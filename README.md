@@ -13,3 +13,5 @@ Navigate to the `/backend/` directory. Before starting the server, run `yarn` to
 
 
 #### Running the Frontend (Client)
+Navigate to the `/frontend/` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies.
+
