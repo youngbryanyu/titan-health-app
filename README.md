@@ -2,4 +2,7 @@
 A comprehensive web application that seamlessly combines exercise and nutrition tracking while offering intelligent, personalized suggestions to guide users' health and fitness journeys. 
 
 ## Workspace Setup
-To clone the repository onto your local machine, run ```git clone https://github.com/yyu2002/Titan_Health_App.git``` in the directory you want the repository to be cloned into.
+To clone the repository onto your local machine, run `git clone https://github.com/yyu2002/Titan_Health_App.git` in the directory you want the repository to be cloned into.
+
+## Running the Application
+TODO: complete this section after setting up repo and running locally.
