@@ -22,3 +22,10 @@ For more details on how to use yarn as a package manager, see the [yarn CLI docu
 #### Installing New Modules (Dependencies)
 To install a new dependency required, navigate to either the frontend or backend directory, then run `yarn add <module_name>` to install the new module in its desired location.
 
+#### Pushing New Changes
+The follow requirements must be met before pushing changes onto the `main` branch:
+- Must be an invited contributor to the repository
+- Must have 1 approval from another contributor
+- Must have 1 approval from the repository owner (yyu2002)
+
+
