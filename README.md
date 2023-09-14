@@ -18,10 +18,10 @@ Navigate to the `/frontend/` directory. Before starting the server, run `yarn` t
 
 For more details on how to use yarn as a package manager, see the [yarn CLI documentation](https://classic.yarnpkg.com/lang/en/docs/cli/).
 
-#### Installing New Modules (Dependencies)
+### Installing New Modules (Dependencies)
 To install a new dependency required, navigate to either the frontend or backend directory, then run `yarn add <module_name>` to install the new module in its desired location.
 
-#### Pushing New Changes
+### Pushing New Changes
 Before pushing any changes and making a pull request, run the following:
 - `git config --global push.default current`: This will allow you to automatically push changes on your local branch to a remote branch of the same name using `git push` or `git push -u`. See [this](https://stackoverflow.com/questions/1519006/how-do-i-create-a-remote-git-branch/27185855#27185855) stack overflow post for more details if interested.
 - `git config --global pull.rebase true`: This will set git to default rebase when pulling.
@@ -38,7 +38,7 @@ The follow requirements must be met before pushing changes onto the `main` branc
 - Must have 1 approval from another contributor
 - Must have 1 approval from the repository owner (yyu2002)
 
-#### Personal Access Tokens
+### Personal Access Tokens
 You may need to set up a personal access token for authentication due to GitHub's newer security guidelines. See [this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) documentation for how to do so (create a classic token), or follow the steps below:
 1. Go to the [Tokens (classic)](https://github.com/settings/tokens) in **Developer settings**.
 2. Click on **Generate new token**, then **Generate new token (classic)**.
