@@ -21,3 +21,9 @@ app.use(express.json());
 
 /* Allow our app instance to use our API endpoints */
 app.use("/api/users", usersRoute);
+
+/* Have backend server listen on port 8000 on the local host */
+const PORT = 8000;
+app.listen(PORT, async () => {
+    console.log(`Backend is running. Listening on port ${PORT}`);
+});
