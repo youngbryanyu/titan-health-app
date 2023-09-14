@@ -9,11 +9,10 @@ We used [yarn](https://yarnpkg.com/) as the package manager for our application 
 ## Running the Application
 
 #### Running the Backend (Server)
-Navigate to the `/backend/` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies.
-
+Navigate to the `/backend/` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
 
 #### Running the Frontend (Client)
-Navigate to the `/frontend/` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies.
+Navigate to the `/frontend/` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
 
 ## Development
 
