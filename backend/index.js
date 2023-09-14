@@ -11,7 +11,7 @@ const app = express();
 const usersRoute = require("./routes/users");
 
 /* Configure .env (hidden env vars) */
-dotenv.config(); 
+dotenv.config();
 
 /* Establish connection to MongoDB */
 // TODO: implement
