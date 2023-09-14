@@ -39,7 +39,7 @@ The follow requirements must be met before pushing changes onto the `main` branc
 - Must have 1 approval from the repository owner (yyu2002)
 
 #### Personal Access Tokens
-You may need to set up a personal access token for authentication due to GitHub's newer security guidelines. See [this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) documentation for how to do so (create a classic token), how follow the steps below:
+You may need to set up a personal access token for authentication due to GitHub's newer security guidelines. See [this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) documentation for how to do so (create a classic token), or follow the steps below:
 1. Go to the [Tokens (classic)](https://github.com/settings/tokens) in **Developer settings**.
 2. Click on **Generate new token**, then **Generate new token (classic)**.
 3. Give the token a name, set the desired expiration, and check every check box for maximum permission access, then at the bottom click **Generate token**.
