@@ -17,6 +17,8 @@ Navigate to the `/frontend/` directory. Before starting the server, run `yarn` t
 
 ## Development
 
+For more details on how to use yarn as a package manager, see the [yarn CLI documentation](https://classic.yarnpkg.com/lang/en/docs/cli/).
+
 #### Installing New Modules (Dependencies)
 To install a new dependency required, navigate to either the frontend or backend directory, then run `yarn add <module_name>` to install the new module in its desired location.
 
