@@ -1,7 +1,7 @@
 # Titan Health App Documentation
 A comprehensive web application that seamlessly combines exercise and nutrition tracking while offering intelligent, personalized suggestions to guide users' health and fitness journeys 🍎🏋️. 
 
-Specialized dining court integration features for students @ Purdue.
+Specialized dining court integration features are included for students @ Purdue.
 
 ## Workspace Setup
 To clone the repository onto your local machine, run `git clone https://github.com/yyu2002/Titan_Health_App.git` in the directory you want the repository to be cloned into.
