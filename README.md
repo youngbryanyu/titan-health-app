@@ -34,7 +34,7 @@ Next, just run the following:
 3. `git push` to push the changes to the remote branch that will be created by default based on the config set above.
 4. Navigate to [Pull requests](https://github.com/yyu2002/Titan_Health_App/pulls) to create the pull request onto the `main` branch. Get the necessary approvals then merge and delete the branch.
 
-Make sure not to push anything from `node_modules` when committing and pushing changes. We don't want tons of dependencies stored in our repository.
+<ins> Make sure not to push anything from `node_modules` when committing and pushing changes. We don't want tons of dependencies stored in our repository.<ins>
 
 #### Pull Request Rules
 The follow requirements must be met before pushing changes onto the `main` branch:
