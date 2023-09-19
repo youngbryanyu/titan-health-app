@@ -1,0 +1,126 @@
+/* Styling for navigation bar */
+.navbar {
+    width: 100%;
+    color: white;
+    font-size: 14px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    background: linear-gradient(to top, transparent 0%, rgb(0, 0, 0, 0.3) 50%);
+
+    &.scrolled {
+        background-color: var(--main-color);
+    }
+
+    .container {
+        padding: 0px 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+
+        .left {
+            display: flex;
+            align-items: center;
+            img { // logo
+                height: 50px;
+                margin-right: 40px;
+                margin-top: 5px;
+            }
+
+            span {
+                margin-right: 20px;
+                cursor: pointer;
+            }
+            
+            .diningDropdown {
+                .diningDropdownOptions {
+                    transform: translate(12.5%, 5%); // translate X and Y to fix centering of dropdown
+                    display: none;
+                    background-color: var(--main-color);
+                    border-radius: 5px;
+                }
+
+                .link {
+                    padding: 10px 0px;
+                    margin-right: 0px;
+                    cursor: pointer;
+                    // display: inline;
+                }
+                
+                span {
+                    padding: 10px;
+                    margin-right: 0px;
+                    cursor: pointer;
+                }
+
+                .link {
+                    &:hover {
+                        background-color: goldenrod;
+                        border-radius: 5px;
+                    }
+                }
+
+                &:hover {
+                    .diningDropdownOptions {
+                        display: flex;
+                        flex-direction: column;
+                        position: absolute;
+                        // top: 50px; // moves dropdown a bit further down
+                    }
+                }
+            }
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+
+            .icon {
+                margin: 0px 15px;
+                cursor: pointer;
+            }
+
+            img {
+                width: 30px;
+                height: 30px;
+                border-radius: 5px;
+                object-fit: cover;
+                cursor: pointer;
+            }
+
+            .profile {
+                .options {
+                    display: none;
+                    background-color: var(--main-color);
+                    border-radius: 5px;
+                }
+
+                .link {
+                    padding: 10px 0px;
+                    margin-right: 0px;
+                    cursor: pointer;
+                    // display: inline;
+
+                    &:hover {
+                        background-color: goldenrod;
+                        border-radius: 5px;
+                    }
+                }
+
+                span {
+                    padding: 10px;
+                    cursor: pointer;
+                }
+
+                &:hover {
+                    .options {
+                        display: flex;
+                        flex-direction: column;
+                        position: absolute;
+                    }
+                }
+            }
+        }
+    }
+}

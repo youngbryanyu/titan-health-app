@@ -1,0 +1,9 @@
+/* root formatting file of frontend */
+:root{ /* root element of HTML document */
+  --main-color: #0b0b0b
+}
+
+.link {
+    color: inherit; /* inherit from parent */
+    text-decoration: none; /* to remove underline for links */
+}
