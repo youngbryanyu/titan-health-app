@@ -14,7 +14,7 @@ We used [yarn](https://yarnpkg.com/) as the package manager for our application.
 Navigate to the `/backend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
 
 ### Running the Frontend (Client)
-Navigate to the `/frontend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
+Navigate to the `/frontend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. The default IP address and port number set by the application is `http://localhost:3000/`.
 
 ## Development
 
