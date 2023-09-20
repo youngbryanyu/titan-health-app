@@ -8,7 +8,19 @@ const schema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         phone: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        // TODO: finish schema
+        isAdmin: { type: Boolean, default: false },
+        preferences: { type: [], required: false },
+
+        /* all below are id arrays */
+        favExercises: { type: [], required: false },
+        favItems: { type: [], required: false },
+        savedWorkouts: { type: [], required: false },
+        savedMeals: { type: [], required: false },
+        createdWorkouts: { type: [], required: false }, 
+        createdMeals: { type: [], required: false }, 
+
+        optInRated: { type: Boolean, required: true }, //notification switches
+        optInSaved: { type: Boolean, required: true }
     },
     {
         timestamps: true
