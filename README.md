@@ -25,7 +25,7 @@ To install a new dependency required, navigate to either the frontend or backend
 
 ### Pushing New Changes
 Before pushing any changes and making a pull request, run the following:
-- `git config --global push.default current`: This will allow you to automatically push changes on your local branch to a remote branch of the same name using `git push` or `git push -u`. See [this](https://stackoverflow.com/questions/1519006/how-do-i-create-a-remote-git-branch/27185855#27185855) stack overflow post for more details if interested.
+- `git config --global push.default current`: This will allow you to automatically push changes on your local branch to a remote branch of the same name using `git push` or `git push -u`. See [this](https://stackoverflow.com/questions/1519006/how-do-i-create-a-remote-git-branch/27185855#27185855) stack overflow post for more details if interested. Just make sure that if you are using this feature instead of specifying the remote branch, that there isn't already a remote branch with the same name or else there could be unintended conflicts.
 - `git config --global pull.rebase true`: This will set git to default rebase when pulling.
 
 Next, just run the following:
