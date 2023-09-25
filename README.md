@@ -11,7 +11,7 @@ We used [yarn](https://yarnpkg.com/) as the package manager for our application.
 ## Running the Application
 
 ### Set up the environment Variables
-The environment variables for the backend server will need to be configured before running the application. The file `.env.example` under `/backend` is provided as a template for the `.env` environment variables file. `.env` will need to be populated with necessary keys and credentials, and is kept empty on the repository because it contains confidential keys and credentials. See [this document](https://docs.google.com/document/d/1iOqG89USP2q-z9TD6mlgi7BTrqrQT_RX3JRDlZpyVYg/edit) for the .env file we are using to run and test our application locally (file is private and must request access). <ins>Do not push changes in `.env` to any remote branch. If you add a new environment variable simply add it to the `.env.example` template file with a temporary value<ins>.
+The environment variables for the backend server will need to be configured before running the application. See [this](https://github.com/yyu2002/Titan_Health_App/blob/main/README.md#set-up-the-environment-variables) section for steps on setting up the `.env` file for environment variables.
 
 ### Running the Backend (Server)
 Navigate to the `/backend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
