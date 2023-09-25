@@ -10,6 +10,9 @@ We used [yarn](https://yarnpkg.com/) as the package manager for our application.
 
 ## Running the Application
 
+### Set up the environment Variables
+The environment variables for the backend server will need to be configured before running the application. The file `.env.example` under `/backend` is provided as a template for the `.env` environment variables file. `.env` will need to be populated with necessary keys and credentials, and is kept empty on the repository because it contains confidential keys and credentials. See [this document](https://docs.google.com/document/d/1iOqG89USP2q-z9TD6mlgi7BTrqrQT_RX3JRDlZpyVYg/edit) for the .env file we are using to run and test our application locally (file is private and must request access).
+
 ### Running the Backend (Server)
 Navigate to the `/backend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
 
@@ -67,4 +70,9 @@ There already exists two users that each assume 1 default role. They're set up t
 The URI and credentials to connect to the database cluster are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit). For ease of visualizing the data while working with it, we recommend downloading [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and connecting through Compass to visualize the databases and collections during development.
 
 The collections of data relevant to the application will all be stored under the `TitanHealthApp` database within the database cluster.
+
+### Environment Variables for the Backend Server
+Like mentioned earlier in the section about how to run the application locally, the environment variables will need to be set up in the `.env` file. The file `.env.example` under `/backend` is provided as a template for the `.env` environment variables file. `.env` will need to be populated with necessary keys and credentials, and is kept empty on the repository because it contains confidential keys and credentials. See [this document](https://docs.google.com/document/d/1iOqG89USP2q-z9TD6mlgi7BTrqrQT_RX3JRDlZpyVYg/edit) for the .env file we are using to run and test our application locally (file is private and must request access). 
+
+### Frontend
 
