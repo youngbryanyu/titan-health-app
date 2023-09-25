@@ -66,3 +66,5 @@ There already exists two users that each assume 1 default role. They're set up t
 #### Connecting to the Database
 The URI and credentials to connect to the database cluster are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit). For ease of visualizing the data while working with it, we recommend downloading [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and connecting through Compass to visualize the databases and collections during development.
 
+The collections of data relevant to the application will all be stored under the `TitanHealthApp` database within the database cluster.
+
