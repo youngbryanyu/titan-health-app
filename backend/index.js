@@ -15,8 +15,8 @@ dotenv.config();
 
 /* Establish connection to MongoDB */
 mongoose
-    .connect( // connect to MongoDB database
-        process.env.MONGO_URL, { // to hide DB credentials
+    .connect( 
+        process.env.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
@@ -33,4 +33,5 @@ app.use("/api/users", usersRoute);
 const PORT = 8000;
 app.listen(PORT, async () => {
     console.log(`Backend is running. Listening on port ${PORT}`);
+    console.log("Attempting to connect to MongoDB.");
 });
