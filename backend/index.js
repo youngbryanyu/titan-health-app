@@ -14,7 +14,14 @@ const usersRoute = require("./routes/users");
 dotenv.config();
 
 /* Establish connection to MongoDB */
-// TODO: implement
+mongoose
+    .connect( // connect to MongoDB database
+        process.env.MONGO_URL, { // to hide DB credentials
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log("Successfully connected to MongoDB."))
+    .catch(err => console.log(err));
 
 /* Use express middleware to parse requests from frontend */
 app.use(express.json());
