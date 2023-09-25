@@ -74,5 +74,4 @@ The collections of data relevant to the application will all be stored under the
 ### Environment Variables for the Backend Server
 Like mentioned earlier in the section about how to run the application locally, the environment variables will need to be set up in the `.env` file. The file `.env.example` under `/backend` is provided as a template for the `.env` environment variables file. `.env` will need to be populated with necessary keys and credentials, and is kept empty on the repository because it contains confidential keys and credentials. See [this document](https://docs.google.com/document/d/1iOqG89USP2q-z9TD6mlgi7BTrqrQT_RX3JRDlZpyVYg/edit) for the .env file we are using to run and test our application locally (file is private and must request access). 
 
-### Frontend
 
