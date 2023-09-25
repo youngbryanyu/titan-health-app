@@ -64,7 +64,7 @@ We have set up a MongoDB cluster though MongoDB Atlas, hosted on AWS. Follow the
 #### Database Access (Users and Roles)
 There already exists two users that each assume 1 default role. They're set up to be authenticated simply through credentials which are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit).
 1. ReadWriteUser - has read and write access to the database cluster. **(Stick with this user for development)**
-2. AdminUser - has full administrator access to the database cluster
+2. AdminUser - has full administrator access to the database cluster.
 
 #### Connecting to the Database
 The URI and credentials to connect to the database cluster are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit). For ease of visualizing the data while working with it, we recommend downloading [MongoDB Compass](https://www.mongodb.com/products/tools/compass) and connecting through Compass to visualize the databases and collections during development.
