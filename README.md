@@ -11,7 +11,7 @@ We used [yarn](https://yarnpkg.com/) as the package manager for our application.
 ## Running the Application
 
 ### Set up the environment Variables
-The environment variables for the backend server will need to be configured before running the application. See the [Environment Variables for the Backend Server]([https://github.com/yyu2002/Titan_Health_App/blob/main/README.md#set-up-the-environment-variables](https://github.com/yyu2002/Titan_Health_App/blob/main/README.md#environment-variables-for-the-backend-server)) section for steps on setting up the `.env` file for environment variables.
+The environment variables for the backend server will need to be configured before running the application. See the [Environment Variables for the Backend Server]([https://github.com/yyu2002/Titan_Health_App/blob/main/README.md#set-up-the-environment-variables](https://github.com/yyu2002/Titan_Health_App/blob/main/README.md#environment-variables-for-the-backend-server) section for steps on setting up the `.env` file for environment variables.
 
 ### Running the Backend (Server)
 Navigate to the `/backend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
