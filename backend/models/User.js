@@ -4,11 +4,67 @@ const mongoose = require("mongoose");
 const schema = new mongoose.Schema(
     {
         /* MongoDB default generates a globally unique _id field */
+        
+        /* Authentication */
         username: { type: String, required: true, unique: true },
         email: { type: String, required: true, unique: true },
         phone: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        // TODO: finish schema
+        isAdmin: { type: Boolean, required: false, default: false },
+
+        /* Dining court */
+        preferences: { type: [], required: false, default: [] },
+        restrictions: { type: [], required: false, default: [] },
+        favoriteMenuItems: { type: [], required: false, default: [] },
+        
+        /* Food tracking and nutrition */
+        breakfastFoods: { type: [], required: false, default: [] },
+        lunchFoods: { type: [], required: false, default: [] },
+        dinnerFoods: { type: [], required: false, default: [] },
+        snackFoods: { type: [], required: false, default: [] },
+        lowLevelNutritionGoals: { type: [], required: false, 
+            default: [
+                { 
+                    calories: 2000,
+                    protein: 122,
+                    carbohydrates: 267,
+                    fat: 57
+                }
+            ] },
+        highLevelNutritionGoals: { type: [], required: false, default: [] },
+        currentFoodPlan: { type: [], required: false, default: [] },
+        favoriteFoodItems: { type: [], required: false, default: [] },
+
+        /* Fitness */
+        liftingLog: { type: [], required: false, default: [] },
+        cardioLog: { type: [], required: false, default: [] },
+        otherExerciseLog: { type: [], required: false, default: [] },
+        favoriteExercises: { type: [], required: false, default: [] },
+        lowLevelFitnessGoals: { type: [], required: false, default: [] },
+        highLevelFitnessGoals: { type: [], required: false, default: [] },
+        currentWorkoutPlan: { type: [], required: false, default: [] },
+        physicalActivityRestrictions: { type: [], required: false, default: [] },
+
+        /* Integrated Health Features */
+        workdayRange: { type: [], required: false, default: [] },
+        healthQuestionnaireAnswers: { type: [], required: false, default: [] },
+        currentHealthPlan: { type: [], required: false, default: [] },
+
+        /* Other Health Features */
+        weightLog: { type: [], required: false, default: [] },
+        waterIntakeLog: { type: [], required: false, default: [] },
+        sleepLog: { type: [], required: false, default: [] },
+        supplementLog: { type: [], required: false, default: [] },
+
+        /* Social Features */
+        friends: { type: [], required: false, default: [] },
+        goals: { type: [], required: false, default: [] },
+        favoriteExercise: { type: String, required: false, default: "none" },
+        favoriteFood: { type: String, required: false, default: "none" },
+
+        /* Notifications */
+        optInRated: { type: Boolean, required: false, default: false }, 
+        optInSaved: { type: Boolean, required: false, default: false }
     },
     {
         timestamps: true

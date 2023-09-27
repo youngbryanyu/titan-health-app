@@ -1,6 +1,6 @@
-// navigation bar at top of page
+/* navigation bar at top of page */
 import "./navbar.scss";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import logo from "./titan_clear_logo.png"
 import { Link, useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import { useContext } from "react";
 import { logout } from "../../authContext/apiCalls";
 import { AuthContext } from "../../authContext/AuthContext";
 import React from "react";
-
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -30,7 +29,7 @@ const Navbar = () => {
     };
 
     /* Get user from auth context*/
-    // const { user } = useContext(AuthContext); 
+    const { user } = useContext(AuthContext); 
 
     return (
         <div className={isScrolled ? "navbar scrolled" : "navbar"}>
@@ -48,7 +47,7 @@ const Navbar = () => {
                 </div>
                 <div className="right">
                     <div className="profile">
-                        <ArrowDropDownIcon className="icon" />
+                        <MenuIcon className="icon" />
                         <div className="options">
                             <Link to="/settings" className="link">
                                 <span className="highlight">Settings</span>
