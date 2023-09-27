@@ -24,7 +24,7 @@ Navigate to the `/frontend` directory. Before starting the server, run `yarn` to
 For more details on how to use yarn as a package manager, see the [yarn CLI documentation](https://classic.yarnpkg.com/lang/en/docs/cli/).
 
 ### Installing New Modules (Dependencies)
-To install a new dependency required, navigate to either the frontend or backend directory, then run `yarn add <module_name>` to install the new module in its desired location. Make sure to not install dependencies in the project root directory, but rather in either the `/frontend` or `/backend` directories. If you accidentally ran installed a dependency in the root directory instead of in the `/backend` and `/frontend` directories, delete the `/node_modules` directory and yarn.lock files and make sure to run `yarn add ...` in the proper directory.
+To install a new dependency required, navigate to either the frontend or backend directory, then run `yarn add <module_name>` to install the new module in its desired location. Use the `--dev` flag to add a dev dependency instead of a dependency. Make sure to not install dependencies in the project root directory, but rather in either the `/frontend` or `/backend` directories. If you accidentally ran installed a dependency in the root directory instead of in the `/backend` and `/frontend` directories, delete the `/node_modules` directory and yarn.lock files and make sure to run `yarn add ...` in the proper directory.
 
 ### Pushing New Changes
 Before pushing any changes and making a pull request, run the following:
