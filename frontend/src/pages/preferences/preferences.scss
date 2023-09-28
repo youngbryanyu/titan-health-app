@@ -1,0 +1,331 @@
+.preferences {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0, ) 0%,
+            rgba(0, 0, 0, 1) 100%),
+        url("https://wallpapercave.com/wp/wp5559316.jpg");
+    background-size: cover;
+    position: relative;
+
+    .category {
+        position: absolute;
+        top: 80px;
+        left: 50px;
+        font-size: 30px;
+        font-weight: 500;
+        color: black;
+        display: flex;
+        align-items: center;
+
+        select {
+            cursor: pointer;
+            background-color: var(--main-color);
+            border: 1px solid white;
+            color: white;
+            margin-left: 20px;
+            padding: 5px;
+        }
+    }
+
+    .box {
+        margin: 10px;
+        width: auto;
+
+        .header {
+            display: inline-flex;
+            padding: 8px;
+            font-size: 18px;
+            background-color: black;
+            border-radius: 5px;
+
+            // &:hover {
+            //     background-color: rgb(32, 218, 218);
+            // }
+
+        }
+
+        .pageTitle {
+            display: inline-flex;
+            padding: 8px;
+            font-size: 30px;
+            background-color: black;
+            border-radius: 5px;
+
+            // &:hover {
+            //     background-color: rgb(32, 218, 218);
+            // }
+
+        }
+        
+
+        .boxHeader2 {
+            display: inline-flex;
+            padding: 5px;
+            font-size: 5px;
+            background-color: rgba(220, 160, 30, .5);
+            border-radius: 5px;
+            margin: -6px 0px;
+
+            &:hover {
+                background-color: goldenrod;
+            }
+    
+        }
+
+        .boxCaption {
+            display: inline-flex;
+            padding: 10px;
+            font-size: 16px;
+            background-color: black;
+            border-radius: 5px;
+            // font-family: 'Playfair Display', serif;
+        }
+
+        .pageDesc {
+            display: inline-flex;
+            padding: 10px;
+            font-size: 14px;
+            background-color: black;
+            border-radius: 5px;
+            // font-family: 'Playfair Display', serif;
+        }
+
+        .boxDesc {
+            display: inline-flex;
+            padding: 10px;
+            font-size: 12px;
+            background-color: goldenrod;
+            border-radius: 5px;
+            // font-family: 'Playfair Display', serif;
+
+        }
+
+    }
+
+    .about {
+        width: 50%;
+        height: 60%;
+        position: absolute;
+        left: 5%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+
+        .locationName {
+            margin: 20px 0px;
+            font-size: 28px;
+        }
+
+        .stationName {
+            margin: 10px 0px;
+            font-size: 18px;
+        }
+
+        .desc {
+            margin: 20px 0px;
+        }
+
+        .buttons {
+            display: flex;
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 500;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &.more {
+                    background-color: goldenrod;
+                    color: white;
+                }
+
+                &.diningCourt {
+                    background-color: white;
+                    color: var(--main-color);
+                }
+
+                span {
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .info2 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 35%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+
+        .locationName {
+            margin: 20px 0px;
+            font-size: 28px;
+        }
+
+        .stationName {
+            margin: 10px 0px;
+            font-size: 18px;
+        }
+
+        .desc {
+            margin: 20px 0px;
+        }
+
+        .buttons {
+            display: flex;
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 500;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &.more {
+                    background-color: goldenrod;
+                    color: white;
+                }
+
+                &.diningCourt {
+                    background-color: white;
+                    color: var(--main-color);
+                }
+
+                span {
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .info3 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 65%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+
+        .locationName {
+            margin: 20px 0px;
+            font-size: 28px;
+        }
+
+        .stationName {
+            margin: 10px 0px;
+            font-size: 18px;
+        }
+
+        .desc {
+            margin: 20px 0px;
+        }
+
+        .buttons {
+            display: flex;
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 500;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &.more {
+                    background-color: goldenrod;
+                    color: white;
+                }
+
+                &.diningCourt {
+                    background-color: white;
+                    color: var(--main-color);
+                }
+
+                span {
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .info2 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 35%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .info3 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 60%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .info3-1 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 55%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .info4 {
+        width: 25%;
+        height: 60%;
+        position: absolute;
+        left: 68%;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+        padding-top: 50px;
+        top: 27%
+    }
+
+    .info5 {
+        width: 30%;
+        height: 60%;
+        left: 82%;
+        position: absolute;
+        bottom: 100px;
+        color: white;
+        display: inline-flex;
+        flex-direction: column;
+        top: 34%
+    }
+}

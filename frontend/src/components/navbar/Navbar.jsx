@@ -58,6 +58,9 @@ const Navbar = () => {
                     <Link to={ROUTES.HOME} className="link">
                         <span>Home</span>
                     </Link>
+                    <Link to={ROUTES.PREFERENCES} className="link">
+                        <span>Preferences</span>
+                    </Link>
                 </div>
                 <div className="right">
                     <div className="profile">

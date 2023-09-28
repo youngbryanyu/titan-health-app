@@ -1,5 +1,5 @@
 /* Code that renders homepage on the frontend */
-import Navbar from "../../components/navbar/navbar";
+import Navbar from "../../components/navbar/Navbar";
 import React from "react";
 import "./home.scss";
 
