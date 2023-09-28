@@ -1,6 +1,9 @@
 /* Schema for a User in the Users Database */
 const mongoose = require("mongoose");
 
+/**
+ * MongoDB schema representing all information pertaining to a specific user.
+ */
 const schema = new mongoose.Schema(
     {
         /* MongoDB default generates a globally unique _id field */
@@ -22,15 +25,14 @@ const schema = new mongoose.Schema(
         lunchFoods: { type: [], required: false, default: [] },
         dinnerFoods: { type: [], required: false, default: [] },
         snackFoods: { type: [], required: false, default: [] },
-        lowLevelNutritionGoals: { type: [], required: false, 
-            default: [
-                { 
-                    calories: 2000,
-                    protein: 122,
-                    carbohydrates: 267,
-                    fat: 57
-                }
-            ] },
+        lowLevelNutritionGoals: { type: Map, of: String, required: false, 
+            default: {
+                calories: "2000",
+                protein: "122",
+                carbohydrates: "267",
+                fat: "57"
+            },
+        },
         highLevelNutritionGoals: { type: [], required: false, default: [] },
         currentFoodPlan: { type: [], required: false, default: [] },
         favoriteFoodItems: { type: [], required: false, default: [] },

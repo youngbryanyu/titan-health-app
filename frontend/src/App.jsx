@@ -1,34 +1,41 @@
 /* Root component of react app */
 import "./app.scss"
-import Home from "./pages/home/Home";
+import Home from "./pages/home/home";
+import Login from "./pages/login/login";
+import Register from "./pages/register/register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "./authContext/AuthContext";
+import { AuthContext } from "./utils/authentication/auth-context";
+import ROUTES from "./routes";
 
+/**
+ * Returns an instance of the frontend React application.
+ * 
+ * @returns an instance of {@link App}
+ */
 const App = () => {
-    /* Get user from authentication context */
+    /* Get user from authentication context. */
     const { user } = useContext(AuthContext);
 
-    /* Page routes for when used is logged in */
+    /* Page routes for when used is logged in. */
     const LOGGED_IN_ROUTES = (
         <>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Home />} />
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.LOGIN} element={<Home />} />
+            <Route path={ROUTES.REGISTER} element={<Home />} />
         </>
     );
 
-    /* Page routes for when use is logged out */
+    /* Page routes for when used is logged out. */
     const LOGGED_OUT_ROUTES = (
         <>
-            <Route path="/" element={<Home />} />
-            {/* Uncomment these lines after login is implemented */}
-            {/* 
-            <Route path="/" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            */}
+            <Route path={ROUTES.HOME} element={<Register />} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTER} element={<Register />} />
         </>
     );
 
+    /* Return react component */
     return (
         <Router>
             <Routes>
@@ -39,3 +46,44 @@ const App = () => {
 };
 
 export default App;
+
+/* 
+In JavaScript, there are several naming conventions that developers follow for function names, page names, file names, and variable names. These conventions help improve code readability and maintainability. Here are some common naming conventions:
+
+Camel Case (e.g., myFunctionName, pageName, fileName):
+
+Typically used for function names, variable names, and object keys.
+The first word starts with a lowercase letter, and subsequent words are capitalized.
+Common practice for most JavaScript code.
+Pascal Case (e.g., MyFunctionName, PageName, FileName):
+
+Typically used for class names and constructor functions.
+Similar to camel case, but the first letter is capitalized.
+Used when defining constructor functions or classes in JavaScript.
+Kebab Case (e.g., my-function-name, page-name, file-name):
+
+Typically used for filenames and URLs.
+Words are separated by hyphens.
+Common practice for HTML and CSS filenames and URLs.
+Snake Case (e.g., my_function_name, page_name, file_name):
+
+Less common in JavaScript but occasionally used for variable and function names.
+Words are separated by underscores.
+All Uppercase (e.g., CONSTANT_NAME):
+
+Used for constants, typically with all letters in uppercase and words separated by underscores.
+Common convention for defining constants in JavaScript.
+Here's how these conventions apply to different naming scenarios:
+
+Page Names: It's common to use camel case or kebab case for page names, depending on your project's naming
+ convention. For example, "myPage" (camel case) or "my-page" (kebab case).
+
+File Names: For JavaScript and TypeScript files, camel case or kebab case is often used for file names. 
+For example, "myModule.js" (camel case) or "my-module.js" (kebab case).
+
+Function Names: Camel case is the most common convention for function names. For example, "calculateTotal()" or
+ "fetchUserData()".
+
+Remember that consistency within your project is key. Choose a naming convention and stick with it throughout 
+your codebase to maintain readability and make it easier for your team to collaborate. If you're working on a project with an established coding style guide, it's essential to follow the guidelines defined in that guide.
+*/

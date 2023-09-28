@@ -1,9 +1,13 @@
-/* root formatting file of frontend */
-:root{ /* root element of HTML document */
-  --main-color: #0b0b0b
+/* Root formatting file of frontend */
+
+/* Root element of HTML document */
+:root{ 
+  --main-color: #0b0b0b;
 }
 
+/* Styling for all links in child components */
 .link {
-    color: inherit; /* inherit from parent */
-    text-decoration: none; /* to remove underline for links */
+    color: inherit;
+    text-decoration: none; /* remove underline for links */
 }
+

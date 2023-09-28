@@ -1,134 +1,137 @@
-// JS for register page
+/* React page for registering a new account */
 import { useState } from "react";
 import "./register.scss";
-import logo from "../../components/fudstops_white_logo.png";
+import logo from "../../components/titan-clear-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useRef, useEffect } from "react";
-import {
-    isValidEmailFormat, isValidPhoneFormat, isValidEmailOrPhoneFormat, isValidUsernameFormat,
-    isValidPasswordFormat, stripNonDigits,
-    MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, EMPTY_EMAIL_STRING, EMPTY_PHONE_STRING
-} from "../../utils/regexAndStrings";
+import { useRef } from "react";
+import RegexUtil from "../../utils/regex-util";
+import ROUTES from "../../routes";
 
-const EXISTING_CREDENTIALS_ERROR = "Email, phone number, or username already taken."
-const INVALID_EMAIL_OR_PHONE_ERROR = "Invalid email or phone number format."
-const INVALID_USERNAME_ERROR = "Invalid username. Username cannot contain spaces and minimum length must be at least "
-const INVALID_PASSWORD_ERROR = "Invalid password. The length must be at least "
-
+/**
+ * Returns a react component consisting of the Register page. Includes all logic relevant to registering.
+ * 
+ * @returns a react component consisting of the Register page.
+ */
 export default function Register() {
-    const navigate = useNavigate(); // allows us to navigate to login page after signing up
+    /* Mapping of different error messages. */
+    const ERROR_MESSAGES = {
+        EXISTING_CREDENTIALS_ERROR: "Email, phone number, or username already taken.",
+        INVALID_EMAIL_ERROR: "Invalid email format.",
+        INVALID_PHONE_ERROR: "Invalid phone format.",
+        INVALID_USERNAME_ERROR: "Invalid username. Username cannot contain spaces and minimum length must be at least ",
+        INVALID_PASSWORD_ERROR: "Invalid password. The length must be at least ",
+        GENERIC_SERVER_ERROR: "There was a problem registering your account. Please try again later."
+    }
 
-    const [emailOrPhone, setEmailOrPhone] = useState(""); // user input for email/phone
+    /* Used to navigate to different pages. */
+    const navigate = useNavigate();
+
+    /* States for user credentials. */
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
 
-    const [isValidNewUser, setIsValidNewUser] = useState(true); // if credentials not already taken
-    const [isValidEmailOrPhone, setIsValidEmailOrPhone] = useState(true);
-    const [isValidUsername, setIsValidUsername] = useState(true);
-    const [isValidPassword, setIsValidPassword] = useState(true);
+    /* State for whether credentials entered are valid. */
+    const [isValidCredentials, setIsValidCredentials] = useState(true);
 
+    /* Flag for whether use clicked on 'Get Started' after entering their email. */
     const [clickedGetStarted, setclickedGetStarted] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(EXISTING_CREDENTIALS_ERROR);
 
-    const emailOrPhoneRef = useRef();
+    /* The current error message to be displayed to the user */
+    const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.EXISTING_CREDENTIALS_ERROR);
 
-    /**
-     * Handles when user clicks 'Get Started' key after typing email
-     */
-    const handleGetStartedClick = (e) => {
-        if (emailOrPhoneRef.current.value.length > 0) {
-            setclickedGetStarted(true);  // only validate email when user tries to submit form at end
+    /* Reference to the DOM element where user enters their email */
+    const emailRef = useRef();
+
+    /* Returns true if the email box is already filled */
+    function isEmailBoxFilled() {
+        return emailRef.current.value.length > 0;
+    }
+
+    /* Handles when user hits 'Enter' key after typing email */
+    const handleGetStarted = (e) => {
+        /* If all the fields are displayed, try submitting the form */
+        if (clickedGetStarted) {
+            handleRegister(e);
+            return;
         }
-    };
 
-    /**
-     * Handles when user hits 'Enter' key after typing email
-     */
-    const handleGetStartedEnter = (e) => {
-        if (e.key === 'Enter') {
-            if (emailOrPhoneRef.current.value.length > 0) {
-                setclickedGetStarted(true); // only validate email when user tries to submit form at end
-            }
+        /* If email box is filled, show other fields */
+        if (isEmailBoxFilled()) {
+            setclickedGetStarted(true);
         }
-    };
+    }
 
-    /**
-     * Handles registration when user clicks "sign up"
-     */
+    /* Handles registration logic when user clicks 'Sign Up' or hits 'Enter' on the keyboard. */
     const handleRegister = (e) => {
-        e.preventDefault(); // prevent default behavior or else registering won't work when clicked
+        /* prevent default event behavior or else registering won't work when clicked */
+        e.preventDefault(); 
 
-        // reset all error messages at start of event
-        setIsValidEmailOrPhone(true);
-        setIsValidNewUser(true);
-        setIsValidUsername(true);
-        setIsValidPassword(true);
+        /* Reset all error flags when attempting register */
+        setIsValidCredentials(true);
 
-        /* use onChange instead of useRef and useState to prevent error on first click on register */
-
-        if (!isValidEmailOrPhoneFormat(emailOrPhone)) {
-            setIsValidEmailOrPhone(false);
-            setErrorMessage(INVALID_EMAIL_OR_PHONE_ERROR);
+        /* Check if email is valid */
+        if (!RegexUtil.isValidEmailFormat(email)) {
+            setIsValidCredentials(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_EMAIL_ERROR);
             return;
         }
 
-        if (!isValidUsernameFormat(username)) {
-            setIsValidUsername(false);
-            setErrorMessage(INVALID_USERNAME_ERROR + MIN_USERNAME_LENGTH + ".");
+        /* Check if phone is valid */
+        if (!RegexUtil.isValidPhoneFormat(phone)) {
+            setIsValidCredentials(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_PHONE_ERROR);
             return;
         }
 
-        if (!isValidPasswordFormat(password)) {
-            setIsValidPassword(false);
-            setErrorMessage(INVALID_PASSWORD_ERROR + MIN_PASSWORD_LENGTH + ".");
+        /* Check if username is valid */
+        if (!RegexUtil.isValidUsernameFormat(username)) {
+            setIsValidCredentials(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_USERNAME_ERROR + RegexUtil.MIN_USERNAME_LENGTH + ".");
             return;
         }
 
-        if (isValidEmailFormat(emailOrPhone)) {
-            setEmail(emailOrPhone);
-            setPhone(username + EMPTY_PHONE_STRING); // to indicate empty phone
-        } else if (isValidPhoneFormat(emailOrPhone)) {
-            setPhone(stripNonDigits(emailOrPhone)); // strip non digits when
-            setEmail(username + EMPTY_EMAIL_STRING)
-        }
-    };
-
-    /**
-     * Try to register when email and phone are set in handleRegister()
-     */
-    const isFirstRender = useRef(true); // don't do anything on first render
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
+        /* Check if password is valid */
+        if (!RegexUtil.isValidPasswordFormat(password)) {
+            setIsValidCredentials(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_PASSWORD_ERROR + RegexUtil.MIN_PASSWORD_LENGTH + ".");
             return;
-        }
-        const handleLogin = async () => {
-            try {
-                await axios.post("auth/register", {
-                    username: username,
-                    email: email,
-                    phone: phone,
-                    password: password
-                });
-                navigate("/login", {
-                    state: {
-                        justRegistered: true
-                    }
-                }); // go to login page after registering
-            } catch (err) {
-                setIsValidNewUser(false); // invalid new user on register
-                setErrorMessage(EXISTING_CREDENTIALS_ERROR);
-                console.log(err);
+        }      
+        
+        /* Perform HTTP request to register user */
+        performRegister();
+    }
+
+    /* Performs the HTTP Request to the backend to register the user. */
+    const performRegister = async () => {
+        try {
+            /* Perform POST request to register user */
+            await axios.post("auth/register", {
+                username: username,
+                email: email,
+                phone: phone,
+                password: password
+            });
+
+            /* Navigate to login page after successful registration */
+            navigate(ROUTES.LOGIN, {
+                state: {
+                    justRegistered: true
+                }
+            });
+        } catch (err) {
+            if (err.response && err.response.status === 403) {
+                setErrorMessage(ERROR_MESSAGES.EXISTING_CREDENTIALS_ERROR);
+            } else {
+                setErrorMessage(ERROR_MESSAGES.GENERIC_SERVER_ERROR);
             }
+            setIsValidCredentials(false);
         }
-        handleLogin();
-    // eslint-disable-next-line
-    }, [email, phone]);
+    }
 
+    /* Return react component */
     return (
         <div className="register">
             <div className="top">
@@ -146,34 +149,54 @@ export default function Register() {
                 </div>
             </div>
             <div className="container">
-                <h1>Find all your favorite foods at Purdue.</h1>
+                <h1>Ready to level up your fitness and nutrition journey?</h1>
                 <h2>Sign up for free.</h2>
                 <p>
-                    Ready to eat good? Enter your phone number or email to create your account.
+                    Ready to reach your health goals? Create your account below.
                 </p>
 
                 <div className="input">
                     <input
                         type="email"
-                        placeholder="Phone number or email"
+                        placeholder="email"
                         onChange={(e) => {
-                            setEmailOrPhone(
+                            setEmail(
                                 e.target.value
                             )
                         }}
-                        ref={emailOrPhoneRef}
-                        // onKeyDown={(clickedGetStarted) ? handleRegister : handleSetEmailEnter} // if all forms are shown, hitting enter while cursor is on email should submit form --> NIT: need to fix this, email box freezes after clicking enter
-                        onKeyDown={handleGetStartedEnter}
+                        ref={emailRef}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleGetStarted(e);
+                            }
+                        }}
                     />
                     {!clickedGetStarted && ( // hide this button when user clicks on next
                         <button
                             className="registerButton"
-                            onClick={handleGetStartedClick}
+                            onClick={handleGetStarted}
                         >Get Started</button>
                     )}
                 </div>
 
-                { // only display username and password forms when user clicks next after entering valid email
+                {/* only display after using clicks get started */}
+                <div className="input"
+                 style={{ visibility: !clickedGetStarted && "hidden" }}
+                 >
+                    <input
+                        type="phone number"
+                        placeholder="phone number"
+                        onChange={(e) => {
+                            setPhone(
+                                e.target.value
+                            )
+                        }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleGetStarted(e)}
+                    />
+                    <button onClick={handleRegister} style={{ visibility: "hidden" }}>Sign Up</button>
+                </div>
+
+                { // only display username, phone number, and password forms when user clicks next after entering valid email
                     <form
                         className="input"
                         style={{ visibility: !clickedGetStarted && "hidden" }}
@@ -194,14 +217,12 @@ export default function Register() {
 
                 { // error message if user enters invalid email regex or credentials already taken
                     <div className="errorMessage">
-                        <p style={{ visibility: (isValidEmailOrPhone && isValidNewUser && isValidUsername && isValidPassword) && "hidden" }}>
+                        <p style={{ visibility: (isValidCredentials) && "hidden" }}>
                             {errorMessage}
                         </p>
                     </div>
                 }
             </div>
         </div>
-    );
+    )
 }
-
-// TODO: fix bug where hitting enter when cursor is on email box doesn't submit form
