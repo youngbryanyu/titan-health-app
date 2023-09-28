@@ -152,7 +152,7 @@ export default function Register() {
                 <h1>Ready to level up your fitness and nutrition journey?</h1>
                 <h2>Sign up for free.</h2>
                 <p>
-                    Ready to reach your health goals? Create your account below.
+                    Create your account below.
                 </p>
 
                 <div className="input">
