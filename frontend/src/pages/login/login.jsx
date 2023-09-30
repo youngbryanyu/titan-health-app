@@ -42,7 +42,7 @@ export default function Login() {
 
         /* strip non-digits if user is trying to login with phone number */
         const loginMethod = RegexUtil.isValidPhoneFormat(emailOrPhoneOrUsername) ? RegexUtil.stripNonDigits(emailOrPhoneOrUsername) : emailOrPhoneOrUsername;
-
+                
         /* Login and store the user in cache (authentication context) */
         login({ loginMethod, password }, dispatch).then(
             returnedUser => setUser(returnedUser)
