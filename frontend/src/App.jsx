@@ -1,8 +1,9 @@
 /* Root component of react app */
 import "./app.scss"
-import Home from "./pages/home/home";
+import Home from "./pages/home/Home";
 import Login from "./pages/login/login";
-import Register from "./pages/register/register";
+import Register from "./pages/register/Register";
+import Preferences from "./pages/preferences/Preferences";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
@@ -21,8 +22,10 @@ const App = () => {
     const LOGGED_IN_ROUTES = (
         <>
             <Route path={ROUTES.HOME} element={<Home />} />
-            <Route path={ROUTES.LOGIN} element={<Home />} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.REGISTER} element={<Home />} />
+            <Route path={ROUTES.PREFERENCES} element={<Preferences />} />
+
         </>
     );
 
@@ -32,6 +35,7 @@ const App = () => {
             <Route path={ROUTES.HOME} element={<Register />} />
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.REGISTER} element={<Register />} />
+            <Route path={ROUTES.PREFERENCES} element={<Register />} />
         </>
     );
 

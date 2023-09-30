@@ -8,6 +8,7 @@ const ROUTES = {
     LOGIN: '/login',
     REGISTER: '/register',
     SETTINGS: '/settings',
+    PREFERENCES: '/preferences',
 }
 
 export default ROUTES;
