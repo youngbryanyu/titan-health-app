@@ -31,6 +31,7 @@ const Navbar = () => {
         /* Prevent default event behavior */
         e.preventDefault();
         
+        /* Log user out and navigate to login */
         logout(dispatch);
         navigate(ROUTES.LOGIN);
     }
