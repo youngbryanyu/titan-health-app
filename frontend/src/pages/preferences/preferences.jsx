@@ -1,4 +1,4 @@
-/* React page for settings page */
+/* React page for dietary preferences page */
 import Navbar from "../../components/navbar/navbar";
 import "./preferences.scss";
 import { useContext, useState, useEffect, useRef } from "react";
@@ -79,7 +79,6 @@ const Preferences = () => {
                 const response = await axios.get('users/preferences/' + username);
                 const initialPreferences = response.data;
                 const preferences = []; // initial preferences to set
-                console.log("initial: " + preferences)
                 if (initialPreferences.includes(VEGAN)) {
                     setVegan(true);
                     preferences.push(VEGAN);
@@ -89,8 +88,7 @@ const Preferences = () => {
                     preferences.push(VEGETARIAN);
                 }
 
-                setPrefs(preferences); // set preferences
-                console.log("prefs init to: " + prefs)
+                setPrefs(preferences);
             } catch (error) {
                 console.log(error);
             }
@@ -147,7 +145,7 @@ const Preferences = () => {
                     restrictions.push(PEANUTS);
                 }
 
-                setRests(restrictions); // set restrictions
+                setRests(restrictions); 
             } catch (error) {
                 console.log(error);
             }
@@ -190,14 +188,13 @@ const Preferences = () => {
         /* Update the preferences in the database */
         const updatePreferencesInDB = async () => {
             try {
-                console.log("setting prefs to:" + prefs);
-                await axios.post('users/preferences', {
+                await axios.put('users/preferences', {
                     username: username,
                     preferences: prefs
                 });
-                console.log("successfully updated preferences");
+                console.log("Successfully updated preferences");
             } catch (error) {
-                console.log("failed to update preferences: " + error);
+                console.log("Failed to update preferences: " + error);
             }
         }
         updatePreferencesInDB(); 
@@ -242,13 +239,13 @@ const Preferences = () => {
         /* Update the restrictions in the database */
         const updateRestrictionsInDB = async () => {
             try {
-                await axios.post('users/restrictions', {
+                await axios.put('users/restrictions', {
                     username: username,
                     restrictions: rests
                 });
-                console.log("successfully updated restrictions: " + rests);
+                console.log("Successfully updated restrictions: " + rests);
             } catch (error) {
-                console.log("failed to update restrictions: " + error);
+                console.log("Failed to update restrictions: " + error);
             }
         }
 
@@ -264,7 +261,7 @@ const Preferences = () => {
                 <Grid item xs={2}>
                     <div className="about">
                         <Box className="box"><span className="pageTitle">Dietary Preferences</span></Box>
-                        <Box className="box"><span className="pageDesc">Select Your Dietary Preferences & Restrictions!</span></Box>
+                        <Box className="box"><span className="pageDesc">Select Your Dietary Preferences & Restrictions</span></Box>
                     </div>
                 </Grid>
 

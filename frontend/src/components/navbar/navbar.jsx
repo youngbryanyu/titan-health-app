@@ -59,7 +59,7 @@ const Navbar = () => {
                         <span>Home</span>
                     </Link>
                     <Link to={ROUTES.PREFERENCES} className="link">
-                        <span>Preferences</span>
+                        <span>Dietary Preferences</span>
                     </Link>
                 </div>
                 <div className="right">
