@@ -54,22 +54,23 @@
     }
 
     .about {
-        width: 50%;
+        width: 30vw;
         height: 60%;
-        position: absolute;
-        left: 5%;
-        bottom: 100px;
+        position: relative;
+        top: 35vh;
+        left: 5vw;
         color: white;
         display: inline-flex;
         flex-direction: column;
+        margin: 5%;
     }
 
     .column1 {
         width: 25%;
         height: 60%;
-        position: absolute;
-        left: 35%;
-        bottom: 100px;
+        position: relative;
+        top: 30vh;
+        left: 15vw;
         color: white;
         display: inline-flex;
         flex-direction: column;
@@ -78,9 +79,9 @@
     .column2 {
         width: 25%;
         height: 60%;
-        position: absolute;
-        left: 50%;
-        bottom: 100px;
+        position: relative;
+        top: 30vh;
+        left: 5vw;
         color: white;
         display: inline-flex;
         flex-direction: column;
@@ -89,25 +90,22 @@
     .column3 {
         width: 25%;
         height: 60%;
-        position: absolute;
-        left: 65%;
-        bottom: 100px;
+        position: relative;
+        top: 38vh;
+        left: 10vw;
         color: white;
         display: inline-flex;
         flex-direction: column;
-        padding-top: 50px;
-        top: 27%
     }
 
     .column4 {
         width: 30%;
         height: 60%;
-        left: 78%;
-        position: absolute;
-        bottom: 100px;
+        position: relative;
+        top: 38vh;
+        left: 15vw;
         color: white;
         display: inline-flex;
         flex-direction: column;
-        top: 23%
     }
 }

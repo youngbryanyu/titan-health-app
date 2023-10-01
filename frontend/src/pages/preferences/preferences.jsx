@@ -257,14 +257,13 @@ const Preferences = () => {
     return (
         <div className="preferences">
             <Navbar />
-            <Grid container rowSpacing={10} columnSpacing={{ xs: 10, sm: 2, md: 3 }}>
+            <Grid container alignItems={"flex-start"} rowSpacing={10} columnSpacing={{ xs: 10, sm: 2, md: 3 }}>
                 <Grid item xs={2}>
                     <div className="about">
                         <Box className="box"><span className="pageTitle">Dietary Preferences</span></Box>
                         <Box className="box"><span className="pageDesc">Select Your Dietary Preferences & Restrictions</span></Box>
                     </div>
                 </Grid>
-
                 <Grid item xs={3}>
                     <div className="column1">
                         <Box className="box"><span className="header">Preferences</span></Box>
