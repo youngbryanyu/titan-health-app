@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
 import ROUTES from "./routes";
+import Settings from "./pages/settings/settings";
 
 /**
  * Returns an instance of the frontend React application.
@@ -25,7 +26,7 @@ const App = () => {
             <Route path={ROUTES.LOGIN} element={<Home />} />
             <Route path={ROUTES.REGISTER} element={<Home />} />
             <Route path={ROUTES.PREFERENCES} element={<Preferences />} />
-
+            <Route path={ROUTES.SETTINGS} element={<Settings />} />
         </>
     );
 
@@ -36,6 +37,7 @@ const App = () => {
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.REGISTER} element={<Register />} />
             <Route path={ROUTES.PREFERENCES} element={<Register />} />
+            <Route path={ROUTES.SETTINGS} element={<Register />} />
         </>
     );
 

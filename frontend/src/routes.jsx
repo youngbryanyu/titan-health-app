@@ -9,6 +9,7 @@ const ROUTES = {
     REGISTER: '/register',
     SETTINGS: '/settings',
     PREFERENCES: '/preferences',
+    REPORT_PROBLEM: '/reportProblem'
 }
 
 export default ROUTES;
