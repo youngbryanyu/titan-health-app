@@ -2,9 +2,10 @@
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
 const User = require("../models/user");
+const verify = require("../util/auth/verifyJWTToken");
 
 /* PUT - update preferences */
-router.put("/preferences", async (req, res) => { 
+router.put("/preferences", verify, async (req, res) => { 
     try {
         /* Find user matching the input username */
         const user = await User.findOne({
@@ -30,7 +31,7 @@ router.put("/preferences", async (req, res) => {
 
 
 /* PUT - update restrictions */
-router.put("/restrictions", async (req, res) => { 
+router.put("/restrictions", verify, async (req, res) => { 
     try {
         /* Find user matching the input username */
         const user = await User.findOne({
@@ -54,7 +55,7 @@ router.put("/restrictions", async (req, res) => {
 });
 
 /* GET - get preferences */
-router.get("/preferences/:username", async (req, res) => {
+router.get("/preferences/:username", verify, async (req, res) => {
     try {
         /* Find user matching the input username */
         const user = await User.findOne({
@@ -70,7 +71,7 @@ router.get("/preferences/:username", async (req, res) => {
 });
 
 /* GET - get restrictions */
-router.get("/restrictions/:username", async (req, res) => {
+router.get("/restrictions/:username", verify, async (req, res) => {
     try {
         /* Find user matching the input username */
         const user = await User.findOne({

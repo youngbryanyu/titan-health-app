@@ -53,6 +53,10 @@ export default function ReportProblem() {
             await axios.post('problems', {
                 username: username,
                 problem: problemMessage
+            }, {
+                headers: {
+                    token: "Bearer " + user.accessToken // need access token to delete
+                }
             });
             setSubmittedForm(true);
 

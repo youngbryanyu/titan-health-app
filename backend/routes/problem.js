@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const Problem = require("../models/Problem");
+const verify = require("../util/auth/verifyJWTToken");
+
 
 /* POST - send problem to database */
-router.post("/", async (req, res) => {
+router.post("/", verify, async (req, res) => {
     try {
         /* Save problem to database */
         const problem = await new Problem({
@@ -18,7 +20,7 @@ router.post("/", async (req, res) => {
 });
 
 /* GET - get all problems from database. Default get all entries, but client can specify how many to return based on newest. */
-router.get("/", async (req, res) => {
+router.get("/", verify, async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || -1; 
 
@@ -37,7 +39,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET - get all problems from database from a single user.  Default get all entries, but client can specify how many to return based on newest. */
-router.get("/:username", async (req, res) => {
+router.get("/:username", verify, async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || -1; 
 

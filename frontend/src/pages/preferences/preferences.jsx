@@ -76,7 +76,11 @@ const Preferences = () => {
         // Get initial preferences then set local variables to those.
         const setInitialPreferences = async () => {
             try {
-                const response = await axios.get('users/preferences/' + username);
+                const response = await axios.get('users/preferences/' + username, {
+                    headers: {
+                        token: "Bearer " + user.accessToken // need access token to delete
+                    }
+                });
                 const initialPreferences = response.data;
                 const preferences = []; // initial preferences to set
                 if (initialPreferences.includes(VEGAN)) {
@@ -97,7 +101,11 @@ const Preferences = () => {
         // Get initial restrictions then set local variables to those.
         const setInitialRestrictions = async () => {
             try {
-                const response = await axios.get('users/restrictions/' + username);
+                const response = await axios.get('users/restrictions/' + username, {
+                    headers: {
+                        token: "Bearer " + user.accessToken // need access token to delete
+                    }
+                });
                 const initialRestrictions = response.data;
                 const restrictions = []; // restrictions to set initially
                 if (initialRestrictions.includes(COCONUT)) {
@@ -191,6 +199,10 @@ const Preferences = () => {
                 await axios.put('users/preferences', {
                     username: username,
                     preferences: prefs
+                }, {
+                    headers: {
+                        token: "Bearer " + user.accessToken // need access token to delete
+                    }
                 });
                 console.log("Successfully updated preferences");
             } catch (error) {
@@ -242,6 +254,10 @@ const Preferences = () => {
                 await axios.put('users/restrictions', {
                     username: username,
                     restrictions: rests
+                }, {
+                    headers: {
+                        token: "Bearer " + user.accessToken // need access token to delete
+                    }
                 });
                 console.log("Successfully updated restrictions: " + rests);
             } catch (error) {

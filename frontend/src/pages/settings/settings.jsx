@@ -42,9 +42,9 @@ const Settings = () => {
                     <Grid item xs={3}>
                         <div className="column1">
                             <Box className="box">
-                                {/* <Link to="/personalInfo" className="link"> */}
+                                <Link to={ROUTES.PERSONAL_INFO} className="link">
                                     <span className="buttonText">Personal Information</span>
-                                {/* </Link> */}
+                                </Link>
                             </Box>
                             <Box className="box">
                                 <Link to={ROUTES.PREFERENCES} className="link">
