@@ -1,7 +1,6 @@
-// JS for settings page
+/* JS for settings page */
 import Navbar from "../../components/navbar/navbar";
 import "./settings.scss";
-// import Footer from "../../components/footer/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
 import { logout } from "../../utils/authentication/auth-helper";
@@ -10,18 +9,21 @@ import { useContext } from "react";
 import ROUTES from "../../routes";
 
 
-
+/**
+ * Returns a react component consisting of the Settings page. 
+ * Includes all logic relevant to logging in.
+ * 
+ * @returns a react component consisting of the Settings page.
+ */
 const Settings = () => {
     const { dispatch } = useContext(AuthContext); // get auth context
     const navigate = useNavigate();
 
-    /**
-     * Logs the user out
-     */
+    /* Handles logging out if user clicks logout */
     const handleLogout = (e) => {
-        e.preventDefault(); // need this to prevent default behavior or else login won't work
-        logout(dispatch); // login and store the user in local storage (context)
-        navigate("/login");
+        e.preventDefault();
+        logout(dispatch);
+        navigate(ROUTES.LOGIN);
     }
 
     return (

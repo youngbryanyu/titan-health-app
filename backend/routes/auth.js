@@ -1,6 +1,6 @@
 /* HTTP request REST API endpoints for authentication */
 const router = require("express").Router();
-const User = require("../models/users");
+const User = require("../models/user");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 

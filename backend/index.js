@@ -10,6 +10,7 @@ const app = express();
 /* Define REST API endpoint routes */
 const authenticationRoute = require("./routes/auth");
 const usersRoute = require("./routes/users");
+const problemsRoute = require("./routes/problem");
 
 /* Configure .env (hidden env vars) */
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(express.json());
 /* Allow our app instance to use our API endpoints */
 app.use("/api/auth", authenticationRoute);
 app.use("/api/users", usersRoute);
+app.use("/api/problems", problemsRoute);
 
 /* Have backend server listen on port 8000 on the local host */
 const PORT = 8000;

@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
 import ROUTES from "./routes";
 import Settings from "./pages/settings/settings";
+import ReportProblem from "./pages/reportProblem/reportProblem";
 
 /**
  * Returns an instance of the frontend React application.
@@ -27,6 +28,7 @@ const App = () => {
             <Route path={ROUTES.REGISTER} element={<Home />} />
             <Route path={ROUTES.PREFERENCES} element={<Preferences />} />
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
+            <Route path={ROUTES.REPORT_PROBLEM} element={<ReportProblem />} />
         </>
     );
 
@@ -38,6 +40,7 @@ const App = () => {
             <Route path={ROUTES.REGISTER} element={<Register />} />
             <Route path={ROUTES.PREFERENCES} element={<Register />} />
             <Route path={ROUTES.SETTINGS} element={<Register />} />
+            <Route path={ROUTES.REPORT_PROBLEM} element={<Register />} />
         </>
     );
 

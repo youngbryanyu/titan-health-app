@@ -1,7 +1,7 @@
 /* REST API Route for users */
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
-const User = require("../models/users");
+const User = require("../models/user");
 
 /* PUT - update preferences */
 router.put("/preferences", async (req, res) => { 

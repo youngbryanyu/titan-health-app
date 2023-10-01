@@ -56,6 +56,13 @@ const RegexUtil = {
     stripNonDigits(phoneNumber) {
         return phoneNumber.replace(/\D/g, '');
     },
+
+    /**
+     * Strips a phone number string of the non digit characters.
+     */
+    isValidErrorMessage(errorMessage) {
+        return errorMessage.length > 0;
+    }
 }
 
 export default RegexUtil;
