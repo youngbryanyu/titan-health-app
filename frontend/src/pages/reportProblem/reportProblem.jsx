@@ -31,7 +31,7 @@ export default function ReportProblem() {
 
     /* Get instance of user from auth context */
     const { user } = useContext(AuthContext); 
-    const username = user.username;
+    const userId = user._id;
 
     /* Reference to the user box */
     const textBoxRef = useRef();
@@ -51,11 +51,11 @@ export default function ReportProblem() {
         setIsValidProblemMessage(true);
         try {
             await axios.post('problems', {
-                username: username,
+                userId: userId,
                 problem: problemMessage
             }, {
                 headers: {
-                    token: "Bearer " + user.accessToken // need access token to delete
+                    token: "Bearer " + user.accessToken 
                 }
             });
             setSubmittedForm(true);
@@ -96,7 +96,7 @@ export default function ReportProblem() {
                     <form>
                         <h1>Report a Problem</h1>
                         <textarea
-                            maxlength="400"
+                            maxLength="400"
                             placeholder="Type the problem here (400 characters max)..."
                             onChange={(e) => setProblemMesssage(e.target.value)}
                             ref={textBoxRef}

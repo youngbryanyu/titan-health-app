@@ -4,17 +4,19 @@ const CryptoJS = require("crypto-js");
 const User = require("../models/user");
 const verify = require("../util/auth/verifyJWTToken");
 
+/* ###################### 
+########## PUT ##########
+######################### */
+
 /* PUT - update preferences */
 router.put("/preferences", verify, async (req, res) => { 
     try {
-        /* Find user matching the input username */
-        const user = await User.findOne({
-            username: req.body.username
-        });
+        /* Find user matching the input user id */
+        const user = await User.findById(req.body.userId);
 
         /* User doesn't exist case*/
         if (!user) {
-            res.status(404).json(`User ${req.body.username} not found`);
+            res.status(404).json(`User not found`);
             return;
         }
         
@@ -33,14 +35,12 @@ router.put("/preferences", verify, async (req, res) => {
 /* PUT - update restrictions */
 router.put("/restrictions", verify, async (req, res) => { 
     try {
-        /* Find user matching the input username */
-        const user = await User.findOne({
-            username: req.body.username
-        });
+        /* Find user matching the input user id */
+        const user = await User.findById(req.body.userId);
 
-        /* User doesn't exist case*/
+        /* User doesn't exist case */
         if (!user) {
-            res.status(404).json(`User ${req.body.username} not found`);
+            res.status(404).json(`User not found`);
             return;
         }
 
@@ -54,13 +54,54 @@ router.put("/restrictions", verify, async (req, res) => {
     }
 });
 
-/* GET - get preferences */
-router.get("/preferences/:username", verify, async (req, res) => {
+/* PUT - update user personal information */
+router.put("/personalInfo", verify, async (req, res) => { 
+    if (req.user.id === req.body.id || req.user.isAdmin) {
+        /* If user wants to change password, encrypt it before storing */
+        if (req.body.password) {
+            req.body.password = CryptoJS.AES.encrypt(
+                req.body.password,
+                process.env.SECRET_KEY
+            ).toString();
+        }
+
+        try {
+            const updatedUser = await User.findByIdAndUpdate(
+                req.body.id,
+                { 
+                    $set: req.body /* update all parameters in the body */
+                },
+                { new: true } /* return updated user in the JSON response */
+            );
+            res.status(200).json(updatedUser);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    } else {
+        res.status(403).json("You can only update your own account!");
+    }
+});
+
+/* ###################### 
+########## GET ##########
+######################### */
+
+// GET - get 1 user by their user ID
+router.get("/find/:id", verify, async (req, res) => {
     try {
-        /* Find user matching the input username */
-        const user = await User.findOne({
-            username: req.params.username
-        });
+        const user = await User.findById(req.params.id);
+        const { password, ...info } = user._doc; /* split password from user data --> return everything but password in JSON response */
+        res.status(200).json(info); /* return everything but password in info */
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+/* GET - get preferences */
+router.get("/preferences/:userId", verify, async (req, res) => {
+    try {
+        /* Find user matching the input user id */
+        const user = await User.findById(req.params.userId);
 
         /* Return user preferences */
         const result = user.preferences;
@@ -71,12 +112,10 @@ router.get("/preferences/:username", verify, async (req, res) => {
 });
 
 /* GET - get restrictions */
-router.get("/restrictions/:username", verify, async (req, res) => {
+router.get("/restrictions/:userId", verify, async (req, res) => {
     try {
-        /* Find user matching the input username */
-        const user = await User.findOne({
-            username: req.params.username
-        });
+        /* Find user matching the input user id */
+        const user = await User.findById(req.params.userId);
 
         /* Return user restrictions */
         const result = user.restrictions;

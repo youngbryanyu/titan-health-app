@@ -32,7 +32,7 @@ const PEANUTS = "Peanuts";
 const Preferences = () => {
     /* get user from auth context, can directly index into its fields */
     const { user } = useContext(AuthContext); 
-    const username = user.username;
+    const userId = user._id;
 
     /* Preference flags */
     const [vegetarian, setVegetarian] = useState(false); 
@@ -76,9 +76,9 @@ const Preferences = () => {
         // Get initial preferences then set local variables to those.
         const setInitialPreferences = async () => {
             try {
-                const response = await axios.get('users/preferences/' + username, {
+                const response = await axios.get('users/preferences/' + userId, {
                     headers: {
-                        token: "Bearer " + user.accessToken // need access token to delete
+                        token: "Bearer " + user.accessToken 
                     }
                 });
                 const initialPreferences = response.data;
@@ -101,9 +101,9 @@ const Preferences = () => {
         // Get initial restrictions then set local variables to those.
         const setInitialRestrictions = async () => {
             try {
-                const response = await axios.get('users/restrictions/' + username, {
+                const response = await axios.get('users/restrictions/' + userId, {
                     headers: {
-                        token: "Bearer " + user.accessToken // need access token to delete
+                        token: "Bearer " + user.accessToken 
                     }
                 });
                 const initialRestrictions = response.data;
@@ -197,11 +197,11 @@ const Preferences = () => {
         const updatePreferencesInDB = async () => {
             try {
                 await axios.put('users/preferences', {
-                    username: username,
+                    userId: userId,
                     preferences: prefs
                 }, {
                     headers: {
-                        token: "Bearer " + user.accessToken // need access token to delete
+                        token: "Bearer " + user.accessToken 
                     }
                 });
                 console.log("Successfully updated preferences");
@@ -252,11 +252,11 @@ const Preferences = () => {
         const updateRestrictionsInDB = async () => {
             try {
                 await axios.put('users/restrictions', {
-                    username: username,
+                    userId: userId,
                     restrictions: rests
                 }, {
                     headers: {
-                        token: "Bearer " + user.accessToken // need access token to delete
+                        token: "Bearer " + user.accessToken 
                     }
                 });
                 console.log("Successfully updated restrictions: " + rests);

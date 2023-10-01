@@ -8,7 +8,7 @@ router.post("/", verify, async (req, res) => {
     try {
         /* Save problem to database */
         const problem = await new Problem({
-            username: req.body.username,
+            userId: req.body.userId,
             problem: req.body.problem
         }).save();
 
