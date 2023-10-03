@@ -16,7 +16,8 @@ router.post("/register", async (req, res) => {
             { username: req.body.loginMethod}
         ]
     });
-    if (user != undefined) {
+    if (user) {
+        console.log(JSON.stringify(user))
         res.status(403).json("The username, email, or phone number is already taken."); // if no matching email in DB
         return;
     }
@@ -35,6 +36,7 @@ router.post("/register", async (req, res) => {
         const user = await newUser.save();
         res.status(201).json(user); 
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 });

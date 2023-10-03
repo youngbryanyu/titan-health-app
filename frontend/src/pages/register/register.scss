@@ -8,6 +8,7 @@
             url("../../components/titan_background.jpeg");
     background-size: cover;
     position: relative;
+    overflow: auto;
   
     .top {
         .wrapper {
@@ -89,6 +90,16 @@
                 font-size: 22px;
                 cursor: pointer;
             }
+
+            .termsButton{
+                flex: 3;
+                height: 100%;
+                background-color: goldenrod;
+                border: none;
+                color: white;
+                font-size: 18px;
+                cursor: pointer;
+            }
         }
 
         .errorMessage {
@@ -96,6 +107,101 @@
             p {
                 font-size: 14px;
                 color: red;
+            }
+        }
+    }
+
+    .termsForm {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        top: 0%; // need this to prevent box from translating down
+
+        .termsContainer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+
+            form {
+                width: 300px;
+                height: 300px;
+                padding: 30px;
+                border-radius: 5px;
+                background-color: var(--main-color);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                h1 {
+                    margin-bottom: -20px;
+                }
+
+                .checkboxContainer {
+                    font-size: 12px;
+                    display: flex;
+                    
+                    input {
+                        margin-right: 5px;
+                    }
+                }
+
+                textarea {
+                    border-radius: 5px;
+                    background-color: gray;
+                    color: white;
+                    padding-left: 10px;
+                    border: none;
+                    resize: none;
+                    height: 140px;
+                    margin-top: 10px;
+
+                    &::placeholder {
+                        color: lightgray;
+                    }
+                }
+
+                button {
+                    height: 40px;
+                    border-radius: 5px;
+                    background-color: goldenrod;
+                    color: white;
+                    font-size: 18px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    border: none;
+                }
+
+                .link {
+                    margin-top: 10px;
+
+                    button {
+                        width: 300px;
+                        color: black;
+                        background-color: white;
+                    }
+                }
+
+                h1 {
+                    text-align: center;
+                }
+            }
+
+            .errorMessage {
+                margin-top: 5px;
+                margin-bottom: 5px;
+
+                p {
+                    text-align: center;
+                    font-size: 14px;
+                    color: red;
+                }
             }
         }
     }

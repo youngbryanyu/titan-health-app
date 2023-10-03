@@ -159,7 +159,7 @@ const Preferences = () => {
             }
         };
 
-        /* don't do anything on first render */
+        /* only run on first render */
         if (isFirstRender.current) {
             setInitialPreferences();
             setInitialRestrictions();
@@ -204,7 +204,7 @@ const Preferences = () => {
                         token: "Bearer " + user.accessToken 
                     }
                 });
-                console.log("Successfully updated preferences");
+                console.log("Successfully updated preferences: " + prefs);
             } catch (error) {
                 console.log("Failed to update preferences: " + error);
             }
