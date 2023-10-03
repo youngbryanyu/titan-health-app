@@ -10,7 +10,8 @@ const ROUTES = {
     SETTINGS: '/settings',
     PREFERENCES: '/preferences',
     REPORT_PROBLEM: '/reportProblem',
-    PERSONAL_INFO: '/personalInfo'
+    PERSONAL_INFO: '/personalInfo',
+    FOOD_TRACKER: '/foodTracker'
 }
 
 export default ROUTES;

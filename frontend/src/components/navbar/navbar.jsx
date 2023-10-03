@@ -62,6 +62,9 @@ const Navbar = () => {
                     <Link to={ROUTES.PREFERENCES} className="link">
                         <span>Dietary Preferences</span>
                     </Link>
+                    <Link to={ROUTES.FOOD_TRACKER} className="link">
+                        <span>Track Food</span>
+                    </Link>
                 </div>
                 <div className="right">
                     <div className="profile">

@@ -82,6 +82,52 @@ router.put("/personalInfo", verify, async (req, res) => {
     }
 });
 
+/* PUT - add/update user food in tracker */
+router.put('/addEdit/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const { foodName, calories, fat, protein, carbohydrates } = req.body;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the specified foodName exists in lowLevelNutritionGoals
+      if (!user.lowLevelNutritionGoals.has(foodName)) {
+        // Food doesn't exist, so create a new entry
+        const newNutritionFacts = {
+          calories: calories || "0",
+          fat: fat || "0",
+          protein: protein || "0",
+          carbohydrates: carbohydrates || "0",
+        };
+        user.lowLevelNutritionGoals.set(foodName, JSON.stringify(newNutritionFacts));
+      } else {
+        // Food exists, so update its nutrition facts
+        const updatedNutritionFacts = {
+          calories: calories || "0",
+          fat: fat || "0",
+          protein: protein || "0",
+          carbohydrates: carbohydrates || "0",
+        };
+        user.lowLevelNutritionGoals.set(foodName, JSON.stringify(updatedNutritionFacts));
+      }
+  
+      // Save the updated user
+      await user.save();
+  
+      return res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+
+
 /* ###################### 
 ########## GET ##########
 ######################### */
@@ -124,6 +170,66 @@ router.get("/restrictions/:userId", verify, async (req, res) => {
         res.status(500).json("Error retriving preferences. " + error);
     }
 });
+
+/* GET - get food items in tracker */
+router.get('/getAllFood/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Get all the food items and their nutrition facts from lowLevelNutritionGoals
+      const foodItems = {};
+      user.lowLevelNutritionGoals.forEach((value, key) => {
+        foodItems[key] = JSON.parse(value);
+      });
+  
+      return res.status(200).json(foodItems);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+/* ###################### 
+########## DELETE ##########
+######################### */
+
+
+/* DELETE - Delete food item in tracker*/
+router.delete('/deleteFood/:userId/:foodName', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const foodName = req.params.foodName;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the specified foodName exists in lowLevelNutritionGoals
+      if (!user.lowLevelNutritionGoals.has(foodName)) {
+        return res.status(404).json({ error: 'Food item not found for the user' });
+      }
+  
+      // Delete the food item
+      user.lowLevelNutritionGoals.delete(foodName);
+  
+      // Save the updated user
+      await user.save();
+  
+      return res.status(200).json({ message: 'Food item deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 /* export module for external use */
 module.exports = router;
