@@ -77,6 +77,6 @@ Like mentioned earlier in the section about how to run the application locally, 
 <ins>Do not push changes in `.env` to any remote branch. If you add a new environment variable simply add it to the `.env.example` template file with a temporary value. To prevent accidental pushes of the `.env` file, I recommend running `git update-index --assume-unchanged **/backend/.env`, which tells git to ignore changes in . More about this is in [this](https://stackoverflow.com/questions/18276951/how-do-i-stop-git-from-tracking-any-changes-to-a-file-from-this-commit-forward) stackoverflow post.<ins>
 
 ## Bugs
-- Currently, when the backend server is stopped, logging out causes the user's dietary preferences to be reset when the backend server is started again and they log back in and navigate to the dietary preferences page.
+- Currently, when the backend server is stopped, logging out causes the user's dietary preferences to be reset when the backend server is started again and they log back in and navigate to the dietary preferences page. [@rv72]
 
 
