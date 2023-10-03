@@ -1,0 +1,91 @@
+.foodTracker {
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #fff; /* White text color */
+    }
+
+    /* Header styles */
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Food list styles */
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    }
+
+    li button {
+        background-color: #ff5858; /* Red button background color */
+        color: #fff; /* White text color */
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    li button:hover {
+        background-color: #ff3737; /* Darker red on hover */
+    }
+
+    /* Edit nutrition facts styles */
+    h2 {
+         font-size: 20px;
+         margin-top: 30px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #4caf50; /* Green button background color */
+        color: #fff; /* White text color */
+        border: none;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+
+    /* Responsive styles */
+    @media (max-width: 600px) {
+        .container {
+            padding: 10px;
+        }
+
+        h1 {
+             font-size: 20px;
+        }
+    }
+}
