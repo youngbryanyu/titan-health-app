@@ -21,10 +21,7 @@ const schema = new mongoose.Schema(
         favoriteMenuItems: { type: [], required: false, default: [] },
         
         /* Food tracking and nutrition */
-        breakfastFoods: { type: [], required: false, default: [] },
-        lunchFoods: { type: [], required: false, default: [] },
-        dinnerFoods: { type: [], required: false, default: [] },
-        snackFoods: { type: [], required: false, default: [] },
+        foods: { type: [], required: false, default: [] },
         lowLevelNutritionGoals: { type: Map, of: String, required: false, 
             default: {
                 calories: "2000",

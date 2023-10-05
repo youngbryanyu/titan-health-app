@@ -4,6 +4,10 @@ import "./foodTracker.scss";
 import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import axios from "axios";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 /**
  * Returns a react component consisting of the Food Tracking page. 
@@ -22,6 +26,10 @@ const FoodTracker = () => {
       protein: "",
       carbohydrates: "",
     });
+    const [mealType, setMealType] = useState('');
+    const handleRadioChange = (e) => {
+        setMealType(e.target.value);
+    }
   
     const getFoodItems = async () => {
       try {
@@ -30,8 +38,9 @@ const FoodTracker = () => {
             token: `Bearer ${user.accessToken}`,
           },
         });
+        console.log(`Bearer ${user.accessToken}`);
         const foodData = response.data;
-
+        
         // Convert the object into an array of key-value pairs
         const foodItemsArray = Object.entries(foodData);
   
@@ -64,11 +73,11 @@ const FoodTracker = () => {
       }
     };
   
-    const handleEditNutritionFacts = async () => {
+    const handleAddFood = async () => {
       const { foodName, calories, fat, protein, carbohydrates } = editedNutritionFacts;
       try {
         await axios.put(
-          `users/addEdit/${userId}`,
+          `users/addFood/${userId}`,
           {
             foodName,
             calories,
@@ -82,7 +91,7 @@ const FoodTracker = () => {
             },
           }
         );
-        // Refresh the food items after editing
+        // Refresh the food items after editing 
         getFoodItems();
         // Clear the editedNutritionFacts state
         setEditedNutritionFacts({
@@ -186,7 +195,15 @@ const FoodTracker = () => {
               }
             />
           </label>
-          <button onClick={handleEditNutritionFacts}>Enter Nutrition Facts</button>
+          <FormControl>
+            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={handleRadioChange}>
+              <FormControlLabel value="breakfast" control={<Radio />} label="Breakfast" />
+              <FormControlLabel value="lunch" control={<Radio />} label="Lunch" />
+              <FormControlLabel value="dinner" control={<Radio />} label="Dinner" />
+              <FormControlLabel value="snack" control={<Radio />} label="Snack" />
+            </RadioGroup>
+          </FormControl>
+        <button onClick={handleAddFood}>Enter Nutrition Facts</button>
         </div>
       </div>
     );
