@@ -305,6 +305,86 @@ router.get('/allFoods/:userId', verify, async (req, res) => {
   }
 });
 
+/* GET - get weight log */
+router.get("/weight/:userId", verify, async (req, res) => {
+  try {
+    /* Find user matching the input user id */
+    const user = await User.findById(req.params.userId);
+
+    /* Return user weight log */
+    const result = user.weightLog;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json("Error retriving weight log. " + error);
+  }
+});
+
+/* GET - get water intake */
+router.get("/water/:userId", verify, async (req, res) => {
+  try {
+    /* Find user matching the input user id */
+    const user = await User.findById(req.params.userId);
+
+    /* Return user water intake */
+    const result = user.waterIntakeLog;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json("Error retriving water intake log. " + error);
+  }
+});
+
+/* GET - get sleep */
+router.get("/sleep/:userId", verify, async (req, res) => {
+  try {
+    /* Find user matching the input user id */
+    const user = await User.findById(req.params.userId);
+
+    /* Return user sleep */
+    const result = user.sleepLog;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json("Error retriving sleep log. " + error);
+  }
+});
+
+/* GET - get supplements */
+router.get("/supplements/:userId", verify, async (req, res) => {
+  try {
+    /* Find user matching the input user id */
+    const user = await User.findById(req.params.userId);
+
+    /* Return user supplements */
+    const result = user.supplementLog;
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json("Error retriving supplement log. " + error);
+  }
+});
+
+/* ###################### 
+########## DELETE ##########
+######################### */
+
+/* DELETE - Delete food item in tracker*/
+router.delete('/deleteFood/:userId/:foodName', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the food items
+    return res.status(200).json(user.foods);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 /* GET - get a food item in tracker */
 router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
   try {
