@@ -4,6 +4,8 @@ import Home from "./pages/home/home";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Preferences from "./pages/preferences/preferences";
+import Recommendations from "./pages/recommendations/recommendations";
+import FoodInfo from "./pages/foodInfo/FoodInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
@@ -11,7 +13,6 @@ import ROUTES from "./routes";
 import Settings from "./pages/settings/settings";
 import ReportProblem from "./pages/reportProblem/reportProblem";
 import PersonalInfo from "./pages/personalInfo/personalInfo";
-import FoodTracker from "./pages/foodTracker/foodTracker";
 
 
 /**
@@ -33,7 +34,9 @@ const App = () => {
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.REPORT_PROBLEM} element={<ReportProblem />} />
             <Route path={ROUTES.PERSONAL_INFO} element={<PersonalInfo />} />
-            <Route path={ROUTES.FOOD_TRACKER} element={<FoodTracker />} />
+            <Route path={ROUTES.RECOMMENDATIONS} element={<Recommendations />} />
+            <Route path={ROUTES.FOOD_ITEM} element={<FoodInfo />} />
+            <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodInfo />} />
         </>
     );
 
@@ -47,7 +50,9 @@ const App = () => {
             <Route path={ROUTES.SETTINGS} element={<Register />} />
             <Route path={ROUTES.REPORT_PROBLEM} element={<Register />} />
             <Route path={ROUTES.PERSONAL_INFO} element={<Register />} />
-            <Route path={ROUTES.FOOD_TRACKER} element={<Register />} />
+            <Route path={ROUTES.RECOMMENDATIONS} element={<Register />} />
+            <Route path={ROUTES.FOOD_ITEM} element={<Register />} />
+            <Route path={ROUTES.FOOD_ITEM_INFO} element={<Register />} />
         </>
     );
 
