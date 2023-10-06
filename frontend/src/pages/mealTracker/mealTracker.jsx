@@ -1,4 +1,4 @@
-// Javascript for page displaying recommendations
+/* React page for the meal tracker */
 import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
@@ -10,21 +10,9 @@ import axios from "axios";
 import { useRef } from "react";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
+import ROUTES from "../../routes";
 
-//the layout will be new recommendation page that has a 
-//list component on left, a filter component on right
-//1st filter option is "Give Me Recommendations Based On Saved Items"
-//this needs to first get all saved items
-//have a weightage for attributes (For example, Vegan - 4, Vegetarian - 1, Eggs - 6, Peanuts - 0 ...)
-//go through each saved item and add +1 to weightage if attribute is true in that item
-//at end select the attributes that are greater than or equal to 3
-//(if no attributes greater than 3, return all items)
-//(also indicate to user to save more items to get more personalized recommendations)
-//then return menu items that fit those more heavily weighted attributes
-//2nd filter option is "Give Me Recommendations Based On My Prefs/Rests"
-//just get all items that fit the users prefs & rests
-//limit results to 15 items
-
+/* Styles for page */
 const useStyles = makeStyles((theme) => ({
     root: {
         color: "black",
@@ -34,10 +22,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+/**
+ * Returns a react component consisting of the meal tracker page. Includes all logic relevant to tracking meals.
+ * 
+ * @returns a react component consisting of the meal tracker page.
+ */
 const MealTracker = () => {
-
+    /* Style object */
     const classes = useStyles();
-    const [foodItems, setFoodItems] = useState([]); //the current items displayed in list
+
+    /* User's food items currently displayed in list */
+    const [foodItems, setFoodItems] = useState([]);
+
+    /* User from auth context */
     const { user } = useContext(AuthContext);
     const userId = user._id;
 
@@ -48,11 +45,35 @@ const MealTracker = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
-    const [mealType, setMealType] = useState('');
-    const [totalCals, setTotalCals] = useState('');
+
+    /* Daily totals */
+    const [totalCaloriesToday, setTotalCaloriesToday] = useState('');
+    const [totalProteinToday, setTotalProteinToday] = useState('');
+    const [totalCarbsToday, setTotalCarbsToday] = useState('');
+    const [totalFatToday, setTotalFatToday] = useState('');
+
+    /* Meal types */
+    const EMPTY = -1;
+    const BREAKFAST = 0;
+    const LUNCH = 1;
+    const DINNER = 2;
+    const SNACK = 3;
+    const [mealType, setMealType] = useState(EMPTY);
+
+    /* Mapping of different error messages. */
+    const ERROR_MESSAGES = {
+        INCOMPLETE_FIELDS_ERROR: 'Please enter all necessary fields before saving',
+        INVALID_CALORIES_ERROR: "Calories must be a number",
+        INVALID_PROTEIN_ERROR: "Protein must be a number",
+        INVALID_CARBS_ERROR: "Carbohydrates must be a number",
+        INVALID_FAT_ERROR: "Fat must be a number",
+        INVALID_SERVINGS_ERROR: "Servings must be a number"
+    }
+
+    const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
+    const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
 
     /* Load food items on page render */
-    const isFirstRender = useRef(true); 
     useEffect(() => {
         // Get food items on load
         const getFoodItems = async () => {
@@ -61,23 +82,83 @@ const MealTracker = () => {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
                 setFoodItems(response.data);
+
+                /* calculate total calories */
                 let totalCalories = 0;
-                response.data.forEach( item => totalCalories += item.calories * item.servings );
-                setTotalCals(totalCalories);
+                response.data.forEach(item => totalCalories += item.calories * item.servings);
+                setTotalCaloriesToday(totalCalories);
+
+                /* calculate total protein */
+                let totalProtein = 0;
+                response.data.forEach(item => totalProtein += item.protein * item.servings);
+                setTotalProteinToday(totalProtein);
+
+                /* calculate total carbohydrates */
+                let totalCarbs = 0;
+                response.data.forEach(item => totalCarbs += item.carbohydrates * item.servings);
+                setTotalCarbsToday(totalCarbs);
+
+                /* calculate total fats */
+                let totalFat = 0;
+                response.data.forEach(item => totalFat += item.fat * item.servings);
+                setTotalFatToday(totalFat);
             } catch (error) {
                 console.log(error);
             }
         };
 
-        /* only run on first render */
-        if (isFirstRender.current) {
-            getFoodItems();
-        }
-        isFirstRender.current = false;
+        getFoodItems(); /* note: removed only run on first render code */
         // eslint-disable-next-line
     }, []);
 
+    /**
+     * Checks if a value is a number and is greater than 0
+     * 
+     * @param {*} str arbitrary input value
+     * @returns true if the value is valid according to the requirements
+     */
+    function isValidNumber(str) {
+        const num = parseFloat(str);
+        return !isNaN(num) && num >= 0 && str.trim() === num.toString();
+    }
+
     const handleAddFood = async () => {
+        /* initialize to true to hide error message */
+        setAllFieldsComplete(true);
+
+        /* check if all fields were entered */
+        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
+            return;
+        }
+
+        /* check if unit fields are numbers and >= 0 */
+        if (!isValidNumber(calories)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_CALORIES_ERROR);
+            return;
+        }
+        if (!isValidNumber(protein)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_PROTEIN_ERROR);
+            return;
+        }
+        if (!isValidNumber(carbohydrates)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_CARBS_ERROR);
+            return;
+        }
+        if (!isValidNumber(fat)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_FAT_ERROR);
+            return;
+        }
+        if (!isValidNumber(servings)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_SERVINGS_ERROR);
+            return;
+        }
 
         try {
             const res = await axios.put(
@@ -86,9 +167,12 @@ const MealTracker = () => {
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
-            // Refresh the food items after editing
+            // Refresh the food items totals and the list after editing
             setFoodItems(res.data.foods);
-            setTotalCals(totalCals + calories*servings);
+            setTotalCaloriesToday(totalCaloriesToday + calories * servings);
+            setTotalProteinToday(totalProteinToday + protein * servings);
+            setTotalCarbsToday(totalCarbsToday + carbohydrates * servings);
+            setTotalFatToday(totalFatToday + fat * servings);
 
             // Clear the editedNutritionFacts state
             setFoodName('');
@@ -97,24 +181,26 @@ const MealTracker = () => {
             setFat('');
             setCarbs('');
             setServings('');
-            setMealType('');
+            setMealType(EMPTY);
         } catch (error) {
             console.error(error);
         }
     };
 
+    /* Handles when user selects meal type */
     const handleMealTypeChange = (event) => {
         setMealType(event.target.value);
     }
 
+    /* A list item in display */
     function listItem(item) { // display a menu item
         const name = item.foodName;
         const id = item.hash;
 
         return (
-            <Link to={`/foodItemInfo/${id}`} className="link">
-                <ListItem component="div" disablePadding button={true}>
-                    <span className="header">{`${name}`}</span>
+            <Link to={ROUTES.FOOD_ITEM_INFO.replace(":foodItemHash", id)} className="link" key={id}>
+                <ListItem component="div" disablePadding>
+                    <span className="listItem">{` ${name}`}</span>
                 </ListItem>
             </Link>
         );
@@ -123,52 +209,97 @@ const MealTracker = () => {
     return (
         <div className="menu">
             <Navbar />
+            <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
             <div>
-                <h4 className="moreSpace">{"View Meal Tracker Items:"}</h4>
-                <Box sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                
+                <h4 className="sectionTitle">{"Foods You Ate Today"}</h4>
+                <Box sx={{ width: '100%', maxHeight: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                     <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                         <List>
-                            {foodItems.map((item) => listItem(item))}
+                            {
+                                foodItems.length === 0 ?
+                                    <ListItem component="div" disablePadding>
+                                        <span className="listItem">{" You've eaten nothing today..."}</span>
+                                    </ListItem>
+                                    :
+                                    foodItems.map((item) => listItem(item))
+                            }
                         </List>
                     </Paper>
                 </Box>
-                <h4 className="moreSpace">{"Total Daily Calories:"}</h4>
-                    <ListItem component="div" disablePadding>
-                        <span className="header">{`${totalCals}`}</span>
-                    </ListItem>
+                <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>
+                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Calories</span>
+                    <span className="listItem">{totalCaloriesToday}</span>
+                </ListItem>
+                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Protein</span>
+                    <span className="listItem">{totalProteinToday}</span>
+                </ListItem>
+                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Carbohydrates</span>
+                    <span className="listItem">{totalCarbsToday}</span>
+                </ListItem>
+                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Fat</span>
+                    <span className="listItem">{totalFatToday}</span>
+                </ListItem>
+
             </div>
-            <Stack className="stack" spacing={2} ml={"50px"}>
-                <h4 className="moreSpace">{"Add Meal Item To Tracker:"}</h4>
-                <div className="filter">
-                    <Box sx={{ minWidth: 120 }}>
-                        <div> {"Food Name: "}</div>
-                        <input type="name" value={foodName} onChange={(e) => setFoodName(e.target.value)}/>
-                        <div> {"Calories: "}</div>
-                        <input type="cals" value={calories} onChange={(e) => setCalories(e.target.value)}/>
-                        <div> {"Protein: "}</div>
-                        <input type="protein" value={protein} onChange={(e) => setProtein(e.target.value)}/>
-                        <div> {"Fat: "}</div>
-                        <input type="fat" value={fat} onChange={(e) => setFat(e.target.value)}/>
-                        <div> {"Carbohydrates: "}</div>
-                        <input type="carbohydrates" value={carbohydrates} onChange={(e) => setCarbs(e.target.value)}/>
-                        <div> {"Servings: "}</div>
-                        <input type="servings" value={servings} onChange={(e) => setServings(e.target.value)}/>
+            </Stack>
+            <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
+                <h4 className="sectionTitle">{"Add Meal Item To Tracker"}</h4>
+                <div className="inputContainer">
+                    <Box sx={{ minWidth: 230}} >
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="foodName">Food Name</label>
+                            <input id="foodName" type="text" value={foodName} className="inputBox" onChange={(e) => setFoodName(e.target.value)} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="cals">Calories</label>
+                            <input id="cals" type="text" value={calories} className="inputBox" onChange={(e) => setCalories(e.target.value)} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="protein">Protein</label>
+                            <input id="protein" type="text" value={protein} className="inputBox" onChange={(e) => setProtein(e.target.value)} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="carbohydrates">{"Carbohydrates "}</label>
+                            <input id="carbohydrates" type="text" value={carbohydrates} className="inputBox" onChange={(e) => setCarbs(e.target.value)} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="fat">Fat</label>
+                            <input id="fat" type="text" value={fat} className="inputBox" onChange={(e) => setFat(e.target.value)} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="servings">Servings</label>
+                            <input id="servings" type="text" value={servings} className="inputBox" onChange={(e) => setServings(e.target.value)} />
+                        </div>
                     </Box>
+
                 </div>
-                <div className="filter2">
-                    <Box sx={{ minWidth: 120 }}>
-                        <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}  >
+                <div className="mealTypeContainer">
+                    <Box sx={{ width: 240 }}>
+                        <FormControl error fullWidth sx={{ m: 1, width: 180 }}  >
                             <InputLabel>Meal Type</InputLabel>
                             <Select id="demo-simple-select" value={mealType} onChange={handleMealTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
-                                <MenuItem value={"Breakfast"}>{`Breakfast`}</MenuItem>
-                                <MenuItem value={"Lunch"}>{`Lunch`}</MenuItem>
-                                <MenuItem value={"Dinner"}>{`Dinner`}</MenuItem>
-                                <MenuItem value={"Snack"}>{`Snack`}</MenuItem>
+                                <MenuItem value={EMPTY}>{`Select a meal type`}</MenuItem>
+                                <MenuItem value={BREAKFAST}>{`Breakfast`}</MenuItem>
+                                <MenuItem value={LUNCH}>{`Lunch`}</MenuItem>
+                                <MenuItem value={DINNER}>{`Dinner`}</MenuItem>
+                                <MenuItem value={SNACK}>{`Snack`}</MenuItem>
                             </Select>
+                            <Button variant="contained" color="success" size="large" className="button" onClick={handleAddFood}> Add Item </Button>
                         </FormControl>
                     </Box>
-                    <Button variant="contained" color="success" size="large" className="button" onClick={handleAddFood}> Add Item </Button>
                 </div>
+                { // error message if not all fields filled in
+                    <div className="errorMessage">
+                        <p style={{ visibility: (allFieldsComplete) && "hidden" }}>
+                            {errorMessage}
+                        </p>
+                    </div>
+                }
             </Stack>
         </div>
     );

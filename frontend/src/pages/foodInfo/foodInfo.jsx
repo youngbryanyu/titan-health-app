@@ -53,9 +53,28 @@ const FoodInfo = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
-    const [mealType, setMealType] = useState('');
 
-    const [avg, setAvg] = useState("N/A"); // tracks avg rating
+    /* Meal types */
+    const EMPTY = -1;
+    const BREAKFAST = 0;
+    const LUNCH = 1;
+    const DINNER = 2;
+    const SNACK = 3;
+    const [mealType, setMealType] = useState(EMPTY);
+
+    /* Mapping of different error messages. */
+    const ERROR_MESSAGES = {
+        INCOMPLETE_FIELDS_ERROR: 'Please enter all necessary fields before saving',
+        INVALID_CALORIES_ERROR: "Calories must be a number",
+        INVALID_PROTEIN_ERROR: "Protein must be a number",
+        INVALID_CARBS_ERROR: "Carbohydrates must be a number",
+        INVALID_FAT_ERROR: "Fat must be a number",
+        INVALID_SERVINGS_ERROR: "Servings must be a number"
+    }
+
+    const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
+    const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
+
     const { user } = useContext(AuthContext);
     const userId = user._id;
     const classes = useStyles();
@@ -70,58 +89,6 @@ const FoodInfo = () => {
         mealType: "",
         hash: ""
     }); //tracks food item
-
-    const handleClick0 = () => {
-        setStarClick1(false);
-        setStarClick2(false);
-        setStarClick3(false);
-        setStarClick4(false);
-        setStarClick5(false);
-        // setScore(0);
-    }
-    const handleClick1 = () => {
-        setStarClick1(true);
-        setStarClick2(false);
-        setStarClick3(false);
-        setStarClick4(false);
-        setStarClick5(false);
-        // setScore(1);
-    }
-    const handleClick2 = () => {
-        setStarClick1(true);
-        setStarClick2(true);
-        setStarClick3(false);
-        setStarClick4(false);
-        setStarClick5(false);
-        // setScore(2);
-    }
-    const handleClick3 = () => {
-        setStarClick1(true);
-        setStarClick2(true);
-        setStarClick3(true);
-        setStarClick4(false);
-        setStarClick5(false);
-        // setScore(3);
-    }
-    const handleClick4 = () => {
-        setStarClick1(true);
-        setStarClick2(true);
-        setStarClick3(true);
-        setStarClick4(true);
-        setStarClick5(false);
-        // setScore(4);
-    }
-    const handleClick5 = () => {
-        setStarClick1(true);
-        setStarClick2(true);
-        setStarClick3(true);
-        setStarClick4(true);
-        setStarClick5(true);
-        // setScore(5);
-    }
-    const handleSavedClick = () => {
-        setSavedClick(!savedClick);
-    }
 
     /**
     *   Get item on page render
@@ -144,7 +111,7 @@ const FoodInfo = () => {
                     mealType: item.mealType,
                     hash: item.hash
                 });
-                console.log(response.data);
+                // console.log(response.data);
             } catch (error) { console.log(error) };
         };
 
@@ -157,7 +124,55 @@ const FoodInfo = () => {
         // eslint-disable-next-line
     }, []);
 
+    /**
+     * Checks if a value is a number and is greater than 0
+     * 
+     * @param {*} str arbitrary input value
+     * @returns true if the value is valid according to the requirements
+     */
+    function isValidNumber(str) {
+        const num = parseFloat(str);
+        return !isNaN(num) && num >= 0 && str.trim() === num.toString();
+    }
+
     const handleEditFood = async () => {
+
+        setAllFieldsComplete(true);
+
+        /* check if all fields were entered */
+        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
+            setAllFieldsComplete(false);
+            console.log(allFieldsComplete)
+            setErrorMessage(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
+            return;
+        }
+
+        /* check if unit fields are numbers and >= 0 */
+        if (!isValidNumber(calories)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_CALORIES_ERROR);
+            return;
+        }
+        if (!isValidNumber(protein)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_PROTEIN_ERROR);
+            return;
+        }
+        if (!isValidNumber(carbohydrates)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_CARBS_ERROR);
+            return;
+        }
+        if (!isValidNumber(fat)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_FAT_ERROR);
+            return;
+        }
+        if (!isValidNumber(servings)) {
+            setAllFieldsComplete(false);
+            setErrorMessage(ERROR_MESSAGES.INVALID_SERVINGS_ERROR);
+            return;
+        }
 
         try {
             const hash = foodItemHash;
@@ -186,7 +201,7 @@ const FoodInfo = () => {
             setFat('');
             setCarbs('');
             setServings('');
-            setMealType('');
+            setMealType(EMPTY);
         } catch (error) {
             console.error(error);
         }
@@ -296,7 +311,7 @@ const FoodInfo = () => {
             <Box sx={{ // info for tags
                 background: '#0b0b0b',
                 width: .2,
-                maxHeight: 425,
+                height: 500,
                 position: 'relative',
                 float: 'left',
                 display: 'inline',
@@ -369,9 +384,18 @@ const FoodInfo = () => {
                         <Button variant="contained" color="success" size="large" className="button" onClick={handleEditFood}> Update Item </Button>
                     </ListItem>
                 </List>
+                { // error message if not all fields filled in
+                    <div className="errorMessage">
+                        <p style={{ visibility: (allFieldsComplete) && "hidden" }}>
+                            {errorMessage}
+                        </p>
+                    </div>
+                }
             </Box>
 
-            <Box sx={{ // info for locations served at today
+            
+
+            <Box sx={{ // delete button
                 background: '#0b0b0b',
                 width: .2,
                 maxHeight: 400,
@@ -390,80 +414,14 @@ const FoodInfo = () => {
                         mx: 'auto',
                         borderRadius: 8,
                     }}>
-                        <Typography fontWeight="bold">
-                            Delete This Item:
+                        <Typography fontWeight="bold" marginRight={1}>
+                            {"Delete This Item: "}
                         </Typography>
                         <Link to={ROUTES.MEAL_TRACKER} className="link" onClick={handleDeleteFood}>
                             <Button variant="contained" color="error" size="large" className="button"> Delete </Button>
                         </Link>
                     </ListItem>
                 </List>
-            </Box>
-
-            <Box sx={{
-                background: '#0b0b0b',
-                width: 340,
-                height: 'auto',
-                overflow: 'hidden', //do not remove, will break the ratings appearance and idk why
-                position: 'absolute',
-                ml: 6, //left margin (percent of screen)
-                mt: 63, //top margin (percent of screen)
-                borderRadius: 10,
-            }}>
-                <Tooltip title={`Average Rating: ${avg}`} placement="bottom">
-                    <IconButton color="inherit">
-                        <Info />
-                    </IconButton>
-                </Tooltip>
-                <IconButton color="inherit" onClick={handleClick1}>
-                    {starClick1 ? <Star /> : <StarOutline />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick2}>
-                    {starClick2 ? <Star /> : <StarOutline />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick3}>
-                    {starClick3 ? <Star /> : <StarOutline />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick4}>
-                    {starClick4 ? <Star/> : <StarOutline/>}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick5}>
-                    {starClick5 ? <Star /> : <StarOutline />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleSavedClick}>
-                    {savedClick ? <Bookmark /> : <BookmarkBorder />}
-                </IconButton>
-            </Box>
-            <Box sx={{ ml: 6, mt: 70, width: .9, height: 'auto', position: 'absolute' }}>
-                <Box sx={{
-                    borderColor: '#242424',
-                    p: 1,
-                    m: 1,
-                    borderRadius: 4,
-                    border: '1px solid',
-                    width: 1,
-                    height: 'auto',
-                    display: 'block',
-                }}>
-                    <Typography fontWeight="bold">
-                        Ingredients: &nbsp;
-                    </Typography>
-                </Box>
-                <Box sx={{
-                    borderColor: '#242424',
-                    p: 1,
-                    m: 1,
-                    borderRadius: 4,
-                    border: '1px solid',
-                    height: 'auto',
-                    width: 1,
-                    display: 'block',
-                }}>
-                    <Typography style={{ color: "#f74d40" }} fontWeight="bold" color='red'>
-                        Disclaimer: &nbsp;
-                    </Typography>
-                    Menus subject to change. All nutritional information is based on the listed menu items. Any additions to ingredients or condiments will change the nutritional value. All information provided is believed to be accurate and reliable as of the date of posting. Nutritional information may vary by location due to product substitutions or product availability.
-                </Box>
             </Box>
         </div>
     );

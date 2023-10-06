@@ -5,7 +5,7 @@ import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Preferences from "./pages/preferences/preferences";
 import MealTracker from "./pages/mealTracker/mealTracker";
-import FoodInfo from "./pages/foodInfo/FoodInfo";
+import FoodInfo from "./pages/foodInfo/foodInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
