@@ -198,7 +198,7 @@ router.get("/restrictions/:userId", verify, async (req, res) => {
     }
 });
 
-/* GET - get food items in tracker */
+/* GET - get all food items in tracker */
 router.get('/allFoods/:userId', verify, async (req, res) => {
     try {
       const userId = req.params.userId;
@@ -216,32 +216,48 @@ router.get('/allFoods/:userId', verify, async (req, res) => {
       console.error(error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+});
+
+/* GET - get a food item in tracker */
+router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const hash = req.params.hash;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
+
+    // Get all the food items
+    return res.status(200).json(user.foods[itemIndex]);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 /* ###################### 
 ########## DELETE ##########
 ######################### */
 
 /* DELETE - Delete food item in tracker*/
-router.delete('/deleteFood/:userId/:foodName', verify, async (req, res) => {
+router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
     try {
       const userId = req.params.userId;
-      const foodName = req.params.foodName;
-  
-      // Find the user by ID
-      const user = await User.findById(userId);
+      const hash = req.params.hash;
+      const user = await User.findById(userId); // Find the user by ID
   
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
   
-      // Check if the specified foodName exists in lowLevelNutritionGoals
-      if (!user.lowLevelNutritionGoals.has(foodName)) {
-        return res.status(404).json({ error: 'Food item not found for the user' });
-      }
-  
-      // Delete the food item
-      user.lowLevelNutritionGoals.delete(foodName);
+      const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
+      user.foods.splice(itemIndex, 1);
   
       // Save the updated user
       await user.save();

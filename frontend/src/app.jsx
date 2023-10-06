@@ -4,7 +4,7 @@ import Home from "./pages/home/home";
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Preferences from "./pages/preferences/preferences";
-import Recommendations from "./pages/recommendations/recommendations";
+import MealTracker from "./pages/mealTracker/mealTracker";
 import FoodInfo from "./pages/foodInfo/FoodInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
@@ -34,7 +34,7 @@ const App = () => {
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
             <Route path={ROUTES.REPORT_PROBLEM} element={<ReportProblem />} />
             <Route path={ROUTES.PERSONAL_INFO} element={<PersonalInfo />} />
-            <Route path={ROUTES.RECOMMENDATIONS} element={<Recommendations />} />
+            <Route path={ROUTES.MEAL_TRACKER} element={<MealTracker />} />
             <Route path={ROUTES.FOOD_ITEM} element={<FoodInfo />} />
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodInfo />} />
         </>
@@ -50,7 +50,7 @@ const App = () => {
             <Route path={ROUTES.SETTINGS} element={<Register />} />
             <Route path={ROUTES.REPORT_PROBLEM} element={<Register />} />
             <Route path={ROUTES.PERSONAL_INFO} element={<Register />} />
-            <Route path={ROUTES.RECOMMENDATIONS} element={<Register />} />
+            <Route path={ROUTES.MEAL_TRACKER} element={<Register />} />
             <Route path={ROUTES.FOOD_ITEM} element={<Register />} />
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<Register />} />
         </>
