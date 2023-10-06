@@ -24,6 +24,7 @@
     .listItem {
         font-weight: normal;
         white-space: pre; // enable whitespace for span text
+        margin-top: 2.5px;
     }
 
     .text {
@@ -47,7 +48,21 @@
     }
     
     .sectionTitle {
-        margin-top: 25px;
+        margin-top: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .calorieLabel {
+        color: gray;
+        font-size: 0.8rem;
+        font-weight: normal;  // Set the font weight to normal
+    }
+
+    .calorieLabelValue {
+        font-weight: normal;  // Set the font weight to normal
+        // font-size: 1rem;
     }
 
     h4 {

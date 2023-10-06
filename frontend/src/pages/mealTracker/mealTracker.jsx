@@ -1,5 +1,5 @@
 /* React page for the meal tracker */
-import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
 import { Link } from "react-router-dom";
@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
  * @returns a react component consisting of the meal tracker page.
  */
 const MealTracker = () => {
+    /* scrolling list height for each meal type list */
+    const MEAL_LIST_HEIGHT = 105;
+
     /* Style object */
     const classes = useStyles();
 
@@ -50,6 +53,12 @@ const MealTracker = () => {
     const [totalProteinToday, setTotalProteinToday] = useState('');
     const [totalCarbsToday, setTotalCarbsToday] = useState('');
     const [totalFatToday, setTotalFatToday] = useState('');
+
+    /* meal specific totals */
+    const [totalBreakfastCalories, setTotalBreakfastCalories] = useState('');
+    const [totalLunchCalories, setTotalLunchCalories] = useState('');
+    const [totalDinnerCalories, setTotalDinnerCalories] = useState('');
+    const [totalSnackCalories, setTotalSnackCalories] = useState('');
 
     /* Meal types */
     const EMPTY = 'Choose meal type';
@@ -84,8 +93,31 @@ const MealTracker = () => {
 
                 /* calculate total calories */
                 let totalCalories = 0;
-                response.data.forEach(item => totalCalories += item.calories * item.servings);
+                let totalBreakfast = 0;
+                let totalLunch = 0;
+                let totalDinner = 0;
+                let totalSnack = 0;
+                response.data.forEach(item => {
+                    totalCalories += item.calories * item.servings;
+
+                    if (item.mealType === BREAKFAST) {
+                        totalBreakfast += item.calories * item.servings;
+                    }
+                    if (item.mealType === LUNCH) {
+                        totalLunch += item.calories * item.servings;
+                    }
+                    if (item.mealType === DINNER) {
+                        totalDinner += item.calories * item.servings;
+                    }
+                    if (item.mealType === SNACK) {
+                        totalSnack += item.calories * item.servings;
+                    }
+                });
                 setTotalCaloriesToday(totalCalories);
+                setTotalBreakfastCalories(totalBreakfast);
+                setTotalLunchCalories(totalLunch);
+                setTotalDinnerCalories(totalDinner);
+                setTotalSnackCalories(totalSnack);
 
                 /* calculate total protein */
                 let totalProtein = 0;
@@ -101,6 +133,8 @@ const MealTracker = () => {
                 let totalFat = 0;
                 response.data.forEach(item => totalFat += item.fat * item.servings);
                 setTotalFatToday(totalFat);
+
+
             } catch (error) {
                 console.log(error);
             }
@@ -173,6 +207,20 @@ const MealTracker = () => {
             setTotalCarbsToday(totalCarbsToday + carbohydrates * servings);
             setTotalFatToday(totalFatToday + fat * servings);
 
+            // refresh meal specific
+            if (mealType === BREAKFAST) {
+                setTotalBreakfastCalories(totalBreakfastCalories + calories * servings);
+            }
+            if (mealType === LUNCH) {
+                setTotalLunchCalories(totalLunchCalories + calories * servings);
+            }
+            if (mealType === DINNER) {
+                setTotalDinnerCalories(totalDinnerCalories + calories * servings);
+            }
+            if (mealType === SNACK) {
+                setTotalSnackCalories(totalSnackCalories + calories * servings);
+            }
+
             // Clear the editedNutritionFacts state
             setFoodName('');
             setCalories('');
@@ -192,64 +240,169 @@ const MealTracker = () => {
     }
 
     /* A list item in display */
-    function listItem(item) { // display a menu item
-        const name = item.foodName;
+
+    function buildListItem(item, mealType) {
+        if (item.mealType !== mealType) {
+            return <></>
+        }
+
+        let name = item.foodName;
+        if (name.length > 30) {
+            name = name.substring(0, 30) + "...";
+        }
         const id = item.hash;
+        const servings = item.servings;
+        const calories = item.calories
+        const totalCalories = calories * servings;
 
         return (
-            <Link to={ROUTES.FOOD_ITEM_INFO.replace(":foodItemHash", id)} className="link" key={id}>
-                <ListItem component="div" disablePadding>
-                    <span className="listItem">{` ${name}`}</span>
-                </ListItem>
-            </Link>
+            <div key={id}>
+                <Link to={ROUTES.FOOD_ITEM_INFO.replace(":foodItemHash", id)} className="link">
+                    <ListItem component="div" sx={{ flexDirection: "column", alignItems: "start", paddingLeft: 1, paddingRight: 1, paddingTop: .5, paddingBottom: .5 }}>
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                            <span>{name}</span>
+                            <span>{totalCalories}</span>
+                        </Box>
+                        <Typography variant="body2" component="span" sx={{ fontSize: '0.8em', color: 'gray' }}>
+                            {`${servings} servings`}
+                        </Typography>
+                    </ListItem>
+                </Link>
+                <Divider />
+            </div>
         );
     }
+
+
 
     return (
         <div className="menu">
             <Navbar />
             <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
-            <div>
-                
-                <h4 className="sectionTitle">{"Foods You Ate Today"}</h4>
-                <Box sx={{ width: '100%', maxHeight: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
-                    <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
-                        <List>
-                            {
-                                foodItems.length === 0 ?
-                                    <ListItem component="div" disablePadding>
-                                        <span className="listItem">{" You've eaten nothing today..."}</span>
-                                    </ListItem>
-                                    :
-                                    foodItems.map((item) => listItem(item))
-                            }
-                        </List>
-                    </Paper>
-                </Box>
-                <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>
-                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Calories</span>
-                    <span className="listItem">{totalCaloriesToday}</span>
-                </ListItem>
-                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Protein</span>
-                    <span className="listItem">{totalProteinToday}</span>
-                </ListItem>
-                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Carbohydrates</span>
-                    <span className="listItem">{totalCarbsToday}</span>
-                </ListItem>
-                <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Fat</span>
-                    <span className="listItem">{totalFatToday}</span>
-                </ListItem>
+                <div>
+                    {/* breakfast */}
+                    <h4 className="sectionTitle">
+                        <span>Breakfast</span>
+                        <div>
+                            <span className="calorieLabelValue">{totalBreakfastCalories}</span>
+                            <div className="calorieLabel">calories</div>
+                        </div>
+                    </h4>
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                        <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
+                            <List>
+                                {
+                                    foodItems.length === 0 ?
+                                        <ListItem component="div" disablePadding>
+                                            <span className="listItem">{" You've eaten nothing today"}</span>
+                                        </ListItem>
+                                        :
+                                        foodItems.map((item) => buildListItem(item, BREAKFAST))
+                                }
+                            </List>
+                        </Paper>
+                    </Box>
 
-            </div>
+                    {/* lunch */}
+                    <h4 className="sectionTitle">
+                        <span>Lunch</span>
+                        <div>
+                            <span className="calorieLabelValue">{totalLunchCalories}</span>
+                            <div className="calorieLabel">calories</div>
+                        </div>
+                    </h4>
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                        <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
+                            <List>
+                                {
+                                    foodItems.length === 0 ?
+                                        <ListItem component="div" disablePadding>
+                                            <span className="listItem">{" You've eaten nothing today"}</span>
+                                        </ListItem>
+                                        :
+                                        foodItems.map((item) => buildListItem(item, LUNCH))
+                                }
+                            </List>
+                        </Paper>
+                    </Box>
+
+                    {/* dinner */}
+                    <h4 className="sectionTitle">
+                        <span>Dinner</span>
+                        <div>
+                            <span className="calorieLabelValue">{totalDinnerCalories}</span>
+                            <div className="calorieLabel">calories</div>
+                        </div>
+                    </h4>
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                        <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
+                            <List>
+                                {
+                                    foodItems.length === 0 ?
+                                        <ListItem component="div" disablePadding>
+                                            <span className="listItem">{" You've eaten nothing today"}</span>
+                                        </ListItem>
+                                        :
+                                        foodItems.map((item) => buildListItem(item, DINNER))
+                                }
+                            </List>
+                        </Paper>
+                    </Box>
+
+                    {/* snack */}
+                    <h4 className="sectionTitle">
+                        <span>Snack</span>
+                        <div>
+                            <span className="calorieLabelValue">{totalSnackCalories}</span>
+                            <div className="calorieLabel">calories</div>
+                        </div>
+                    </h4>
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                        <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
+                            <List>
+                                {
+                                    foodItems.length === 0 ?
+                                        <ListItem component="div" disablePadding>
+                                            <span className="listItem">{" You've eaten nothing today"}</span>
+                                        </ListItem>
+                                        :
+                                        foodItems.map((item) => buildListItem(item, SNACK))
+                                }
+                            </List>
+                        </Paper>
+                    </Box>
+                </div>
             </Stack>
+
+            <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
+                <div>
+
+                    <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>
+                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Calories</span>
+                        <span className="listItem">{totalCaloriesToday}</span>
+                    </ListItem>
+                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Protein</span>
+                        <span className="listItem">{totalProteinToday}</span>
+                    </ListItem>
+                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Carbohydrates</span>
+                        <span className="listItem">{totalCarbsToday}</span>
+                    </ListItem>
+                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Fat</span>
+                        <span className="listItem">{totalFatToday}</span>
+                    </ListItem>
+
+                </div>
+            </Stack>
+
+
             <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
                 <h4 className="sectionTitle">{"Add Meal Item To Tracker"}</h4>
                 <div className="inputContainer">
-                    <Box sx={{ minWidth: 230}} >
+                    <Box sx={{ minWidth: 230 }} >
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <label htmlFor="foodName">Food Name</label>
                             <input id="foodName" type="text" value={foodName} className="inputBox" onChange={(e) => setFoodName(e.target.value)} />

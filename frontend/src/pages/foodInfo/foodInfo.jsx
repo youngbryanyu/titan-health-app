@@ -299,7 +299,7 @@ const FoodInfo = () => {
             <Box sx={{ // info for tags
                 background: '#0b0b0b',
                 width: .22,
-                height: 450,
+                height: 500,
                 position: 'relative',
                 float: 'left',
                 display: 'inline',
