@@ -12,9 +12,8 @@ const ROUTES = {
     REPORT_PROBLEM: '/reportProblem',
     PERSONAL_INFO: '/personalInfo',
     FOOD_TRACKER: '/foodTracker',
-    RECOMMENDATIONS: '/recommendations',
-    FOOD_ITEM: '/foodItemInfo',
-    FOOD_ITEM_INFO: '/foodItemInfo/:itemID'
+    MEAL_TRACKER: '/recommendations',
+    FOOD_ITEM_INFO: '/foodItemInfo/:foodItemHash'
 }
 
 export default ROUTES;

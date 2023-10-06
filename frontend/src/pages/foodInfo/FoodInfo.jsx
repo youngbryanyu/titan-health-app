@@ -5,43 +5,74 @@ import "./foodInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
 import { IconButton, Tooltip } from "@material-ui/core";
-
 import Info from '@mui/icons-material/Info';
 import StarOutline from '@mui/icons-material/StarOutline';
 import Star from '@mui/icons-material/Star';
 import BookmarkBorder from '@mui/icons-material/BookmarkBorder';
 import Bookmark from '@mui/icons-material/Bookmark';
 import { AuthContext } from "../../utils/authentication/auth-context";
-
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import axios from "axios";
+import Button from '@mui/material/Button';
+import { makeStyles } from "@material-ui/core/styles";
+import ROUTES from "../../routes";
+import { Link, useNavigate } from "react-router-dom";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: "black",
+    },
+    selected: {
+        color: "white"
+    }
+}));
 
 const FoodInfo = () => {
+
+
+    const handleMealTypeChange = (event) => {
+        setMealType(event.target.value);
+    }
+
+    /* Rating Info */
     const [starClick1, setStarClick1] = useState(false);
     const [starClick2, setStarClick2] = useState(false);
     const [starClick3, setStarClick3] = useState(false);
     const [starClick4, setStarClick4] = useState(false);
     const [starClick5, setStarClick5] = useState(false);
     const [savedClick, setSavedClick] = useState(false);
-    const [score, setScore] = useState(0); // tracks users rating of item
+
+    /* Food info corresponding to input boxes */
+    const [foodName, setFoodName] = useState('');
+    const [calories, setCalories] = useState('');
+    const [protein, setProtein] = useState('');
+    const [fat, setFat] = useState('');
+    const [carbohydrates, setCarbs] = useState('');
+    const [servings, setServings] = useState('');
+    const [mealType, setMealType] = useState('');
+
     const [avg, setAvg] = useState("N/A"); // tracks avg rating
-    // const [saved, setSaved] = useState(false); // whether or not item is saved --> unused 
     const { user } = useContext(AuthContext);
-    let { menuItemID } = useParams(); // this will be undefined if no params
-    const [menuItem, setMenuItem] = useState({
-        _id: "",
-        ID: "",
-        name: "",
-        courtData: [],
-        dateServed: "",
-        isVegetarian: false,
-        allergens: [],
-        nutritionFacts: [],
-        ingredients: "",
-        __v: 0
-    }); //tracks menu item
+    const userId = user._id;
+    const classes = useStyles();
+    let { foodItemHash } = useParams(); // this will be undefined if no params
+    const [foodItem, setFoodItem] = useState({
+        foodName: "",
+        calories: "",
+        fat: "",
+        protein: "",
+        carbohydrates: "",
+        servings: "",
+        mealType: "",
+        hash: ""
+    }); //tracks food item
 
     const handleClick0 = () => {
         setStarClick1(false);
@@ -96,230 +127,90 @@ const FoodInfo = () => {
     }
 
     /**
-    * Load initial ratings & get item & get saved item on page render
+    *   Get item on page render
     */
-    const isFirstRenderRatings = useRef(true); // don't do anything on first render
+    const isFirstRender = useRef(true); // don't do anything on first render
     useEffect(() => {
-        // Get initial rating then set rating of this item to that
-        const setInitialRating = async () => {
+        
+        const getFoodItemInfo = async () => {
             try {
-                const response = await axios.get('/ratings/' + user.username + '/' + menuItemID);
-                let rating = response.data;
-
-                if (rating === "No doc found") { //means no rating for this item
-                    // leave all stars blank
-                    handleClick0();
-                } else { //find rating and call respective function
-
-                    rating = response.data.rating;
-
-                    switch (rating) {
-                        default:
-                            handleClick0();
-                            break;
-                        case 1:
-                            handleClick1();
-                            break;
-                        case 2:
-                            handleClick2();
-                            break;
-                        case 3:
-                            handleClick3();
-                            break;
-                        case 4:
-                            handleClick4();
-                            break;
-                        case 5:
-                            handleClick5();
-                            break;
-
-                    }
-
-                }
-
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const getIntialAvgRating = async () => {
-            try {
-                const response = await axios.get(`/ratings/${menuItemID}`);
-                const rating = response.data.avgRating;
-                if (rating != null) setAvg(rating);
-            } catch (error) { console.log(error) };
-        };
-
-        const getMenuItemInfo = async () => {
-            try {
-                const response = await axios.get(`/menuInfo/item/${menuItemID}`);
+                const response = await axios.get(`/users/aFoodItem/${userId}/${foodItemHash}`,
+                { headers: { token: `Bearer ${user.accessToken}` } });
                 const item = response.data;
-                setMenuItem({
-                    _id: item._id,
-                    ID: item.ID,
-                    name: item.name,
-                    courtData: item.courtData,
-                    dateServed: item.dateServed,
-                    isVegetarian: item.isVegetarian,
-                    allergens: item.allergens,
-                    nutritionFacts: item.nutritionFacts,
-                    ingredients: item.ingredients,
-                    __v: item.__v,
+                setFoodItem({
+                    foodName: item.foodName,
+                    calories: item.calories,
+                    fat: item.fat,
+                    protein: item.protein,
+                    carbohydrates: item.carbohydrates,
+                    servings: item.servings,
+                    mealType: item.mealType,
+                    hash: item.hash
                 });
-                console.log(menuItem);
-            } catch (error) { console.log(error) };
-
-        };
-
-        const getSavedStatus = async () => {
-            try {
-                const response = await axios.get(`/saved/${user.username}/${menuItemID}`);
-                const savedStatus = response.data.saved;
-                if (savedStatus != null) {
-                    // setSaved(savedStatus); // unused
-                    setSavedClick(savedStatus); //this is a test comment
-                }
+                console.log(response.data);
             } catch (error) { console.log(error) };
         };
 
-        if (isFirstRenderRatings.current) {
-            if (menuItemID != null) {
-                setInitialRating();
-                getIntialAvgRating();
-                getMenuItemInfo();
-                getSavedStatus();
+        if (isFirstRender.current) {
+            if (foodItemHash != null) {
+                getFoodItemInfo();
             }
         }
-        isFirstRenderRatings.current = false;
+        isFirstRender.current = false;
         // eslint-disable-next-line
     }, []);
 
-    /**
-     * Update the rating in the database when rating changes, not on first render though. Triggered by useEffect above
-     */
-    const isFirstRender_updateRatingsDB = useRef(true); // don't do anything on first render
-    useEffect(() => {
-        if (isFirstRender_updateRatingsDB.current) {
-            isFirstRender_updateRatingsDB.current = false;
-            return; // don't update DB on initial render
-        }
+    const handleEditFood = async () => {
 
-        const updateRatingInDB = async () => {
-            try {
-                var rating;
-                if (starClick5) {
-                    rating = 5
-                } else if (starClick4) {
-                    rating = 4
-                } else if (starClick3) {
-                    rating = 3
-                } else if (starClick2) {
-                    rating = 2
-                } else if (starClick1) {
-                    rating = 1
-                }
-                await axios.post('/ratings', {
-                    username: user.username,
-                    menuItemID: menuItemID,
-                    rating: rating
+        try {
+            const hash = foodItemHash;
+            const res = await axios.put(
+                `/users/editFood/${userId}`,
+                { foodName, calories, fat, protein, carbohydrates, servings, mealType, hash },
+                { headers: { token: `Bearer ${user.accessToken}` } }
+            );
+
+            // Refresh the food items after editing
+            setFoodItem({
+                    foodName: foodName,
+                    calories: calories,
+                    fat: fat,
+                    protein: protein,
+                    carbohydrates: carbohydrates,
+                    servings: servings,
+                    mealType: mealType,
+                    hash: foodItemHash
                 });
-                console.log("successfully updated rating of menuItemId: " + menuItemID);
-            } catch (error) {
-                console.log("failed to update rating: " + error);
-            } finally {
-                setScore(rating)
-            }
-        }
-        if (menuItemID != null) {
-            updateRatingInDB(); // update the preferences in the database
-        }// eslint-disable-next-line
-    }, [starClick1, starClick2, starClick3, starClick4, starClick5]);
 
-    /* useEffect to udpate avg rating of menu item on page when user rates something */
-    useEffect(() => {
-        async function updateAvgRating() {
-            try {
-                const response = await axios.get('/ratings/' + menuItemID);
-                console.log("successfully updated rating of menuItemId: " + menuItemID);
-                console.log(response.data.avgRating)
-                setAvg(response.data.avgRating);
-    
-            } catch (error) {
-                console.log("failed to update avg rating: " + error);
-            }
+            // Clear the previous state
+            setFoodName('');
+            setCalories('');
+            setProtein('');
+            setFat('');
+            setCarbs('');
+            setServings('');
+            setMealType('');
+        } catch (error) {
+            console.error(error);
         }
-        updateAvgRating();
-    }, [score])
+    };
 
-    /* Get nutrition info */
-    const nutrition = menuItem.nutritionFacts.map((fact) =>
-        <ListItem key="{fact.Name}">
-            <Typography fontWeight="bold">
-                {fact.Name}: &nbsp;
-            </Typography>
-            {fact.LabelValue}
-        </ListItem>
-    );
-
-    /* Get dietary tag info */
-    const tags1 = menuItem.allergens.map((tag) =>
-        vegTags(tag)
-    );
-    const tags2 = menuItem.allergens.map((tag) =>
-        nonVegTags(tag)
-    );
-    function vegTags(tag) {
-        if (tag.Name === "Vegan" || tag.Name === "Vegetarian") {
-            if (tag.Value) {
-                return (
-                    <ListItem key="{tag.Name}">
-                        Is&nbsp;{tag.Name}
-                    </ListItem>
-                )
-            } else {
-                return (
-                    <ListItem key="{tag.Name}">
-                        Is not&nbsp;{tag.Name}
-                    </ListItem>
-                )
-            }
+    const handleDeleteFood = async () => {
+        try {
+            const hash = foodItemHash;
+            const res = await axios.delete(
+                `/users/deleteFood/${userId}/${hash}`,
+                { headers: { token: `Bearer ${user.accessToken}` } }
+            );
+        } catch (error) {
+            console.error(error);
         }
-    }
-    function nonVegTags(tag) {
-        if (tag.Name === "Vegan" || tag.Name === "Vegetarian") {
-            return
-        }
-        if (tag.Value) {
-            return (
-                <ListItem key="{tag.Name}">
-                    Contains&nbsp;{tag.Name}
-                </ListItem>
-            )
-        } else {
-            return (
-                <ListItem key="{tag.Name}">
-                    Does not contain&nbsp;{tag.Name}
-                </ListItem>
-            )
-        }
-    }
-
-    /* Get the locations an item is served at today */
-    const locations = menuItem.courtData.map((courtDataItem) =>
-        courtDataInfo(courtDataItem)
-    )
-    function courtDataInfo(courtDataItem) {
-        return (
-            <ListItem key="{courtDataItem}">
-                &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
-            </ListItem>
-        )
-    }
+    };
 
     /**
      * Update the savedStatus in the database when saved changes, not on first render though.
      */
-    const isFirstRender_updateSavedDB = useRef(true); // don't do anything on first render
+    /* const isFirstRender_updateSavedDB = useRef(true); // don't do anything on first render
     useEffect(() => {
         if (isFirstRender_updateSavedDB.current) {
             isFirstRender_updateSavedDB.current = false;
@@ -330,24 +221,187 @@ const FoodInfo = () => {
             try {
                 await axios.post('/saved', {
                     username: user.username,
-                    menuItemID: menuItemID,
+                    menuItemID: foodItemHash,
                     saved: savedClick
                 });
-                console.log("successfully updated savedStatus of menuItemId: " + menuItemID);
+                console.log("successfully updated savedStatus of menuItemId: " + foodItemHash);
             } catch (error) {
                 console.log("failed to update savedStatus: " + error);
             }
         }
 
-        if (menuItemID != null) {
+        if (foodItemHash != null) {
             updateSavedStatusInDB(); //update savedStatus of item in DB
         }// eslint-disable-next-line
 
-    }, [savedClick]);
+    }, [savedClick]); */
 
     return (
         <div className="foodInfo">
             <Navbar />
+
+            <Box sx={{ // info for nutrition facts (sx provides inline style information for this component)
+                background: '#0b0b0b',
+                width: .4,
+                maxHeight: 400,
+                position: 'relative',
+                float: 'left',
+                display: 'inline',
+                ml: 6,
+                top: 85,
+                borderRadius: 5,
+                overflow: 'auto',
+            }}>
+                <List>
+                    <ListItem sx={{
+                        background: '#242424',
+                        width: .98,
+                        mx: 'auto',
+                        borderRadius: 8,
+                    }}>
+                        <Typography style={{ color: "#ebc034" }} fontWeight="bold">
+                            Nutrition Facts for: &nbsp; {foodItem.foodName}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="calories">
+                        <Typography fontWeight="bold">
+                            Calories: {foodItem.calories}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="fat">
+                        <Typography fontWeight="bold">
+                            Fat: {foodItem.fat}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="protein">
+                        <Typography fontWeight="bold">
+                            Protein: {foodItem.protein}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="carbohydrates">
+                        <Typography fontWeight="bold">
+                            Carbohydrates: {foodItem.carbohydrates}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="servings">
+                        <Typography fontWeight="bold">
+                            Servings: {foodItem.servings}
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="mealType">
+                        <Typography fontWeight="bold">
+                            Meal Type: {foodItem.mealType}
+                        </Typography>
+                    </ListItem>
+                </List>
+            </Box>
+
+            <Box sx={{ // info for tags
+                background: '#0b0b0b',
+                width: .2,
+                maxHeight: 425,
+                position: 'relative',
+                float: 'left',
+                display: 'inline',
+                ml: 6,
+                top: 85,
+                borderRadius: 5,
+                overflow: 'auto',
+            }}>
+                <List>
+                    <ListItem sx={{
+                        background: '#242424',
+                        width: .98,
+                        mx: 'auto',
+                        borderRadius: 8,
+                    }}>
+                        <Typography fontWeight="bold">
+                            Edit Item:
+                        </Typography>
+                    </ListItem>
+                    <ListItem key="name">
+                        <Typography fontWeight="bold">
+                            Food Name:  
+                        </Typography>
+                        <input type="name" value={foodName} onChange={(e) => setFoodName(e.target.value)}/>
+                    </ListItem>
+                    <ListItem key="calories">
+                        <Typography fontWeight="bold">
+                            Calories:
+                        </Typography>
+                        <input type="cals" value={calories} onChange={(e) => setCalories(e.target.value)}/>
+                    </ListItem>
+                    <ListItem key="fat">
+                        <Typography fontWeight="bold">
+                            Fat:
+                        </Typography>
+                        <input type="fat" value={fat} onChange={(e) => setFat(e.target.value)} />
+                    </ListItem>
+                    <ListItem key="protein">
+                        <Typography fontWeight="bold">
+                            Protein:
+                        </Typography>
+                        <input type="protein" value={protein} onChange={(e) => setProtein(e.target.value)}/>
+                    </ListItem>
+                    <ListItem key="carbs">
+                        <Typography fontWeight="bold">
+                            Carbs:
+                        </Typography>
+                        <input type="carbs" value={carbohydrates} onChange={(e) => setCarbs(e.target.value)}/>
+                    </ListItem>
+                    <ListItem key="servings">
+                        <Typography fontWeight="bold">
+                            Servings:
+                        </Typography>
+                        <input type="servings" value={servings} onChange={(e) => setServings(e.target.value)}/>
+                    </ListItem>
+                    <ListItem>
+                        <Box sx={{ minWidth: 120 }}>
+                            <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}  >
+                                <InputLabel>Meal Type</InputLabel>
+                                <Select id="demo-simple-select" value={mealType} onChange={handleMealTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
+                                    <MenuItem value={"Breakfast"}>{`Breakfast`}</MenuItem>
+                                    <MenuItem value={"Lunch"}>{`Lunch`}</MenuItem>
+                                    <MenuItem value={"Dinner"}>{`Dinner`}</MenuItem>
+                                    <MenuItem value={"Snack"}>{`Snack`}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </ListItem>
+                    <ListItem>
+                        <Button variant="contained" color="success" size="large" className="button" onClick={handleEditFood}> Update Item </Button>
+                    </ListItem>
+                </List>
+            </Box>
+
+            <Box sx={{ // info for locations served at today
+                background: '#0b0b0b',
+                width: .2,
+                maxHeight: 400,
+                position: 'relative',
+                float: 'left',
+                display: 'inline',
+                ml: 6,
+                top: 85,
+                borderRadius: 10,
+                overflow: 'auto',
+            }}>
+                <List>
+                    <ListItem sx={{
+                        background: '#242424',
+                        width: .98,
+                        mx: 'auto',
+                        borderRadius: 8,
+                    }}>
+                        <Typography fontWeight="bold">
+                            Delete This Item:
+                        </Typography>
+                        <Link to={ROUTES.MEAL_TRACKER} className="link" onClick={handleDeleteFood}>
+                            <Button variant="contained" color="error" size="large" className="button"> Delete </Button>
+                        </Link>
+                    </ListItem>
+                </List>
+            </Box>
 
             <Box sx={{
                 background: '#0b0b0b',
@@ -397,7 +451,6 @@ const FoodInfo = () => {
                     <Typography fontWeight="bold">
                         Ingredients: &nbsp;
                     </Typography>
-                    {menuItem.ingredients}
                 </Box>
                 <Box sx={{
                     borderColor: '#242424',
