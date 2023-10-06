@@ -4,7 +4,7 @@ import Navbar from "../../components/navbar/navbar";
 import "./foodInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-import { IconButton, Tooltip } from "@material-ui/core";
+import { IconButton, Tooltip } from "@mui/material";
 import Info from '@mui/icons-material/Info';
 import StarOutline from '@mui/icons-material/StarOutline';
 import Star from '@mui/icons-material/Star';
@@ -13,17 +13,14 @@ import Bookmark from '@mui/icons-material/Bookmark';
 import { AuthContext } from "../../utils/authentication/auth-context";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import { FormControl, InputLabel, Select, MenuItem }from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import axios from "axios";
 import Button from '@mui/material/Button';
-import { makeStyles } from "@material-ui/core/styles";
 import ROUTES from "../../routes";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {

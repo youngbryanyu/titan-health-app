@@ -1,13 +1,6 @@
 // Javascript for page displaying recommendations
-import Box from "@material-ui/core/Box";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Paper from '@material-ui/core/Paper';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
@@ -140,11 +133,9 @@ const MealTracker = () => {
                     </Paper>
                 </Box>
                 <h4 className="moreSpace">{"Total Daily Calories:"}</h4>
-                <Box sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
-                    <ListItem component="div" disablePadding button={false}>
+                    <ListItem component="div" disablePadding>
                         <span className="header">{`${totalCals}`}</span>
                     </ListItem>
-                </Box>
             </div>
             <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4 className="moreSpace">{"Add Meal Item To Tracker:"}</h4>

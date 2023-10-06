@@ -75,6 +75,7 @@ router.post("/login", async (req, res) => {
             process.env.SECRET_KEY,
             { expiresIn: "5d" }
         ); 
+        console.log(accessToken)
         
         /* Return info and access token to user, but don't return password */
         const { password, ...info } = user._doc; 
