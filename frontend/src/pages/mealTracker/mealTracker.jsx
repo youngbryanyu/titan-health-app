@@ -7,7 +7,6 @@ import { AuthContext } from "../../utils/authentication/auth-context";
 import { useState, useEffect, useContext } from 'react';
 import "./mealTracker.scss";
 import axios from "axios";
-import { useRef } from "react";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
 import ROUTES from "../../routes";
@@ -53,11 +52,11 @@ const MealTracker = () => {
     const [totalFatToday, setTotalFatToday] = useState('');
 
     /* Meal types */
-    const EMPTY = -1;
-    const BREAKFAST = 0;
-    const LUNCH = 1;
-    const DINNER = 2;
-    const SNACK = 3;
+    const EMPTY = 'Choose meal type';
+    const BREAKFAST = 'Breakfast';
+    const LUNCH = 'Lunch';
+    const DINNER = 'Dinner';
+    const SNACK = 'Snack';
     const [mealType, setMealType] = useState(EMPTY);
 
     /* Mapping of different error messages. */
@@ -283,11 +282,11 @@ const MealTracker = () => {
                         <FormControl error fullWidth sx={{ m: 1, width: 180 }}  >
                             <InputLabel>Meal Type</InputLabel>
                             <Select id="demo-simple-select" value={mealType} onChange={handleMealTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
-                                <MenuItem value={EMPTY}>{`Select a meal type`}</MenuItem>
-                                <MenuItem value={BREAKFAST}>{`Breakfast`}</MenuItem>
-                                <MenuItem value={LUNCH}>{`Lunch`}</MenuItem>
-                                <MenuItem value={DINNER}>{`Dinner`}</MenuItem>
-                                <MenuItem value={SNACK}>{`Snack`}</MenuItem>
+                                <MenuItem value={EMPTY}>{EMPTY}</MenuItem>
+                                <MenuItem value={BREAKFAST}>{BREAKFAST}</MenuItem>
+                                <MenuItem value={LUNCH}>{LUNCH}</MenuItem>
+                                <MenuItem value={DINNER}>{DINNER}</MenuItem>
+                                <MenuItem value={SNACK}>{SNACK}</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" size="large" className="button" onClick={handleAddFood}> Add Item </Button>
                         </FormControl>

@@ -4,16 +4,10 @@ import Navbar from "../../components/navbar/navbar";
 import "./foodInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-import { IconButton, Tooltip } from "@mui/material";
-import Info from '@mui/icons-material/Info';
-import StarOutline from '@mui/icons-material/StarOutline';
-import Star from '@mui/icons-material/Star';
-import BookmarkBorder from '@mui/icons-material/BookmarkBorder';
-import Bookmark from '@mui/icons-material/Bookmark';
 import { AuthContext } from "../../utils/authentication/auth-context";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { FormControl, InputLabel, Select, MenuItem }from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -38,14 +32,6 @@ const FoodInfo = () => {
         setMealType(event.target.value);
     }
 
-    /* Rating Info */
-    const [starClick1, setStarClick1] = useState(false);
-    const [starClick2, setStarClick2] = useState(false);
-    const [starClick3, setStarClick3] = useState(false);
-    const [starClick4, setStarClick4] = useState(false);
-    const [starClick5, setStarClick5] = useState(false);
-    const [savedClick, setSavedClick] = useState(false);
-
     /* Food info corresponding to input boxes */
     const [foodName, setFoodName] = useState('');
     const [calories, setCalories] = useState('');
@@ -55,11 +41,11 @@ const FoodInfo = () => {
     const [servings, setServings] = useState('');
 
     /* Meal types */
-    const EMPTY = -1;
-    const BREAKFAST = 0;
-    const LUNCH = 1;
-    const DINNER = 2;
-    const SNACK = 3;
+    const EMPTY = 'Choose meal type';
+    const BREAKFAST = 'Breakfast';
+    const LUNCH = 'Lunch';
+    const DINNER = 'Dinner';
+    const SNACK = 'Snack';
     const [mealType, setMealType] = useState(EMPTY);
 
     /* Mapping of different error messages. */
@@ -95,11 +81,11 @@ const FoodInfo = () => {
     */
     const isFirstRender = useRef(true); // don't do anything on first render
     useEffect(() => {
-        
+
         const getFoodItemInfo = async () => {
             try {
                 const response = await axios.get(`/users/aFoodItem/${userId}/${foodItemHash}`,
-                { headers: { token: `Bearer ${user.accessToken}` } });
+                    { headers: { token: `Bearer ${user.accessToken}` } });
                 const item = response.data;
                 setFoodItem({
                     foodName: item.foodName,
@@ -139,7 +125,7 @@ const FoodInfo = () => {
 
         setAllFieldsComplete(true);
 
-        /* check if all fields were entered */
+        /* check if at least one */
         if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
             setAllFieldsComplete(false);
             console.log(allFieldsComplete)
@@ -176,7 +162,7 @@ const FoodInfo = () => {
 
         try {
             const hash = foodItemHash;
-            const res = await axios.put(
+            await axios.put(
                 `/users/editFood/${userId}`,
                 { foodName, calories, fat, protein, carbohydrates, servings, mealType, hash },
                 { headers: { token: `Bearer ${user.accessToken}` } }
@@ -184,15 +170,15 @@ const FoodInfo = () => {
 
             // Refresh the food items after editing
             setFoodItem({
-                    foodName: foodName,
-                    calories: calories,
-                    fat: fat,
-                    protein: protein,
-                    carbohydrates: carbohydrates,
-                    servings: servings,
-                    mealType: mealType,
-                    hash: foodItemHash
-                });
+                foodName: foodName,
+                calories: calories,
+                fat: fat,
+                protein: protein,
+                carbohydrates: carbohydrates,
+                servings: servings,
+                mealType: mealType,
+                hash: foodItemHash
+            });
 
             // Clear the previous state
             setFoodName('');
@@ -210,7 +196,7 @@ const FoodInfo = () => {
     const handleDeleteFood = async () => {
         try {
             const hash = foodItemHash;
-            const res = await axios.delete(
+            await axios.delete(
                 `/users/deleteFood/${userId}/${hash}`,
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
@@ -270,48 +256,50 @@ const FoodInfo = () => {
                         width: .98,
                         mx: 'auto',
                         borderRadius: 8,
+                        display: 'flex',
+                        justifyContent: 'space-between'
                     }}>
                         <Typography style={{ color: "#ebc034" }} fontWeight="bold">
-                            Nutrition Facts for: &nbsp; {foodItem.foodName}
+                            Nutrition Facts for:
+                        </Typography>
+                        <Typography style={{ color: "#ebc034" }} fontWeight="bold">
+                            {foodItem.foodName}
                         </Typography>
                     </ListItem>
-                    <ListItem key="calories">
-                        <Typography fontWeight="bold">
-                            Calories: {foodItem.calories}
-                        </Typography>
+
+                    <ListItem key="calories" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Calories</Typography>
+                        <Typography>{foodItem.calories}</Typography>
                     </ListItem>
-                    <ListItem key="fat">
-                        <Typography fontWeight="bold">
-                            Fat: {foodItem.fat}
-                        </Typography>
+                    <ListItem key="protein" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Protein</Typography>
+                        <Typography>{foodItem.protein}</Typography>
                     </ListItem>
-                    <ListItem key="protein">
-                        <Typography fontWeight="bold">
-                            Protein: {foodItem.protein}
-                        </Typography>
+                    <ListItem key="carbohydrates" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Carbohydrates</Typography>
+                        <Typography>{foodItem.carbohydrates}</Typography>
                     </ListItem>
-                    <ListItem key="carbohydrates">
-                        <Typography fontWeight="bold">
-                            Carbohydrates: {foodItem.carbohydrates}
-                        </Typography>
+                    <ListItem key="fat" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Fat</Typography>
+                        <Typography>{foodItem.fat}</Typography>
                     </ListItem>
-                    <ListItem key="servings">
-                        <Typography fontWeight="bold">
-                            Servings: {foodItem.servings}
-                        </Typography>
+                    <ListItem key="servings" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Servings</Typography>
+                        <Typography>{foodItem.servings}</Typography>
                     </ListItem>
-                    <ListItem key="mealType">
-                        <Typography fontWeight="bold">
-                            Meal Type: {foodItem.mealType}
-                        </Typography>
+
+                    <ListItem key="mealType" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Meal Type:</Typography>
+                        <Typography>{foodItem.mealType}</Typography>
                     </ListItem>
                 </List>
+
             </Box>
 
             <Box sx={{ // info for tags
                 background: '#0b0b0b',
-                width: .2,
-                height: 500,
+                width: .22,
+                height: 450,
                 position: 'relative',
                 float: 'left',
                 display: 'inline',
@@ -326,64 +314,64 @@ const FoodInfo = () => {
                         width: .98,
                         mx: 'auto',
                         borderRadius: 8,
+                        display: 'flex',
+                        justifyContent: 'space-between',
                     }}>
-                        <Typography fontWeight="bold">
-                            Edit Item:
-                        </Typography>
+                        <Typography fontWeight="bold">Edit Item:</Typography>
+                        <div></div> {/* Empty div for spacing */}
                     </ListItem>
-                    <ListItem key="name">
-                        <Typography fontWeight="bold">
-                            Food Name:  
-                        </Typography>
-                        <input type="name" value={foodName} onChange={(e) => setFoodName(e.target.value)}/>
+
+                    <ListItem key="name" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Food Name</Typography>
+                        <input type="name" value={foodName} onChange={(e) => setFoodName(e.target.value)} />
                     </ListItem>
-                    <ListItem key="calories">
-                        <Typography fontWeight="bold">
-                            Calories:
-                        </Typography>
-                        <input type="cals" value={calories} onChange={(e) => setCalories(e.target.value)}/>
+
+                    <ListItem key="calories" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Calories</Typography>
+                        <input type="cals" value={calories} onChange={(e) => setCalories(e.target.value)} />
                     </ListItem>
-                    <ListItem key="fat">
-                        <Typography fontWeight="bold">
-                            Fat:
-                        </Typography>
+
+                    <ListItem key="fat" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Fat</Typography>
                         <input type="fat" value={fat} onChange={(e) => setFat(e.target.value)} />
                     </ListItem>
-                    <ListItem key="protein">
-                        <Typography fontWeight="bold">
-                            Protein:
-                        </Typography>
-                        <input type="protein" value={protein} onChange={(e) => setProtein(e.target.value)}/>
+
+                    <ListItem key="protein" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Protein</Typography>
+                        <input type="protein" value={protein} onChange={(e) => setProtein(e.target.value)} />
                     </ListItem>
-                    <ListItem key="carbs">
-                        <Typography fontWeight="bold">
-                            Carbs:
-                        </Typography>
-                        <input type="carbs" value={carbohydrates} onChange={(e) => setCarbs(e.target.value)}/>
+
+                    <ListItem key="carbs" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Carbs</Typography>
+                        <input type="carbs" value={carbohydrates} onChange={(e) => setCarbs(e.target.value)} />
                     </ListItem>
-                    <ListItem key="servings">
-                        <Typography fontWeight="bold">
-                            Servings:
-                        </Typography>
-                        <input type="servings" value={servings} onChange={(e) => setServings(e.target.value)}/>
+
+                    <ListItem key="servings" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Servings</Typography>
+                        <input type="servings" value={servings} onChange={(e) => setServings(e.target.value)} />
                     </ListItem>
-                    <ListItem>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}  >
+
+                    <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Meal Type:</Typography>
+                        <Box sx={{ width: 180 }}>
+                            <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}>
                                 <InputLabel>Meal Type</InputLabel>
-                                <Select id="demo-simple-select" value={mealType} onChange={handleMealTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
-                                    <MenuItem value={"Breakfast"}>{`Breakfast`}</MenuItem>
-                                    <MenuItem value={"Lunch"}>{`Lunch`}</MenuItem>
-                                    <MenuItem value={"Dinner"}>{`Dinner`}</MenuItem>
-                                    <MenuItem value={"Snack"}>{`Snack`}</MenuItem>
+                                <Select id="demo-simple-select" value={mealType} onChange={handleMealTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }}>
+                                    <MenuItem value={BREAKFAST}>{BREAKFAST}</MenuItem>
+                                    <MenuItem value={LUNCH}>{LUNCH}</MenuItem>
+                                    <MenuItem value={DINNER}>{DINNER}</MenuItem>
+                                    <MenuItem value={SNACK}>{SNACK}</MenuItem>
+                                    <MenuItem value={EMPTY}>{EMPTY}</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
                     </ListItem>
-                    <ListItem>
+
+                    <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Button variant="contained" color="success" size="large" className="button" onClick={handleEditFood}> Update Item </Button>
                     </ListItem>
                 </List>
+
                 { // error message if not all fields filled in
                     <div className="errorMessage">
                         <p style={{ visibility: (allFieldsComplete) && "hidden" }}>
@@ -393,7 +381,7 @@ const FoodInfo = () => {
                 }
             </Box>
 
-            
+
 
             <Box sx={{ // delete button
                 background: '#0b0b0b',
