@@ -292,12 +292,7 @@ const MealTracker = () => {
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
-                                    foodItems.length === 0 ?
-                                        <ListItem component="div" disablePadding>
-                                            <span className="listItem">{" You've eaten nothing today"}</span>
-                                        </ListItem>
-                                        :
-                                        foodItems.map((item) => buildListItem(item, BREAKFAST))
+                                    foodItems.map((item) => buildListItem(item, BREAKFAST))
                                 }
                             </List>
                         </Paper>
@@ -315,12 +310,7 @@ const MealTracker = () => {
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
-                                    foodItems.length === 0 ?
-                                        <ListItem component="div" disablePadding>
-                                            <span className="listItem">{" You've eaten nothing today"}</span>
-                                        </ListItem>
-                                        :
-                                        foodItems.map((item) => buildListItem(item, LUNCH))
+                                    foodItems.map((item) => buildListItem(item, LUNCH))
                                 }
                             </List>
                         </Paper>
@@ -338,12 +328,7 @@ const MealTracker = () => {
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
-                                    foodItems.length === 0 ?
-                                        <ListItem component="div" disablePadding>
-                                            <span className="listItem">{" You've eaten nothing today"}</span>
-                                        </ListItem>
-                                        :
-                                        foodItems.map((item) => buildListItem(item, DINNER))
+                                    foodItems.map((item) => buildListItem(item, DINNER))
                                 }
                             </List>
                         </Paper>
@@ -361,12 +346,7 @@ const MealTracker = () => {
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
-                                    foodItems.length === 0 ?
-                                        <ListItem component="div" disablePadding>
-                                            <span className="listItem">{" You've eaten nothing today"}</span>
-                                        </ListItem>
-                                        :
-                                        foodItems.map((item) => buildListItem(item, SNACK))
+                                    foodItems.map((item) => buildListItem(item, SNACK))
                                 }
                             </List>
                         </Paper>
