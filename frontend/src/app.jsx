@@ -37,6 +37,7 @@ const App = () => {
             <Route path={ROUTES.MEAL_TRACKER} element={<MealTracker />} />
             <Route path={ROUTES.FOOD_ITEM} element={<FoodInfo />} />
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodInfo />} />
+            <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
         </>
     );
 
@@ -53,6 +54,7 @@ const App = () => {
             <Route path={ROUTES.MEAL_TRACKER} element={<Register />} />
             <Route path={ROUTES.FOOD_ITEM} element={<Register />} />
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<Register />} />
+            <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
         </>
     );
 

@@ -5,6 +5,7 @@ const User = require("../models/user");
 const verify = require("../util/auth/verifyJWTToken");
 const crypto = require('crypto')
 
+
 /* ###################### 
 ########## PUT ##########
 ######################### */
@@ -155,93 +156,124 @@ router.put('/editFood/:userId', verify, async (req, res) => {
   }
 });
 
-/* PUT - update weight log */
-router.put("/weight", verify, async (req, res) => {
+/* PUT - add to weight log */
+router.put("/weight/:userId", verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.body.userId);
+    // Get user by ID
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
 
-    /* User doesn't exist case */
+    const { weight, date } = req.body;
+    const newEntry = {
+      weight: weight || "[add weight]",
+      date: date || "[add date]"
+    };
+
     if (!user) {
-      res.status(404).json(`User not found`);
-      return;
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    /* Write changes to database */
-    const updatedWeight = await User.findByIdAndUpdate(user._id, {
-      weightLog: req.body.weightLog
-    }, { new: true });
-    res.status(201).json("Weight was updated. " + updatedWeight);
+    user.weightLog.push(newEntry);
+
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json("Error updating weights. " + error);
+    console.error("Error making new weight entry: " + error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-/* PUT - update water intake log */
-router.put("/water", verify, async (req, res) => {
+/* PUT - add to water log */
+router.put("/water/:userId", verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.body.userId);
+    // Get user by ID
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
 
-    /* User doesn't exist case */
+    const { intake, date } = req.body;
+    const newEntry = {
+      intake: intake || "[add water intake]",
+      date: date || "[add date]"
+    };
+
     if (!user) {
-      res.status(404).json(`User not found`);
-      return;
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    /* Write changes to database */
-    const updatedwaterIntakeLog = await User.findByIdAndUpdate(user._id, {
-      waterIntakeLog: req.body.waterIntakeLog
-    }, { new: true });
-    res.status(201).json("waterIntakeLog was updated. " + updatedwaterIntakeLog);
+    user.waterIntakeLog.push(newEntry);
+
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json("Error updating water intake log. " + error);
+    console.error("Error making new water intake entry: " + error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-/* PUT - update sleep log */
-router.put("/sleep", verify, async (req, res) => {
+/* PUT - add to sleep log */
+router.put("/sleep/:userId", verify, async (req, res) => {
+  //TODO: disallow duplicate dates
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.body.userId);
+    // Get user by ID
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
 
-    /* User doesn't exist case */
+    const { length, date } = req.body;
+    const newEntry = {
+      length: length || "[add amount]",
+      date: date || "[add date]"
+    };
+
     if (!user) {
-      res.status(404).json(`User not found`);
-      return;
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    /* Write changes to database */
-    const updatedSleep = await User.findByIdAndUpdate(user._id, {
-      sleepLog: req.body.sleepLog
-    }, { new: true });
-    res.status(201).json("Sleep was updated. " + updatedSleep);
-  } catch (error) {
-    res.status(500).json("Error updating sleep. " + error);
-  }
-});
-/* PUT - update supplement log */
-router.put("/supplements", verify, async (req, res) => {
-  try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.body.userId);
+    user.sleepLog.push(newEntry);
 
-    /* User doesn't exist case */
-    if (!user) {
-      res.status(404).json(`User not found`);
-      return;
-    }
+    // Save the updated user
+    await user.save();
 
-    /* Write changes to database */
-    const updatedSupplements = await User.findByIdAndUpdate(user._id, {
-      supplementLog: req.body.supplementLog
-    }, { new: true });
-    res.status(201).json("Supplements were updated. " + updatedSupplements);
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json("Error updating supplements. " + error);
+    console.error("Error making new sleep entry: " + error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+/* PUT - add to supplement log */
+router.put("/supplement/:userId", verify, async (req, res) => {
+  //TODO: disallow duplicate dates
+  try {
+    // Get user by ID
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    const { supplement, amount, date } = req.body;
+    const newEntry = {
+      supplement: supplement || "[add supplement]",
+      amount: amount || "[add amount]", 
+      date: date || "[add date]"
+    };
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.supplementLog.push(newEntry);
+
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error making new supplement entry: " + error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 /* ###################### 
 ########## GET ##########
 ######################### */
@@ -305,59 +337,83 @@ router.get('/allFoods/:userId', verify, async (req, res) => {
   }
 });
 
-/* GET - get weight log */
-router.get("/weight/:userId", verify, async (req, res) => {
+/* GET - get weights in log */
+router.get('/weights/:userId', verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.params.userId);
+    const userId = req.params.userId;
 
-    /* Return user weight log */
-    const result = user.weightLog;
-    res.status(200).json(result);
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the requisite items
+    return res.status(200).json(user.weightLog);
   } catch (error) {
-    res.status(500).json("Error retriving weight log. " + error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-/* GET - get water intake */
-router.get("/water/:userId", verify, async (req, res) => {
+/* GET - get sleep in log */
+router.get('/sleep/:userId', verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.params.userId);
+    const userId = req.params.userId;
 
-    /* Return user water intake */
-    const result = user.waterIntakeLog;
-    res.status(200).json(result);
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the requisite items
+    return res.status(200).json(user.sleepLog);
   } catch (error) {
-    res.status(500).json("Error retriving water intake log. " + error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-/* GET - get sleep */
-router.get("/sleep/:userId", verify, async (req, res) => {
+/* GET - get water intake in log */
+router.get('/water/:userId', verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.params.userId);
+    const userId = req.params.userId;
 
-    /* Return user sleep */
-    const result = user.sleepLog;
-    res.status(200).json(result);
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the requisite items
+    return res.status(200).json(user.waterIntakeLog);
   } catch (error) {
-    res.status(500).json("Error retriving sleep log. " + error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-/* GET - get supplements */
-router.get("/supplements/:userId", verify, async (req, res) => {
+/* GET - get supplements in log */
+router.get('/supplement/:userId', verify, async (req, res) => {
   try {
-    /* Find user matching the input user id */
-    const user = await User.findById(req.params.userId);
+    const userId = req.params.userId;
 
-    /* Return user supplements */
-    const result = user.supplementLog;
-    res.status(200).json(result);
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the requisite items
+    return res.status(200).json(user.supplementLog);
   } catch (error) {
-    res.status(500).json("Error retriving supplement log. " + error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
