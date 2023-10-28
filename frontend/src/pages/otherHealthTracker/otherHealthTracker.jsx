@@ -4,17 +4,12 @@ import "./otherHealthTracker.scss";
 import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
 //basic ui
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Paper from '@mui/material/Paper';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
 //icons
@@ -26,16 +21,7 @@ import MedicationIcon from '@mui/icons-material/Medication'; // supplement icon
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    color: "black",
-  },
-  selected: {
-    color: "white"
-  }
-}));
 // TabPanel setup
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -87,7 +73,7 @@ const OtherHealthTracker = () => {
   const [weightLog, setWeightLog] = useState([]); // the weight log displayed
   const [sleepLog, setSleepLog] = useState([]); // the sleep log displayed
   const [waterLog, setWaterLog] = useState([]); // the water log displayed
-  const [suppLog, setSuppLog] = useState([]); // the supplement log displayed
+  const [supplementLog, setSupplementLog] = useState([]); // the supplement log displayed
 
   /* Input states corresponding to each input box */
   // weight tracking:
@@ -110,33 +96,31 @@ const OtherHealthTracker = () => {
     // Get entries on load
     const getAllEntries = async () => {
       try {
-        const response1 = await axios.get([`users/weight/${userId}`, {
+        // causing errors right now
+        const weightRes = await axios.get(`users/weights/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
-        }]);
-
-        const response2= await axios.get(`users/water/${userId}`, {
+        });
+        const waterRes= await axios.get(`users/water/${userId}`, {
+          headers: { token: `Bearer ${user.accessToken}` }
+        });
+        const sleepRes = await axios.get(`users/sleep/${userId}`, {
+          headers: { token: `Bearer ${user.accessToken}` }
+        });
+        const suppRes = await axios.get(`users/supplement/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
         });
 
-        const response3 = await axios.get(`users/sleep/${userId}`, {
-          headers: { token: `Bearer ${user.accessToken}` }
-        });
-
-        const response4 = await axios.get(`users/supplement/${userId}`, {
-          headers: { token: `Bearer ${user.accessToken}` }
-        });
-        setWeightLog(response1.data);
-        setWaterLog(response2.data);
-        setSleepLog(response3.data);
-        setSuppLog(response4.data);
+        setWeightLog(weightRes.data);
+        setWaterLog(waterRes.data);
+        setSleepLog(sleepRes.data);
+        setSupplementLog(suppRes.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
-
     /* only run on first render */
     if (isFirstRender.current) {
-      getAllEntries();
+        getAllEntries();
     }
     isFirstRender.current = false;
     // eslint-disable-next-line
@@ -206,7 +190,7 @@ const OtherHealthTracker = () => {
       );
 
       // Reflect new supp log changes
-      setSuppLog(res.data.suppLog);
+      setSupplementLog(res.data.suppLog);
 
       // Clear all supp fields
       setSupplement('');
@@ -217,67 +201,68 @@ const OtherHealthTracker = () => {
     }
   };
 
-  function formatDate(date) {
+  function formatTime(date) {
     const currentDate = new Date(date);
     const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
-    // Determine whether it's AM or PM
     const amOrPm = hours >= 12 ? 'PM' : 'AM';
-    // Convert hours to 12-hour format
     const hours12 = hours % 12 || 12; // 0 should be converted to 12 for 12 AM
-    // Format the time as a string in 12-hour format
     const formattedTime = `${hours12.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${amOrPm}`;
+    return formattedTime;
+  }
 
+  function formatDate(date) {
+    const currentDate = new Date(date);
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
-    // Format the date as a string
-    const formattedDate = `${month} - ${day} - ${year}`
-    return { formattedDate, formattedTime }
+    const formattedDate = `${month}\/${day}\/${year}`;
+    return formattedDate;
   }
 
   // Use to provide links to edit entries later
   function listWeights(entry) { // display a menu item
     const weight = entry.weight;
-    const date = entry.date;
+    const date = formatDate(entry.date);
     // const id = item.hash;
 
     return (
-      <ListItemButton component="div" disablePadding>
+      <ListItemButton component="div" disablepadding='true'>
         <span className="header">{`${weight} lbs | ${date}`}</span>
       </ListItemButton>
     );
   }
   function listWater(entry) { // display a menu item
     const intake = entry.intake;
-    const date = entry.date;
+    const date = formatDate(entry.date);
     // const id = item.hash;
 
     return (
-      <ListItemButton component="div" >
+      <ListItemButton component="div" disablepadding='true'>
         <span className="header">{`${intake} cups | ${date}`}</span>
       </ListItemButton>
     );
   }
   function listSleep(entry) { // display a menu item
     const length = entry.length;
-    const date = entry.date;
+    const date = formatDate(entry.date);
+    const time = formatTime(entry.date);
     // const id = item.hash;
 
     return (
-      <ListItemButton component="div" >
-        <span className="header">{`${length} hours | ${date}`}</span>
+      <ListItemButton component="div" disablepadding='true'>
+        <span className="header">{`${length} hours | ${date} ${time}`}</span>
       </ListItemButton>
     );
   }
-  function listSupps(entry) { // display a menu item
+  function listSupplements(entry) { // display a menu item
     const supplement = entry.supplement;
     const amount = entry.amount;
     const date = entry.date;
     // const id = item.hash;
 
     return (
-      <ListItemButton component="div" >
+      <ListItemButton component="div" disablepadding='true'>
         <span className="header">{`${supplement}, ${amount} | ${date}`}</span>
       </ListItemButton>
     );
@@ -316,7 +301,7 @@ const OtherHealthTracker = () => {
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                   <List>
-                    {weightLog.map((entry) => listWeights(entry))}
+                    {weightLog?.map((entry) => listWeights(entry))}
                   </List>
                 </Paper>
               </Box>
@@ -345,7 +330,7 @@ const OtherHealthTracker = () => {
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                   <List>
-                    {sleepLog.map((entry) => listSleep(entry))}
+                    {sleepLog?.map((entry) => listSleep(entry))}
                   </List>
                 </Paper>
               </Box>
@@ -374,7 +359,7 @@ const OtherHealthTracker = () => {
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                   <List>
-                    {waterLog.map((entry) => listWater(entry))}
+                    {waterLog?.map((entry) => listWater(entry))}
                   </List>
                 </Paper>
               </Box>
@@ -403,7 +388,7 @@ const OtherHealthTracker = () => {
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                   <List>
-                    {suppLog.map((entry) => listSupps(entry))}
+                    {supplementLog?.map((entry) => listSupplements(entry))}
                   </List>
                 </Paper>
               </Box>
