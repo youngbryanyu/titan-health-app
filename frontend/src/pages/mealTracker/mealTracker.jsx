@@ -17,20 +17,7 @@ import axios from "axios";
 import { useRef } from "react";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
-
-//the layout will be new recommendation page that has a 
-//list component on left, a filter component on right
-//1st filter option is "Give Me Recommendations Based On Saved Items"
-//this needs to first get all saved items
-//have a weightage for attributes (For example, Vegan - 4, Vegetarian - 1, Eggs - 6, Peanuts - 0 ...)
-//go through each saved item and add +1 to weightage if attribute is true in that item
-//at end select the attributes that are greater than or equal to 3
-//(if no attributes greater than 3, return all items)
-//(also indicate to user to save more items to get more personalized recommendations)
-//then return menu items that fit those more heavily weighted attributes
-//2nd filter option is "Give Me Recommendations Based On My Prefs/Rests"
-//just get all items that fit the users prefs & rests
-//limit results to 15 items
+import { PieChart } from "@mui/x-charts/PieChart";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,13 +37,17 @@ const MealTracker = () => {
 
     /* Food info corresponding to input boxes */
     const [foodName, setFoodName] = useState('');
-    const [calories, setCalories] = useState('');
-    const [protein, setProtein] = useState('');
-    const [fat, setFat] = useState('');
-    const [carbohydrates, setCarbs] = useState('');
-    const [servings, setServings] = useState('');
+    const [calories, setCalories] = useState(0);
+    const [protein, setProtein] = useState(0);
+    const [fat, setFat] = useState(0);
+    const [carbohydrates, setCarbs] = useState(0);
+    const [servings, setServings] = useState(0);
     const [mealType, setMealType] = useState('');
-    const [totalCals, setTotalCals] = useState('');
+    const [totalCals, setTotalCals] = useState(0);
+    const [totalProtein, setTotalProtein] = useState(0);
+    const [totalFat, setTotalFat] = useState(0);
+    const [totalCarbs, setTotalCarbs] = useState(0);
+    const [totalServings, setTotalServings] = useState(0);
 
     /* Load food items on page render */
     const isFirstRender = useRef(true); 
@@ -67,10 +58,29 @@ const MealTracker = () => {
                 const response = await axios.get(`users/allFoods/${userId}`, {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
+
                 setFoodItems(response.data);
-                let totalCalories = 0;
-                response.data.forEach( item => totalCalories += item.calories * item.servings );
-                setTotalCals(totalCalories);
+
+                let sumCalories = 0;
+                let sumProtein = 0;
+                let sumFat = 0;
+                let sumCarbs = 0;
+                let sumServings = 0;
+
+                response.data.forEach( item => { //sum total nutrition amounts
+                    sumCalories += isNaN(item.calories) ? 0 : item.calories * item.servings;
+                    sumProtein += isNaN(item.protein) ? 0 : item.protein * item.servings;
+                    sumFat += isNaN(item.fat) ? 0 : item.fat * item.servings;
+                    sumCarbs += isNaN(item.carbohydrates) ? 0 : item.carbohydrates * item.servings;
+                    sumServings += parseInt(item.servings);
+                } );
+
+                setTotalCals(sumCalories);
+                setTotalProtein(sumProtein);
+                setTotalFat(sumFat);
+                setTotalCarbs(sumCarbs);
+                setTotalServings(sumServings);
+
             } catch (error) {
                 console.log(error);
             }
@@ -96,6 +106,10 @@ const MealTracker = () => {
             // Refresh the food items after editing
             setFoodItems(res.data.foods);
             setTotalCals(totalCals + calories*servings);
+            setTotalProtein(totalProtein + protein*servings);
+            setTotalFat(totalFat + fat*servings);
+            setTotalCarbs(totalCarbs + carbohydrates*servings);
+            setTotalServings(totalServings + parseInt(servings));
 
             // Clear the editedNutritionFacts state
             setFoodName('');
@@ -131,7 +145,7 @@ const MealTracker = () => {
         <div className="menu">
             <Navbar />
             <div>
-                <h4 className="moreSpace">{"View Meal Tracker Items:"}</h4>
+                <h4 className="moreSpace">{"View Your Meals Today:"}</h4>
                 <Box sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                     <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                         <List>
@@ -139,12 +153,28 @@ const MealTracker = () => {
                         </List>
                     </Paper>
                 </Box>
-                <h4 className="moreSpace">{"Total Daily Calories:"}</h4>
-                <Box sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
-                    <ListItem component="div" disablePadding button={false}>
-                        <span className="header">{`${totalCals}`}</span>
-                    </ListItem>
-                </Box>
+                <h4 className="moreSpace">{`Total Daily Calories: ${totalCals}`}</h4>
+                <PieChart
+                    series={[
+                        {
+                        data: [
+                            { id: 0, value: totalProtein, label: 'Total Protein' },
+                            { id: 1, value: totalFat, label: 'Total Fat' },
+                            { id: 2, value: totalCarbs, label: 'Total Carbs' },
+                            { id: 3, value: totalServings, label: 'Total Servings' }
+                        ],
+                        innerRadius: 25,
+                        outerRadius: 90,
+                        paddingAngle: 5,
+                        cornerRadius: 5,
+                        startAngle: 0,
+                        endAngle: 360,
+                        cx: 185,
+                        },
+                    ]}
+                    width={400}
+                    height={200}
+                />
             </div>
             <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4 className="moreSpace">{"Add Meal Item To Tracker:"}</h4>

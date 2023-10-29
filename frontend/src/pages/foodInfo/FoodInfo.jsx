@@ -206,36 +206,7 @@ const FoodInfo = () => {
             console.error(error);
         }
     };
-
-    /**
-     * Update the savedStatus in the database when saved changes, not on first render though.
-     */
-    /* const isFirstRender_updateSavedDB = useRef(true); // don't do anything on first render
-    useEffect(() => {
-        if (isFirstRender_updateSavedDB.current) {
-            isFirstRender_updateSavedDB.current = false;
-            return; // don't update DB on initial render
-        }
-
-        const updateSavedStatusInDB = async () => {
-            try {
-                await axios.post('/saved', {
-                    username: user.username,
-                    menuItemID: foodItemHash,
-                    saved: savedClick
-                });
-                console.log("successfully updated savedStatus of menuItemId: " + foodItemHash);
-            } catch (error) {
-                console.log("failed to update savedStatus: " + error);
-            }
-        }
-
-        if (foodItemHash != null) {
-            updateSavedStatusInDB(); //update savedStatus of item in DB
-        }// eslint-disable-next-line
-
-    }, [savedClick]); */
-
+    
     return (
         <div className="foodInfo">
             <Navbar />
