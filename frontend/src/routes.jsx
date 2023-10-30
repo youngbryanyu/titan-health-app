@@ -11,6 +11,7 @@ const ROUTES = {
     PREFERENCES: '/preferences',
     REPORT_PROBLEM: '/reportProblem',
     PERSONAL_INFO: '/personalInfo',
+    OTHER_HEALTH_TRACKER: '/otherHealthTracker',
     FOOD_TRACKER: '/foodTracker',
     MEAL_TRACKER: '/mealTracker',
     FOOD_ITEM_INFO: '/foodItemInfo/:foodItemHash',
