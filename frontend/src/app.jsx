@@ -15,6 +15,7 @@ import ReportProblem from "./pages/reportProblem/reportProblem";
 import PersonalInfo from "./pages/personalInfo/personalInfo";
 import ExerciseTracker from "./pages/exerciseTracker/exerciseTracker";
 import ExerciseInfo from "./pages/exerciseInfo/exerciseInfo";
+import OtherHealthTracker from "./pages/otherHealthTracker/otherHealthTracker";
 
 
 /**
