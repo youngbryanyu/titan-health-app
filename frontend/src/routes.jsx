@@ -13,8 +13,10 @@ const ROUTES = {
     PERSONAL_INFO: '/personalInfo',
     OTHER_HEALTH_TRACKER: '/otherHealthTracker',
     FOOD_TRACKER: '/foodTracker',
-    MEAL_TRACKER: '/recommendations',
-    FOOD_ITEM_INFO: '/foodItemInfo/:foodItemHash'
+    MEAL_TRACKER: '/mealTracker',
+    FOOD_ITEM_INFO: '/foodItemInfo/:foodItemHash',
+    EXERCISE_TRACKER: '/exerciseTracker',
+    EXERCISE_INFO: '/exerciseInfo/:exerciseHash'
 }
 
 export default ROUTES;

@@ -197,19 +197,98 @@ router.put("/water/:userId", verify, async (req, res) => {
       intake: intake || "[add water intake]",
       date: date || "[add date]"
     };
-
+    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
+    
     user.waterIntakeLog.push(newEntry);
+    
+    // Save the updated user
+    await user.save();
 
+    return res.status(200).json(user);
+    
+    } catch (error) {
+      console.error("Error making new water intake entry: " + error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* PUT - add exercise in tracker */
+router.put('/addExercise/:userId', verify, async (req, res) => {
+  try {
+    //TODO: add logic to reject duplicate exercises
+    const userId = req.params.userId;
+    const { exerciseName, sets, reps, time, exerciseType } = req.body;
+    const hash = crypto.createHash('sha1').update(exerciseName).digest('hex');
+    const newExercise = {
+      exerciseName: exerciseName || "[add name]",
+      sets: sets || (exerciseType === "Cardio" ? "N/A" : "[add sets]"),
+      reps: reps || (exerciseType === "Cardio" ? "N/A" : "[add reps]"),
+      time: time || "[add time]",
+      exerciseType: exerciseType || "[add exercise type]",
+      hash
+    };
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    exerciseType === "Weight Lifting" ? user.liftingLog.push(newExercise) : user.cardioLog.push(newExercise);
+    user.otherExerciseLog.push(newExercise);
+    
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json(user);
+    
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* PUT - edit user food in tracker */
+router.put('/editExercise/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { exerciseName, sets, reps, time, exerciseType, hash } = req.body;
+    const editedExercise = {
+      exerciseName: exerciseName,
+      sets: sets,
+      reps: reps,
+      time: time,
+      exerciseType: exerciseType,
+      hash: hash
+  };
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    let itemIndex;
+
+    if (exerciseType === "Weight Lifting") {
+      itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
+      user.liftingLog[itemIndex] = editedExercise;
+    } else {
+      itemIndex = user.cardioLog.findIndex((obj => obj.hash === hash));
+      user.cardioLog[itemIndex] = editedExercise;
+    }
+    
     // Save the updated user
     await user.save();
 
     return res.status(200).json(user);
   } catch (error) {
-    console.error("Error making new water intake entry: " + error);
+    console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -227,11 +306,11 @@ router.put("/sleep/:userId", verify, async (req, res) => {
       length: length || "[add amount]",
       date: date || "[add date]"
     };
-
+    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
+    
     user.sleepLog.push(newEntry);
 
     // Save the updated user
@@ -264,7 +343,7 @@ router.put("/supplement/:userId", verify, async (req, res) => {
     }
 
     user.supplementLog.push(newEntry);
-
+    
     // Save the updated user
     await user.save();
 
@@ -274,6 +353,8 @@ router.put("/supplement/:userId", verify, async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 /* ###################### 
 ########## GET ##########
 ######################### */
@@ -464,6 +545,93 @@ router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
   }
 });
 
+/* GET - get all weight lifting exercises in tracker */
+router.get('/allLifting/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the food items
+    return res.status(200).json(user.liftingLog);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* GET - get all cardio exercises in tracker */
+router.get('/allCardio/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the food items
+    return res.status(200).json(user.cardioLog);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* GET - get an exercise from tracker */
+router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const hash = req.params.hash;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
+    const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
+
+    return itemIndex == -1 ? res.status(200).json(user.cardioLog[itemIndex2]) : res.status(200).json(user.liftingLog[itemIndex]);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* GET - get an old exercise from tracker */
+router.get('/priorExercise/:userId/:name', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const name = req.params.name;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const itemIndex = user.otherExerciseLog.findIndex((obj => obj.exerciseName === name));
+
+    return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 /* ###################### 
 ########## DELETE ##########
 ######################### */
@@ -478,15 +646,43 @@ router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
+    
     const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
     user.foods.splice(itemIndex, 1);
+    
+    // Save the updated user
+    await user.save();
+    
+    return res.status(200).json({ message: 'Food item deleted successfully' });
+    
+    } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+  
+/* DELETE - Delete exercise in tracker*/
+router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const hash = req.params.hash;
+    const user = await User.findById(userId); // Find the user by ID
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
+    const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
+    if(itemIndex != -1) user.liftingLog.splice(itemIndex, 1);
+    else user.cardioLog.splice(itemIndex2, 1);
 
     // Save the updated user
     await user.save();
-
-    return res.status(200).json({ message: 'Food item deleted successfully' });
-  } catch (error) {
+    
+    return res.status(200).json({ message: 'Exercise deleted successfully' });
+    
+    } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }

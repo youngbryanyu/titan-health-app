@@ -10,6 +10,7 @@ import axios from "axios";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
 import ROUTES from "../../routes";
+import { PieChart } from "@mui/x-charts/PieChart";
 
 /* Styles for page */
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +60,8 @@ const MealTracker = () => {
     const [totalLunchCalories, setTotalLunchCalories] = useState('');
     const [totalDinnerCalories, setTotalDinnerCalories] = useState('');
     const [totalSnackCalories, setTotalSnackCalories] = useState('');
+
+    const [totalServings, setTotalServings] = useState(0);
 
     /* Meal types */
     const EMPTY = 'Choose meal type';
@@ -376,8 +379,30 @@ const MealTracker = () => {
                     </ListItem>
 
                 </div>
+                <div>
+                    <PieChart
+                        colors={['teal', 'purple', 'orange']}
+                        series={[
+                            {
+                            data: [
+                                { id: 0, value: totalProteinToday, label: 'Protein' },
+                                { id: 1, value: totalFatToday, label: 'Total Fat' },
+                                { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
+                            ],
+                            innerRadius: 25,
+                            outerRadius: 90,
+                            paddingAngle: 5,
+                            cornerRadius: 5,
+                            startAngle: 0,
+                            endAngle: 360,
+                            cx: 185,
+                            },
+                        ]}
+                        width={450}
+                        height={200}
+                    />
+                </div>
             </Stack>
-
 
             <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
                 <h4 className="sectionTitle">{"Add Meal Item To Tracker"}</h4>
