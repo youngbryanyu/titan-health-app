@@ -19,7 +19,6 @@ import FoodInfo from "./pages/foodInfo/foodInfo";
 import Menu from "./pages/menu/menu";
 import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
 
-
 /**
  * Returns an instance of the frontend React application.
  * 
