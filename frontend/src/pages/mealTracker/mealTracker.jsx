@@ -357,7 +357,7 @@ const MealTracker = () => {
                 </div>
             </Stack>
 
-            <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
+            <Stack className="stack" spacing={2} alignItems={"center"} justifyContent={"center"}>
                 <div>
 
                     <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>

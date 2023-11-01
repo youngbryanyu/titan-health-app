@@ -46,11 +46,11 @@ app.listen(PORT, async () => {
     console.log(`Backend is running. Listening on port ${PORT}`);
     console.log("Attempting to connect to MongoDB.");
 
-    try {
-        await axios.post('http://localhost:8000/api/menuInfo/load');
-    } catch (error) {
-        console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
-    }
+    // try {
+    //     await axios.post('http://localhost:8000/api/menuInfo/load');
+    // } catch (error) {
+    //     console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
+    // }
 });
 
 /* Parse dining data everyday at 12:01 am --> scheduler uses CRON formatting: https://crontab.guru/every-night-at-midnight */

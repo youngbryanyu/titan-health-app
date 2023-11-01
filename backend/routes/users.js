@@ -503,19 +503,22 @@ router.get('/supplement/:userId', verify, async (req, res) => {
 ######################### */
 
 /* DELETE - Delete food item in tracker*/
-router.delete('/deleteFood/:userId/:foodName', verify, async (req, res) => {
+router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
   try {
     const userId = req.params.userId;
-
-    // Find the user by ID
     const user = await User.findById(userId);
+    const hash = req.params.hash;
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Get all the food items
-    return res.status(200).json(user.foods);
+    // delete food item
+    const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
+    user.foods.splice(itemIndex, 1);
+    await user.save();
+
+    return res.status(200).json({ message: 'Food item deleted successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });

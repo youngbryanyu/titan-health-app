@@ -1,0 +1,94 @@
+.menu {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0, ) 0%,
+            rgba(0, 0, 0, 1) 100%),
+            url("../../components/titan_background.jpeg");
+    background-size: cover;
+    position: relative;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .header {
+        font-weight: bold;
+    }
+    
+    .text {
+        color: white;
+    }
+    
+    .space {
+        margin-top: 5px;
+    }
+    
+    .filter {
+        margin-left: 50px;
+        margin-right: -150px;
+    }
+    
+    .filter2 {
+        // margin-left: 10px;
+    }
+
+    .smallListItem {
+        font-size: 14px;
+    }
+
+    .listItem {
+        // font-size: 18px;
+        font-weight: normal;
+    }
+    
+    //for use in stack component (padding is weird)
+    .stack {
+        margin-left: 25px;
+        margin-right: 15px;
+        .stackedFilter {
+            margin-top: 0px;
+            padding-top: 10px;
+        }
+    }
+    
+    .menuItems {
+        margin-left: 25px;
+    }
+    
+    .menuTimes {
+        // margin-left: -125px;
+    }
+    
+    .moreSpace {
+        margin-top: 25px;
+    }
+    
+    .evenMoreSpace {
+        margin-top: 35px;
+    }
+
+    .checkboxes {
+        // align-items: center;
+    }
+
+    .howBusy {
+        margin-top: -25px; /* moves left column up a bit */
+    }
+    
+    .contactInfo {
+        font-weight: bold;
+        transform: translate(0px, 340px);
+        position: absolute;
+    
+        .icon {
+            transform: translate(0px, 5px);
+        }
+    
+        .location {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

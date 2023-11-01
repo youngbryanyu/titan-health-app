@@ -68,12 +68,29 @@ const Navbar = () => {
                     <Link to={ROUTES.EXERCISE_TRACKER} className="link">
                         <span>Exercise Tracker</span>
                     </Link>
-                    <Link to={ROUTES.FOOD_ITEM} className="link">
-                        <span>Food Info</span>
-                    </Link>
                     <Link to={ROUTES.OTHER_HEALTH_TRACKER} className="link">
                         <span>Health Tracker</span>
                     </Link>
+                    <div className="diningDropdown">
+                        <span>Dining courts ▾</span>
+                        <div className="diningDropdownOptions">
+                            <Link to="/menu/Windsor" className="link">
+                                <span className="highlight">Windsor</span>
+                            </Link>
+                            <Link to="/menu/Wiley" className="link">
+                                <span className="highlight">Wiley</span>
+                            </Link>
+                            <Link to="/menu/Ford" className="link">
+                                <span className="highlight">Ford</span>
+                            </Link>
+                            <Link to="/menu/Earhart" className="link">
+                                <span className="highlight">Earhart</span>
+                            </Link>
+                            <Link to="/menu/Hillenbrand" className="link">
+                                <span className="highlight">Hillenbrand</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
                 <div className="right">
                     <div className="profile">

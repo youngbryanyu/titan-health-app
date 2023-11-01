@@ -16,6 +16,8 @@ import PersonalInfo from "./pages/personalInfo/personalInfo";
 import ExerciseTracker from "./pages/exerciseTracker/exerciseTracker";
 import ExerciseInfo from "./pages/exerciseInfo/exerciseInfo";
 import OtherHealthTracker from "./pages/otherHealthTracker/otherHealthTracker";
+import FoodInfo from "./pages/foodInfo/foodInfo";
+import Menu from "./pages/menu/menu";
 
 
 /**
@@ -42,6 +44,9 @@ const App = () => {
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodTrackerInfo />} />
             <Route path={ROUTES.EXERCISE_INFO} element={<ExerciseInfo />} />
             <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
+            <Route path={ROUTES.FOOD_INFO} element={<FoodInfo />} />
+            <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<FoodInfo />} />
+            <Route path={ROUTES.MENU_INFO_LOCATION} element={<Menu />} />
         </>
     );
 
@@ -60,6 +65,9 @@ const App = () => {
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<Register />} />
             <Route path={ROUTES.EXERCISE_INFO} element={<Register />} />
             <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
+            <Route path={ROUTES.FOOD_INFO} element={<Register />} />
+            <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<Register />} />
+            <Route path={ROUTES.MENU_INFO_LOCATION} element={<Register />} />
         </>
     );
 

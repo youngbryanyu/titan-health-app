@@ -26,8 +26,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FoodTrackerInfo = () => {
-
-
     const handleMealTypeChange = (event) => {
         setMealType(event.target.value);
     }
