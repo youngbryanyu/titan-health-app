@@ -1,7 +1,7 @@
 // Javascript for page displaying info related to a menu item
 // import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/navbar";
-import "./foodInfo.scss";
+import "./foodTrackerInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const FoodInfo = () => {
+const FoodTrackerInfo = () => {
 
 
     const handleMealTypeChange = (event) => {
@@ -388,4 +388,4 @@ const FoodInfo = () => {
 
 
 
-export default FoodInfo;
+export default FoodTrackerInfo;
