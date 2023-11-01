@@ -5,7 +5,6 @@ import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Preferences from "./pages/preferences/preferences";
 import MealTracker from "./pages/mealTracker/mealTracker";
-import FoodTrackerInfo from "./pages/foodTrackerInfo/foodTrackerInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
@@ -18,6 +17,7 @@ import ExerciseInfo from "./pages/exerciseInfo/exerciseInfo";
 import OtherHealthTracker from "./pages/otherHealthTracker/otherHealthTracker";
 import FoodInfo from "./pages/foodInfo/foodInfo";
 import Menu from "./pages/menu/menu";
+import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
 
 
 /**
@@ -41,7 +41,7 @@ const App = () => {
             <Route path={ROUTES.PERSONAL_INFO} element={<PersonalInfo />} />
             <Route path={ROUTES.MEAL_TRACKER} element={<MealTracker />} />
             <Route path={ROUTES.EXERCISE_TRACKER} element={<ExerciseTracker />} />
-            <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodTrackerInfo />} />
+            <Route path={ROUTES.FOOD_ITEM_INFO} element={<MealTrackerItem />} />
             <Route path={ROUTES.EXERCISE_INFO} element={<ExerciseInfo />} />
             <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
             <Route path={ROUTES.FOOD_INFO} element={<FoodInfo />} />
