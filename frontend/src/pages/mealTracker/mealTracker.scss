@@ -15,6 +15,11 @@
     justify-content: center;
     overflow: auto;
 
+    // set text color of legend to white
+    .MuiChartsLegend-series tspan {
+        fill: white;
+    }
+
     .stack {
         background-color: rgba(0, 0, 0, .75);
         padding: 1%;

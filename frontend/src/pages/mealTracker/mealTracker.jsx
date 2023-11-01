@@ -382,10 +382,11 @@ const MealTracker = () => {
                 <div>
                     <PieChart
                         colors={['teal', 'purple', 'orange']}
+                        className="pieChart"
                         series={[
                             {
                             data: [
-                                { id: 0, value: totalProteinToday, label: 'Protein' },
+                                { id: 0, value: totalProteinToday, label: 'Total Protein' },
                                 { id: 1, value: totalFatToday, label: 'Total Fat' },
                                 { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
                             ],
@@ -396,10 +397,13 @@ const MealTracker = () => {
                             startAngle: 0,
                             endAngle: 360,
                             cx: 185,
+                            // style: { fill: 'white', color: 'white' },
+                            fontSize: 20
                             },
                         ]}
                         width={450}
                         height={200}
+                        // sx={{fill: "white", color: "white"}}
                     />
                 </div>
             </Stack>
