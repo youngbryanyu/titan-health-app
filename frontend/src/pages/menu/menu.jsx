@@ -661,7 +661,7 @@ const Menu = () => {
                     }}
                     className="list"
                 >
-                    <Paper style={{ maxHeight: 400, overflow: "auto" }}>
+                    <Paper style={{ height: 400, overflow: "auto" }}>
                         {
                             loading.current || courtsMenu[0] === "loading" ? (
                                 <List>
@@ -713,10 +713,10 @@ const Menu = () => {
                             >
                                 <MenuItem value={ALL_MEALS}>{`No filters`}</MenuItem>
                                 <MenuItem value={CUSTOM_PREFS}>
-                                    Select Custom Preferences & Restrictions
+                                    Custom Preferences & Restrictions
                                 </MenuItem>
                                 <MenuItem value={MY_PREFS}>
-                                    Items Matching My Preferences & Restrictions
+                                    My Preferences & Restrictions
                                 </MenuItem>
                             </Select>
                         </FormControl>
@@ -793,51 +793,150 @@ const Menu = () => {
                     </Box>
                 </div>
             </Stack>
-            <div className="filter">
+            
+            <div className="filter customPrefs">
                 {view === CUSTOM_PREFS && (
                     <>
                         <h4 className="space">{`Select custom preferences and restrictions:`}</h4>
                         {/* <h6>(menu will update after submitting)</h6> */}
                         <FormGroup>
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={VEGETARIAN}
                                 checked={vegetarian}
                                 onChange={handleVegetarian}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={VEGAN}
                                 checked={vegan}
                                 onChange={handleVegan}
                             />
 
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={COCONUT + " free"}
                                 checked={coconut}
                                 onChange={handleCoconut}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={EGGS + " free"}
                                 checked={eggs}
                                 onChange={handleEggs}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={FISH + " free"}
                                 checked={fish}
                                 onChange={handleFish}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={GLUTEN + " free"}
                                 checked={gluten}
                                 onChange={handleGluten}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={SESAME + " free"}
                                 checked={sesame}
                                 onChange={handleSesame}
@@ -846,42 +945,126 @@ const Menu = () => {
                     </>
                 )}
             </div>
-            <div className="">
+            <div className="customPrefs">
                 {view === CUSTOM_PREFS && (
                     <>
                         <FormGroup>
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={SHELLFISH + " free"}
                                 checked={shellfish}
                                 onChange={handleShellfish}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={SOY + " free"}
                                 checked={soy}
                                 onChange={handleSoy}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={TREE_NUTS + " free"}
                                 checked={treeNuts}
                                 onChange={handleTreeNuts}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={WHEAT + " free"}
                                 checked={wheat}
                                 onChange={handleWheat}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={MILK + " free"}
                                 checked={milk}
                                 onChange={handleMilk}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={PEANUTS + " free"}
                                 checked={peanuts}
                                 onChange={handlePeanuts}
