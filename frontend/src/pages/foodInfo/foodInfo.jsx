@@ -256,8 +256,8 @@ const FoodInfo = () => {
 
     /* Get nutrition info */
     const nutrition = menuItem.nutritionFacts.map((fact) =>
-        <ListItem key="{fact.Name}">
-            <Typography fontWeight="bold">
+        <ListItem key="{fact.Name}" style={{ color: 'white' }}>
+            <Typography fontWeight="bold" style={{ color: 'white' }}>
                 {fact.Name}: &nbsp;
             </Typography>
             {fact.LabelValue}
@@ -275,13 +275,13 @@ const FoodInfo = () => {
         if (tag.Name === "Vegan" || tag.Name === "Vegetarian") {
             if (tag.Value) {
                 return (
-                    <ListItem key="{tag.Name}">
+                    <ListItem key={tag.Name} style={{ color: 'white' }}>
                         Is&nbsp;{tag.Name}
                     </ListItem>
                 )
             } else {
                 return (
-                    <ListItem key="{tag.Name}">
+                    <ListItem key={tag.Name} style={{ color: 'white' }}>
                         Is not&nbsp;{tag.Name}
                     </ListItem>
                 )
@@ -290,17 +290,17 @@ const FoodInfo = () => {
     }
     function nonVegTags(tag) {
         if (tag.Name === "Vegan" || tag.Name === "Vegetarian") {
-            return
+            return;
         }
         if (tag.Value) {
             return (
-                <ListItem key="{tag.Name}">
+                <ListItem key={tag.Name} style={{ color: 'white' }}>
                     Contains&nbsp;{tag.Name}
                 </ListItem>
             )
         } else {
             return (
-                <ListItem key="{tag.Name}">
+                <ListItem key={tag.Name} style={{ color: 'white' }}>
                     Does not contain&nbsp;{tag.Name}
                 </ListItem>
             )
@@ -313,8 +313,8 @@ const FoodInfo = () => {
     )
     function courtDataInfo(courtDataItem) {
         return (
-            <ListItem key="{courtDataItem}">
-                &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
+            <ListItem key="{courtDataItem}" style={{ color: 'white' }}>
+                    &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
             </ListItem>
         )
     }
@@ -371,7 +371,7 @@ const FoodInfo = () => {
                         borderRadius: 8,
                     }}>
                         <Typography style={{ color: "#ebc034" }} fontWeight="bold">
-                            Nutrition Facts for: &nbsp; {menuItem.name}
+                             Nutrition Facts for: &nbsp; {menuItem.name}
                         </Typography>
                     </ListItem>
                     {nutrition}
@@ -397,8 +397,8 @@ const FoodInfo = () => {
                         mx: 'auto',
                         borderRadius: 8,
                     }}>
-                        <Typography fontWeight="bold">
-                            Tags:
+                        <Typography fontWeight="bold" color={"white"}>
+                            Dietary Tags:
                         </Typography>
                     </ListItem>
                     {tags1}
@@ -425,7 +425,7 @@ const FoodInfo = () => {
                         mx: 'auto',
                         borderRadius: 8,
                     }}>
-                        <Typography fontWeight="bold">
+                        <Typography fontWeight="bold" color={"white"}>
                             Locations Served At Today:
                         </Typography>
                     </ListItem>
