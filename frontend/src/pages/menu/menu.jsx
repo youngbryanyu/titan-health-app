@@ -710,7 +710,7 @@ const Menu = () => {
                 </Box>
             </div>
             {/* using the MUI stack component to vertically stack the filtering options, then will stack search bar on top */}
-            <Stack className="stack" spacing={2} ml={"50px"}>
+            <Stack className="stack filters" spacing={2} ml={"50px"}>
                 <div className="stackedFilter searchBar">
                     {/* <h4>Search for an item:</h4> */}
                     {Searchbar(courtsMenu)}

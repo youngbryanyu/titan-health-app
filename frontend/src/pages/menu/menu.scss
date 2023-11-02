@@ -55,15 +55,21 @@
     }
 
     .customPrefs {
-        transform: translate(-25px, 0%);
+        transform: translate(-40px, 0%);
     }
     
     .menuItems {
         margin-left: 32.5px;
+        transform: translate(10px, 0%);
     }
     
     .menuTimes {
         // margin-left: -125px;
+        transform: translate(25px, 0px);
+    }
+
+    .filters {
+        transform: translate(-5px, 0px);
     }
 
     /* Makes filter text white */
