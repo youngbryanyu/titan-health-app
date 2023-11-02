@@ -19,6 +19,7 @@ import {
     Stack
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+
 import { Mail, Phone, NearMe } from "@mui/icons-material";
 import Navbar from "../../components/navbar/navbar";
 import { AuthContext } from "../../utils/authentication/auth-context";
@@ -32,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
         color: "white",
     },
 }));
+
+
 
 const Menu = () => {
     const classes = useStyles();
@@ -379,7 +382,7 @@ const Menu = () => {
         } else if (view === FULL_MENU) {
             getCourtsItems();
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [view, mealType]);
 
     /* edge case: useEffect for instantaneous custom prefs updates */
@@ -389,11 +392,11 @@ const Menu = () => {
             setShouldSort(false); /* reset sorting */
             setShouldSortPop(false);
             handleSelectPrefsClick();
-        } 
-    }, 
-    // eslint-disable-next-line
-    [vegetarian, vegan, coconut, eggs, fish, gluten, sesame, shellfish,
-        soy, treeNuts, wheat, milk, peanuts]);
+        }
+    },
+        // eslint-disable-next-line
+        [vegetarian, vegan, coconut, eggs, fish, gluten, sesame, shellfish,
+            soy, treeNuts, wheat, milk, peanuts]);
 
     const [busyLevel, setBusyLevel] = useState("");
 
@@ -487,10 +490,20 @@ const Menu = () => {
         const end = time.end;
 
         return (
-            <ListItem component="div" disablePadding button={true}>
+            <ListItem
+                component="div"
+                disablePadding
+                button={false}
+                sx={{
+                    paddingLeft: '16px', // Add left padding
+                    borderBottom: '1px solid #e0e0e0', // Line between items
+                    marginBottom: '8px', // Spacing between items
+                    paddingBottom: '8px', // Padding at the bottom of the item
+                }}
+            >
                 <span className="smallListItem">{`${type}: ${start} to ${end}`}</span>
             </ListItem>
-        );
+        )
     }
 
     function listItem(item) {
@@ -499,7 +512,13 @@ const Menu = () => {
         const id = item.ID;
         return (
             <Link to={`/foodInfo/${id}`} className="link">
-                <ListItem component="div" disablePadding button={true}>
+                <ListItem component="div" disablePadding button={true}  
+                sx={{
+                    paddingLeft: '16px', // Add left padding
+                    borderBottom: '1px solid #e0e0e0', // Line between items
+                    marginBottom: '8px', // Spacing between items
+                    paddingBottom: '8px', // Padding at the bottom of the item
+                }}>
                     <span className="listItem">{`${name}`}</span>
                 </ListItem>
             </Link>
@@ -585,20 +604,26 @@ const Menu = () => {
         <div className="menu">
             <Navbar />
             <div className="menuTimes">
-            <h4 className="howBusy">{`How busy is ${location}?`}</h4>
+                <h4 className="howBusy">{`How busy is ${location}?`}</h4>
                 <Box
                     sx={{
-                        width: "100%",
-                        maxHeight: 100,
+                        width: 250,
+                        maxHeight: 80,
                         maxWidth: 360,
                         bgcolor: "background.paper",
                         borderRadius: 5
                     }}
                     className="list"
                 >
-                    <Paper style={{ maxHeight: 100, maxWidth: 250, overflow: "auto" }}>
+                    <Paper style={{ height: 50, width: 250, overflow: "auto" }}>
                         <List>
-                            <ListItem component="div" disablePadding button={false}>
+                            <ListItem component="div" disablePadding button={false}
+                                sx={{
+                                    paddingLeft: '16px', // Add left padding
+                                    borderBottom: '1px solid #e0e0e0', // Line between items
+                                    marginBottom: '8px', // Spacing between items
+                                    paddingBottom: '8px', // Padding at the bottom of the item
+                                }}>
                                 <span className="smallListItem">
                                     {`${location}`} is currently {`${busyLevel}`} at {`${busytime}`}
                                 </span>
@@ -607,31 +632,29 @@ const Menu = () => {
                     </Paper>
                 </Box>
 
-                <h4 className="moreSpace">{`When ${location} is open:`}</h4>
+                <h4 className="sectionTitle">{`When ${location} is open:`}</h4>
                 <Box
                     sx={{
-                        width: "100%",
+                        width: 250,
                         maxHeight: 100,
-                        maxWidth: 250,
                         bgcolor: "background.paper",
-                        borderRadius: 5
+                        borderRadius: 5,
                     }}
                     className="list"
                 >
-                    <Paper style={{ maxHeight: 300, maxWidth: 250, overflow: "auto" }}>
+                    <Paper style={{ maxHeight: 105, width: 250, overflow: "auto" }}>
                         <List>{times.map((time) => listTimes(time))}</List>
                     </Paper>
                 </Box>
             </div>
 
             <div className="menuItems">
-                <h4 className="moreSpace">{`${location}'s menu:`}</h4>
+                <h4 className="sectionTitle">{`${location}'s menu:`}</h4>
                 {/* <h6>(click to view info)</h6> */}
                 <Box
                     sx={{
-                        width: "100%",
+                        width: 360,
                         height: 400,
-                        maxWidth: 360,
                         bgcolor: "background.paper",
                         borderRadius: 5
                     }}
@@ -724,14 +747,42 @@ const Menu = () => {
 
                         <FormGroup className="checkboxes">
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={"Sort Alphabetically"}
                                 checked={shouldSort}
                                 onChange={handleSortClick}
                                 disabled={disableSort}
                             />
                             <FormControlLabel
-                                control={<Checkbox size="small" color="secondary" />}
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
                                 label={"Sort by Item Popularity"}
                                 checked={shouldSortPop}
                                 onChange={handleSortClickPop}
@@ -794,7 +845,7 @@ const Menu = () => {
                     </>
                 )}
             </div>
-            <div className="filter2">
+            <div className="">
                 {view === CUSTOM_PREFS && (
                     <>
                         <FormGroup>

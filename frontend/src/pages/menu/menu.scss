@@ -28,10 +28,6 @@
         margin-left: 50px;
         margin-right: -150px;
     }
-    
-    .filter2 {
-        // margin-left: 10px;
-    }
 
     .smallListItem {
         font-size: 14px;
@@ -58,14 +54,19 @@
     }
     
     .menuItems {
-        margin-left: 25px;
+        margin-left: 32.5px;
     }
     
     .menuTimes {
         // margin-left: -125px;
     }
+
+    /* Makes filter text white */
+    .MuiSelect-select {
+        color: white;
+    }
     
-    .moreSpace {
+    .sectionTitle {
         margin-top: 25px;
     }
     
