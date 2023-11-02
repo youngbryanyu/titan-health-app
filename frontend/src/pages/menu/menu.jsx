@@ -148,6 +148,7 @@ const Menu = () => {
     const EARHART = "Earhart";
     const HILLENBRAND = "Hillenbrand";
 
+    // addresses of each dining court
     const WINDSOR_ADDR =
         "https://www.google.com/maps/place/Windsor+Dining+Court/@40.4270199,-86.9227636,17z/data=!3m1!4b1!4m5!3m4!1s0x8812e2b5c166c8cb:0xc6b89b5c96b567c4!8m2!3d40.4270158!4d-86.9205696";
     const WILEY_ADDR =
@@ -508,22 +509,33 @@ const Menu = () => {
 
     function listItem(item) {
         // display a menu item
-        const name = item.name;
+        let name = item.name;
+        if (name.length > 40) {
+            name = name.substring(0, 40) + "...";
+        }
         const id = item.ID;
+        const rating = item.avgRating > 0 ? item.avgRating : "";
+
         return (
             <Link to={`/foodInfo/${id}`} className="link">
-                <ListItem component="div" disablePadding button={true}  
-                sx={{
-                    paddingLeft: '16px', // Add left padding
-                    borderBottom: '1px solid #e0e0e0', // Line between items
-                    marginBottom: '8px', // Spacing between items
-                    paddingBottom: '8px', // Padding at the bottom of the item
-                }}>
-                    <span className="listItem">{`${name}`}</span>
+                <ListItem component="div" disablePadding button={true}
+                    sx={{
+                        paddingLeft: '16px', // Add left padding
+                        paddingRight: '16px', // Add right padding for symmetry
+                        borderBottom: '1px solid #e0e0e0', // Line between items
+                        marginBottom: '8px', // Spacing between items
+                        paddingBottom: '8px', // Padding at the bottom of the item
+                        display: 'flex', // Make this a flex container
+                        justifyContent: 'space-between', // Space between items
+                        alignItems: 'center', // Align items vertically in the center
+                    }}>
+                    <span className="listItem">{name}</span>
+                    <span className="listRating">{rating}</span> {/* Added marginRight */}
                 </ListItem>
             </Link>
         );
     }
+
 
     const navigate = useNavigate();
     //searchbar component. cannot search for just any value, have to select from dropdown
@@ -541,7 +553,6 @@ const Menu = () => {
         return (
             <Box>
                 <Autocomplete
-                    zIndex={999}
                     disablePortal
                     autoComplete={true}
                     autoHighlight={true}
@@ -650,11 +661,17 @@ const Menu = () => {
             </div>
 
             <div className="menuItems">
-                <h4 className="sectionTitle">{`${location}'s menu:`}</h4>
+                <div className="sectionHeader">
+                    <h4 className="menuTitle">{`${location}'s menu:`}</h4>
+                    <div className="ratingHeader">
+                        <span className="ratingTitle">Rating</span>
+                        <span className="ratingSubtitle">out of 5</span>
+                    </div>
+                </div>
                 {/* <h6>(click to view info)</h6> */}
                 <Box
                     sx={{
-                        width: 360,
+                        width: 380,
                         height: 400,
                         bgcolor: "background.paper",
                         borderRadius: 5
@@ -666,14 +683,14 @@ const Menu = () => {
                             loading.current || courtsMenu[0] === "loading" ? (
                                 <List>
                                     <ListItem component="div" disablePadding button={true}>
-                                        <span style={{marginLeft: 10}} className="header">{"Loading..."}</span>
+                                        <span style={{ marginLeft: 10 }} className="header">{"Loading..."}</span>
                                     </ListItem>
                                 </List>
                             ) : (
                                 view === CUSTOM_PREFS && noCheckBoxesSelected() ? (
                                     <List>
                                         <ListItem component="div" disablePadding button={true}>
-                                            <span style={{marginLeft: 10}} className="header">{"Select some preferences/restrictions."}</span>
+                                            <span style={{ marginLeft: 10 }} className="header">{"Select some preferences/restrictions."}</span>
                                         </ListItem>
                                     </List>
                                 ) : (
@@ -682,7 +699,7 @@ const Menu = () => {
                                     ) : (
                                         <List>
                                             <ListItem component="div" disablePadding button={true}>
-                                                <span style={{marginLeft: 10}} className="header">{"No items served at this time."}</span>
+                                                <span style={{ marginLeft: 10 }} className="header">{"No items served at this time."}</span>
                                             </ListItem>
                                         </List>
                                     )
@@ -727,7 +744,7 @@ const Menu = () => {
                 <div className="stackedFilter">
                     {/* <h4>Select Meals:</h4> */}
                     {/* <h6>(click to view options)</h6> */}
-                    <Box sx={{ minWidth: 120, zIndex: 5}}>
+                    <Box sx={{ minWidth: 120, zIndex: 5 }}>
                         <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel>Meal type</InputLabel>
                             <Select
@@ -793,7 +810,7 @@ const Menu = () => {
                     </Box>
                 </div>
             </Stack>
-            
+
             <div className="filter customPrefs">
                 {view === CUSTOM_PREFS && (
                     <>

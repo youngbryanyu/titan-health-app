@@ -241,8 +241,8 @@ const FoodInfo = () => {
         async function updateAvgRating() {
             try {
                 const response = await axios.get('/ratings/' + menuItemID);
-                console.log("successfully updated rating of menuItemId: " + menuItemID);
-                console.log(response.data.avgRating)
+                // console.log("successfully updated rating of menuItemId: " + menuItemID);
+                // console.log(response.data.avgRating)
                 setAvg(response.data.avgRating);
 
             } catch (error) {
