@@ -541,6 +541,7 @@ const Menu = () => {
         return (
             <Box>
                 <Autocomplete
+                    zIndex={999}
                     disablePortal
                     autoComplete={true}
                     autoHighlight={true}
@@ -726,7 +727,7 @@ const Menu = () => {
                 <div className="stackedFilter">
                     {/* <h4>Select Meals:</h4> */}
                     {/* <h6>(click to view options)</h6> */}
-                    <Box sx={{ minWidth: 120 }}>
+                    <Box sx={{ minWidth: 120, zIndex: 5}}>
                         <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel>Meal type</InputLabel>
                             <Select

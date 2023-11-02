@@ -51,6 +51,7 @@
     .searchBar {
         transform: translate(7.5px, 0%);
         margin-bottom: 10px;
+        z-index: 999;
     }
     
     .menuItems {
