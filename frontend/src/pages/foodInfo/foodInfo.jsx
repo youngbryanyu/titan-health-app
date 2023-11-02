@@ -363,22 +363,30 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 10,
+                borderRadius: 5,
                 overflow: 'auto',
             }}>
-                <List>
-                    <ListItem sx={{
-                        background: '#242424',
-                        width: .98,
-                        mx: 'auto',
-                        borderRadius: 8,
-                    }}>
-                        <Typography style={{ color: "white" }} fontWeight="bold">
-                            Nutrition Facts for: &nbsp; <span style={{ color: "#ebc034" }}>{menuItem.name}</span>
-                        </Typography>
-                    </ListItem>
-                    {nutrition}
-                </List>
+
+                <div style={{ position: 'relative' }}>
+                    {/* Fixed Header */}
+                    <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+                        <ListItem sx={{
+                            background: '#242424',
+                            width: .98,
+                            mx: 'auto',
+                            borderRadius: 5,
+                        }}>
+                            <Typography style={{ color: "white" }} fontWeight="bold">
+                                Nutrition Facts for: &nbsp; <span style={{ color: "#ebc034" }}>{menuItem.name}</span>
+                            </Typography>
+                        </ListItem>
+                    </div>
+
+                    {/* Scrollable Content */}
+                    <List style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                        {nutrition}
+                    </List>
+                </div>
             </Paper>
 
             <Paper sx={{ // info for tags
@@ -390,23 +398,31 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 10,
+                borderRadius: 5,
                 overflow: 'auto',
             }}>
-                <List>
-                    <ListItem sx={{
-                        background: '#242424',
-                        width: .98,
-                        mx: 'auto',
-                        borderRadius: 8,
-                    }}>
-                        <Typography fontWeight="bold" color={"white"}>
-                            Dietary Tags:
-                        </Typography>
-                    </ListItem>
-                    {tags1}
-                    {tags2}
-                </List>
+                {/* Dietary Tags List */}
+                <div style={{ position: 'relative' }}>
+                    {/* Fixed Header */}
+                    <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+                        <ListItem sx={{
+                            background: '#242424',
+                            width: .98,
+                            mx: 'auto',
+                            borderRadius: 5,
+                        }}>
+                            <Typography fontWeight="bold" color={"white"}>
+                                Dietary Tags:
+                            </Typography>
+                        </ListItem>
+                    </div>
+
+                    {/* Scrollable Content */}
+                    <List style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        {tags1}
+                        {tags2}
+                    </List>
+                </div>
             </Paper>
 
             <Paper sx={{ // info for locations served at today
@@ -418,22 +434,30 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 10,
+                borderRadius: 5,
                 overflow: 'auto',
             }}>
-                <List>
-                    <ListItem sx={{
-                        background: '#242424',
-                        width: .98,
-                        mx: 'auto',
-                        borderRadius: 8,
-                    }}>
-                        <Typography fontWeight="bold" color={"white"}>
-                            Locations Served At Today:
-                        </Typography>
-                    </ListItem>
-                    {locations}
-                </List>
+                {/* Locations Served At Today List */}
+                <div style={{ position: 'relative' }}>
+                    {/* Fixed Header */}
+                    <div style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+                        <ListItem sx={{
+                            background: '#242424',
+                            width: .98,
+                            mx: 'auto',
+                            borderRadius: 5,
+                        }}>
+                            <Typography fontWeight="bold" color={"white"}>
+                                Locations Served At Today:
+                            </Typography>
+                        </ListItem>
+                    </div>
+
+                    {/* Scrollable Content */}
+                    <List style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        {locations}
+                    </List>
+                </div>
             </Paper>
 
             <Box sx={{
@@ -444,7 +468,7 @@ const FoodInfo = () => {
                 position: 'absolute',
                 ml: 6, //left margin (percent of screen)
                 mt: 63, //top margin (percent of screen)
-                borderRadius: 10,
+                borderRadius: 5,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
