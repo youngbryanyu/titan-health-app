@@ -17,9 +17,24 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper'; // Sheet is replaced by Paper
 import Box from '@mui/material/Box';
 import axios from "axios";
+import Button from '@mui/material/Button';
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: "black",
+    },
+    selected: {
+        color: "white",
+    },
+}));
 
 
 const FoodInfo = () => {
+    const classes = useStyles();
+
+
     const [starClick1, setStarClick1] = useState(false);
     const [starClick2, setStarClick2] = useState(false);
     const [starClick3, setStarClick3] = useState(false);
@@ -95,6 +110,15 @@ const FoodInfo = () => {
     const handleSavedClick = () => {
         setSavedClick(!savedClick);
     }
+
+     /* fields for meal type */
+     const SELECT_MEAL = 0;
+     const BREAKFAST = 1;
+     const LUNCH = 2;
+     const DINNER = 3;
+     const SNACK = 4;
+     const [mealType, setMealType] = useState(SELECT_MEAL);
+     const mealTypes = ["", "Breakfast", "Unknown", "Lunch", "Snack", "Dinner"];
 
     /**
     * Load initial ratings & get item & get saved item on page render
@@ -460,6 +484,12 @@ const FoodInfo = () => {
                 </div>
             </Paper>
 
+            {/* <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}> */}
+
             <Box sx={{
                 background: '#0b0b0b',
                 width: .35,
@@ -501,15 +531,93 @@ const FoodInfo = () => {
                     </IconButton>
                 </div>
 
+                {/* avg rating info */}
                 <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                    {/* <span color="inherit" > */}
-                        <span style={{ fontSize: 16, marginLeft: 20 }}>
-                            {`Average Rating: ${avg}`}
-                        </span>
-                    {/* </span> */}
+                    <span style={{ fontSize: 16, marginLeft: 20 }}>
+                        {`Average Rating: ${avg}`}
+                    </span>
                 </div>
-
             </Box>
+
+            {/* Box for form field and button */}
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: '10px',
+                position: "absolute",
+                ml: 80, //left margin (percent of screen)
+                mt: 60, //top margin (percent of screen),
+                background: '#0b0b0b',
+                padding: 1,
+                borderRadius: 5
+            }}>
+                <span style={{ marginRight: 5 }}>
+                    <input
+                        type="number"
+                        placeholder="Servings"
+                        style={{
+                            padding: '5px',
+                            border: 'none',
+                            borderRadius: '4px',
+                            height: '40px', // Adjust height to align with button
+                            marginTop: '5px',
+                            marginRight: '-5px'
+                        }}
+                    />
+                </span>
+
+                <FormControl error fullWidth sx={{ m: 1, width: 200, height: 50 }}>
+                    <InputLabel>Meal type</InputLabel>
+                    <Select
+                        id="demo-simple-select"
+                        value={mealType}
+                        label="Filter"
+                        // onChange={handleMeals}
+                        classes={{ root: classes.root, select: classes.selected }}
+                    >
+                        <MenuItem value={SELECT_MEAL}>{`Select meal type`}</MenuItem>
+                        <MenuItem value={BREAKFAST}>{`Breakfast`}</MenuItem>
+                        <MenuItem value={LUNCH}>{`Lunch`}</MenuItem>
+                        <MenuItem value={DINNER}>{`Dinner`}</MenuItem>
+                        <MenuItem value={SNACK}>{`Snack`}</MenuItem>
+                    </Select>
+                </FormControl>
+                <span>
+                    <Button
+                        variant="contained"
+                        onClick={() => {/* Your click handler function here */ }}
+                        style={{
+                            backgroundColor: 'goldenrod',
+                            color: 'white',
+                            height: '50px',
+                            paddingLeft: '10px',
+                            paddingRight: '10px',
+                            marginTop: '5px'
+                        }}>
+                        Add to Tracker
+                    </Button>
+                </span>
+            </Box>
+
+            {/* sucess and error message*/}
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: '10px',
+                position: "absolute",
+                ml: 140, //left margin (percent of screen)
+                mt: 50, //top margin (percent of screen),
+                // background: '#0b0b0b',
+                padding: 15,
+                borderRadius: 5
+            }}>
+                <span>ERROR </span>
+            </Box>
+
+
+            {/* ingredients  */}
             <Box sx={{ ml: 6, mt: 70, width: .9, height: 'auto', position: 'absolute' }}>
                 <Box sx={{
                     borderColor: '#242424',
