@@ -256,12 +256,15 @@ const FoodInfo = () => {
 
     /* Get nutrition info */
     const nutrition = menuItem.nutritionFacts.map((fact) =>
-        <ListItem key="{fact.Name}" style={{ color: 'white' }}>
+        <ListItem key={fact.Name} style={{ color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography fontWeight="bold" style={{ color: 'white' }}>
-                {fact.Name}: &nbsp;
+                {fact.Name}:
             </Typography>
-            {fact.LabelValue}
+            <div>
+                {fact.LabelValue}
+            </div>
         </ListItem>
+
     );
 
     /* Get dietary tag info */
@@ -481,7 +484,7 @@ const FoodInfo = () => {
                         </span>
                     </IconButton>
                 </div>
-                
+
             </Box>
             <Box sx={{ ml: 6, mt: 70, width: .9, height: 'auto', position: 'absolute' }}>
                 <Box sx={{
