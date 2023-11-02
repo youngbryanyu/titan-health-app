@@ -102,16 +102,16 @@ const MealTracker = () => {
                 response.data.forEach(item => {
                     totalCalories += item.calories * item.servings;
 
-                    if (item.mealType === BREAKFAST) {
+                    if (item.mealType === BREAKFAST && isValidNumber(item.calories)) {
                         totalBreakfast += item.calories * item.servings;
                     }
-                    if (item.mealType === LUNCH) {
+                    if (item.mealType === LUNCH && isValidNumber(item.calories)) {
                         totalLunch += item.calories * item.servings;
                     }
-                    if (item.mealType === DINNER) {
+                    if (item.mealType === DINNER && isValidNumber(item.calories)) {
                         totalDinner += item.calories * item.servings;
                     }
-                    if (item.mealType === SNACK) {
+                    if (item.mealType === SNACK && isValidNumber(item.calories)) {
                         totalSnack += item.calories * item.servings;
                     }
                 });
@@ -123,17 +123,17 @@ const MealTracker = () => {
 
                 /* calculate total protein */
                 let totalProtein = 0;
-                response.data.forEach(item => totalProtein += item.protein * item.servings);
+                response.data.forEach(item => totalProtein += (isValidNumber(item.protein)) ? item.protein * item.servings : 0);
                 setTotalProteinToday(totalProtein);
 
                 /* calculate total carbohydrates */
                 let totalCarbs = 0;
-                response.data.forEach(item => totalCarbs += item.carbohydrates * item.servings);
+                response.data.forEach(item => totalCarbs += (isValidNumber(item.carbohydrates)) ? item.carbohydrates * item.servings : 0);
                 setTotalCarbsToday(totalCarbs);
 
                 /* calculate total fats */
                 let totalFat = 0;
-                response.data.forEach(item => totalFat += item.fat * item.servings);
+                response.data.forEach(item => totalFat += (isValidNumber(item.fat)) ? item.fat * item.servings : 0);
                 setTotalFatToday(totalFat);
             } catch (error) {
                 console.log(error);

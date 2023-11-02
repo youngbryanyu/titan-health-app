@@ -138,13 +138,29 @@ const FoodInfo = () => {
         }
     };
 
+    /* Message fields needed for determining error and success messages when saving item to tracker*/
     const MESSAGES = {
-        INCOMPLETE_FIELDS_ERROR: 'Please enter all necessary fields before saving',
-        SUCCESSFUL_MESSAGE: 'Successfully added item to tracker'
+        INCOMPLETE_FIELDS_ERROR: 'Please enter all fields first',
+        SUCCESSFUL_MESSAGE: 'Successfully added to tracker'
     }
-
     const [message, setMessage] = useState(MESSAGES.INCOMPLETE_FIELDS_ERROR);
     const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
+    const [success, setSuccess] = useState(false);
+    /* Text colors */
+    const RED = "red";
+    const WHITE = "white";
+    const [messageColor, setMessageColor] = useState(RED);
+
+
+    /* Clears success message after 5 seconds*/
+    useEffect(() => {
+        if (!success) {
+            return;
+        }
+        setTimeout(() => {
+            setSuccess(false);
+        }, 5000);
+    }, [success]);
 
     // remove's the last 'g' from a field
     function removeUnit(str) {
@@ -159,8 +175,9 @@ const FoodInfo = () => {
         setAllFieldsComplete(true);
 
         /* check if all fields were entered */
-        if (servings === '' || mealType === '') {
+        if (servings === '' || mealType === SELECT_MEAL) {
             setAllFieldsComplete(false);
+            setMessageColor(RED);
             setMessage(MESSAGES.INCOMPLETE_FIELDS_ERROR);
             return;
         }
@@ -177,7 +194,7 @@ const FoodInfo = () => {
             if (fact.Name === 'Serving Size') {
                 servingSize = fact.LabelValue;
             } else if (fact.Name === 'Calories' && fact.LabelValue !== '') {
-                calories = fact.LabelValue ;
+                calories = fact.LabelValue;
             } else if (fact.Name === 'Protein' && fact.LabelValue !== '') {
                 protein = removeUnit(fact.LabelValue);
             } else if (fact.Name === 'Total Carbohydrate' && fact.LabelValue !== '') {
@@ -186,13 +203,13 @@ const FoodInfo = () => {
                 fat = removeUnit(fact.LabelValue);
             }
         });
-        // console.log(calories);
-        // console.log(protein);
-        // console.log(fat);
-        // console.log(servingSize);
-        // console.log(carbohydrates);
-        // console.log(foodName);
-            console.log(userId);
+        console.log(calories);
+        console.log(protein);
+        console.log(fat);
+        console.log(servingSize);
+        console.log(carbohydrates);
+        console.log(foodName);
+        console.log(userId);
         try {
 
             // store item in tracker
@@ -201,9 +218,12 @@ const FoodInfo = () => {
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
-            // Clear the editedNutritionFacts state
+            // Clear the states and set successful to true to display message
             setServings('');
             setMealType(SELECT_MEAL);
+            setSuccess(true);
+            setMessageColor(WHITE);
+            setMessage(MESSAGES.SUCCESSFUL_MESSAGE);
 
             console.log(`Saved item with ${menuItem.name} to tracker!`);
         } catch (error) {
@@ -713,11 +733,12 @@ const FoodInfo = () => {
                 // background: '#0b0b0b',
                 padding: 15,
                 borderRadius: 2.5,
-                width: 200
+                width: 225,
+                visibility: (allFieldsComplete && !success) && "hidden",
+                color: messageColor
             }}>
-                <span>Please enter all fields first!</span>
+                <p> {message} </p>
             </Box>
-
 
             {/* ingredients  */}
             <Box sx={{ ml: 6, mt: 70, width: .9, height: 'auto', position: 'absolute' }}>

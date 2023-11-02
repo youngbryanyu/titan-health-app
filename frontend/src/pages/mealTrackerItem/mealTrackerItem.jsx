@@ -3,7 +3,7 @@
 import Navbar from "../../components/navbar/navbar";
 import "./mealTrackerItem.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -26,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MealTrackerItem = () => {
+    // /* force rerender on location change */
+    // const location = useLocation();
+    // useEffect(() => {
+    //     // Perform actions here on route change
+    // }, [location]);
+
     const handleMealTypeChange = (event) => {
         setMealType(event.target.value);
     }
@@ -37,7 +43,7 @@ const MealTrackerItem = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
-    const [servingSize, setServingSize] = useState(''); 
+    const [servingSize, setServingSize] = useState('');
 
     /* Meal types */
     const EMPTY = 'Choose meal type';

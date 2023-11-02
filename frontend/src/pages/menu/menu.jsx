@@ -637,7 +637,7 @@ const Menu = () => {
                                     paddingBottom: '8px', // Padding at the bottom of the item
                                 }}>
                                 <span className="smallListItem">
-                                    {`${location}`} is currently {`${busyLevel}`} at {`${busytime}`}
+                                    {`${location} is currently ${busyLevel} at ${busytime}`}
                                 </span>
                             </ListItem>
                         </List>
