@@ -514,7 +514,7 @@ const Menu = () => {
             name = name.substring(0, 40) + "...";
         }
         const id = item.ID;
-        const rating = item.avgRating > 0 ? item.avgRating : "";
+        const rating = item.avgRating > 0 ? item.avgRating : "-";
 
         return (
             <Link to={`/foodInfo/${id}`} className="link">
