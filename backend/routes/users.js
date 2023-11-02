@@ -88,7 +88,7 @@ router.put('/addFood/:userId', verify, async (req, res) => {
   try {
     //TODO: add logic to reject duplicate foods
     const userId = req.params.userId;
-    const { foodName, calories, fat, protein, carbohydrates, servings, mealType } = req.body;
+    const { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType } = req.body;
     const hash = crypto.createHash('sha1').update(foodName).digest('hex');
     const newFood = {
       foodName: foodName || "[add name]",
@@ -97,6 +97,7 @@ router.put('/addFood/:userId', verify, async (req, res) => {
       protein: protein || "[add protein]",
       carbohydrates: carbohydrates || "[add carbs]",
       servings: servings || "[add servings]",
+      servingSize: servingSize || "[add serving size]",
       mealType: mealType || "[add meal type]",
       hash
     };

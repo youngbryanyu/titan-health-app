@@ -48,6 +48,7 @@ const MealTracker = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
+    const [servingSize, setServingSize] = useState('');
 
     /* Daily totals */
     const [totalCaloriesToday, setTotalCaloriesToday] = useState('');
@@ -76,7 +77,7 @@ const MealTracker = () => {
         INVALID_PROTEIN_ERROR: "Protein must be a number",
         INVALID_CARBS_ERROR: "Carbohydrates must be a number",
         INVALID_FAT_ERROR: "Fat must be a number",
-        INVALID_SERVINGS_ERROR: "Servings must be a number"
+        INVALID_SERVINGS_ERROR: "Servings must be a number",
     }
 
     const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
@@ -134,8 +135,6 @@ const MealTracker = () => {
                 let totalFat = 0;
                 response.data.forEach(item => totalFat += item.fat * item.servings);
                 setTotalFatToday(totalFat);
-
-
             } catch (error) {
                 console.log(error);
             }
@@ -161,7 +160,7 @@ const MealTracker = () => {
         setAllFieldsComplete(true);
 
         /* check if all fields were entered */
-        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
+        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || servingSize === '' || mealType === EMPTY) {
             setAllFieldsComplete(false);
             setErrorMessage(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
             return;
@@ -197,7 +196,7 @@ const MealTracker = () => {
         try {
             const res = await axios.put(
                 `users/addFood/${userId}`,
-                { foodName, calories, fat, protein, carbohydrates, servings, mealType },
+                { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType },
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
@@ -229,6 +228,7 @@ const MealTracker = () => {
             setFat('');
             setCarbs('');
             setServings('');
+            setServingSize('');
             setMealType(EMPTY);
         } catch (error) {
             console.error(error);
@@ -241,7 +241,6 @@ const MealTracker = () => {
     }
 
     /* A list item in display */
-
     function buildListItem(item, mealType) {
         if (item.mealType !== mealType) {
             return <></>
@@ -253,6 +252,7 @@ const MealTracker = () => {
         }
         const id = item.hash;
         const servings = item.servings;
+        const servingSize = item.servingSize;
         const calories = item.calories
         const totalCalories = calories * servings;
 
@@ -265,7 +265,7 @@ const MealTracker = () => {
                             <span>{totalCalories}</span>
                         </Box>
                         <Typography variant="body2" component="span" sx={{ fontSize: '0.8em', color: 'gray' }}>
-                            {`${servings} servings`}
+                            {`${servings} servings (${servingSize})`}
                         </Typography>
                     </ListItem>
                 </Link>
@@ -433,6 +433,11 @@ const MealTracker = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <label htmlFor="servings">Servings</label>
                             <input id="servings" type="text" value={servings} className="inputBox" onChange={(e) => setServings(e.target.value)} />
+                        </div>
+                        {/* TODO */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="servings">Serving Size</label>
+                            <input id="servingSize" type="text" value={servingSize} className="inputBox" onChange={(e) => setServingSize(e.target.value)} />
                         </div>
                     </Box>
 

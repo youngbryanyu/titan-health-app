@@ -46,6 +46,7 @@ app.listen(PORT, async () => {
     console.log(`Backend is running. Listening on port ${PORT}`);
     console.log("Attempting to connect to MongoDB.");
 
+    /* Uncomment this to immediately parse new dining data on server startup */
     // try {
     //     await axios.post('http://localhost:8000/api/menuInfo/load');
     // } catch (error) {
@@ -53,11 +54,14 @@ app.listen(PORT, async () => {
     // }
 });
 
-/* Parse dining data everyday at 12:01 am --> scheduler uses CRON formatting: https://crontab.guru/every-night-at-midnight */
-schedule.scheduleJob('1 0 * * *', async () => {
+/* Parse dining data everyday at 12:00 am --> scheduler uses CRON formatting: https://crontab.guru/every-night-at-midnight */
+schedule.scheduleJob('0 0 * * *', async () => {
     try {
         await axios.post('http://localhost:8000/api/menuInfo/load');
     } catch (error) {
         console.log("ERROR PARSING DINING DATA AT MIDNIGHT: " + error);
     }
 });
+
+/* Reset user's trackers everyday at 12 am */
+// TODO
