@@ -561,13 +561,13 @@ const FoodInfo = () => {
                             border: 'none',
                             borderRadius: '4px',
                             height: '40px', // Adjust height to align with button
-                            marginTop: '5px',
+                            // marginTop: '0px',
                             marginRight: '-5px'
                         }}
                     />
                 </span>
 
-                <FormControl error fullWidth sx={{ m: 1, width: 200, height: 50 }}>
+                <FormControl error fullWidth sx={{ m: 1, width: 200, height: 50, marginTop: 0, marginBottom: .5 }}>
                     <InputLabel>Meal type</InputLabel>
                     <Select
                         id="demo-simple-select"
@@ -593,7 +593,7 @@ const FoodInfo = () => {
                             height: '50px',
                             paddingLeft: '10px',
                             paddingRight: '10px',
-                            marginTop: '5px'
+                            // marginTop: '0px'
                         }}>
                         Add to Tracker
                     </Button>
