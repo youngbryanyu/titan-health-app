@@ -562,7 +562,8 @@ const FoodInfo = () => {
                             borderRadius: '4px',
                             height: '40px', // Adjust height to align with button
                             // marginTop: '0px',
-                            marginRight: '-5px'
+                            marginRight: '-5px',
+                            width: '100px'
                         }}
                     />
                 </span>
@@ -608,7 +609,7 @@ const FoodInfo = () => {
                 marginLeft: '10px',
                 position: "absolute",
                 ml: 140, //left margin (percent of screen)
-                mt: 50, //top margin (percent of screen),
+                mt: 48, //top margin (percent of screen),
                 // background: '#0b0b0b',
                 padding: 15,
                 borderRadius: 5
