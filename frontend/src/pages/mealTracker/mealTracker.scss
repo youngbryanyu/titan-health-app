@@ -1,4 +1,4 @@
-.menu {
+.mealTracker {
     width: 100vw;
     height: 100vh;
     background: linear-gradient(
@@ -25,7 +25,11 @@
         padding: 1%;
         border-radius: 5%;
         margin-top: 20px;
+        // padding: 15px;
+        margin-left: 20px;
+        
     }
+
 
     .listItem {
         font-weight: normal;

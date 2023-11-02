@@ -193,7 +193,7 @@ const ExerciseInfo = () => {
     }
 
     return (
-        <div className="foodInfo">
+        <div className="exerciseInfo">
             <Navbar />
 
             <Box sx={{ // info for exercise facts (sx provides inline style information for this component)

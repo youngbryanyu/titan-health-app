@@ -204,7 +204,7 @@ const MealTrackerItem = () => {
     };
 
     return (
-        <div className="foodInfo">
+        <div className="mealTrackerItem">
             <Navbar />
 
             <Box sx={{ // info for nutrition facts (sx provides inline style information for this component)
