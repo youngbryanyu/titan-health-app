@@ -2,7 +2,7 @@
 import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import { useState, useEffect, useContext } from 'react';
 import "./mealTracker.scss";
@@ -28,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
  * @returns a react component consisting of the meal tracker page.
  */
 const MealTracker = () => {
+    // /* force rerender on location change */
+    const location = useLocation();
+    useEffect(() => {
+        if (location.state?.refresh) {
+            getFoodItems();
+        }
+    }, [location]);
+
     /* scrolling list height for each meal type list */
     const MEAL_LIST_HEIGHT = 105;
 
@@ -85,64 +93,64 @@ const MealTracker = () => {
 
     /* Load food items on page render */
     useEffect(() => {
-        // Get food items on load
-        const getFoodItems = async () => {
-            try {
-                const response = await axios.get(`users/allFoods/${userId}`, {
-                    headers: { token: `Bearer ${user.accessToken}` }
-                });
-                setFoodItems(response.data);
-
-                /* calculate total calories */
-                let totalCalories = 0;
-                let totalBreakfast = 0;
-                let totalLunch = 0;
-                let totalDinner = 0;
-                let totalSnack = 0;
-                response.data.forEach(item => {
-                    totalCalories += item.calories * item.servings;
-
-                    if (item.mealType === BREAKFAST && isValidNumber(item.calories)) {
-                        totalBreakfast += item.calories * item.servings;
-                    }
-                    if (item.mealType === LUNCH && isValidNumber(item.calories)) {
-                        totalLunch += item.calories * item.servings;
-                    }
-                    if (item.mealType === DINNER && isValidNumber(item.calories)) {
-                        totalDinner += item.calories * item.servings;
-                    }
-                    if (item.mealType === SNACK && isValidNumber(item.calories)) {
-                        totalSnack += item.calories * item.servings;
-                    }
-                });
-                setTotalCaloriesToday(totalCalories);
-                setTotalBreakfastCalories(totalBreakfast);
-                setTotalLunchCalories(totalLunch);
-                setTotalDinnerCalories(totalDinner);
-                setTotalSnackCalories(totalSnack);
-
-                /* calculate total protein */
-                let totalProtein = 0;
-                response.data.forEach(item => totalProtein += (isValidNumber(item.protein)) ? item.protein * item.servings : 0);
-                setTotalProteinToday(totalProtein);
-
-                /* calculate total carbohydrates */
-                let totalCarbs = 0;
-                response.data.forEach(item => totalCarbs += (isValidNumber(item.carbohydrates)) ? item.carbohydrates * item.servings : 0);
-                setTotalCarbsToday(totalCarbs);
-
-                /* calculate total fats */
-                let totalFat = 0;
-                response.data.forEach(item => totalFat += (isValidNumber(item.fat)) ? item.fat * item.servings : 0);
-                setTotalFatToday(totalFat);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
         getFoodItems(); /* note: removed only run on first render code */
         // eslint-disable-next-line
     }, []);
+
+    // Gets food items. should be called on page load
+    const getFoodItems = async () => {
+        try {
+            const response = await axios.get(`users/allFoods/${userId}`, {
+                headers: { token: `Bearer ${user.accessToken}` }
+            });
+            setFoodItems(response.data);
+
+            /* calculate total calories */
+            let totalCalories = 0;
+            let totalBreakfast = 0;
+            let totalLunch = 0;
+            let totalDinner = 0;
+            let totalSnack = 0;
+            response.data.forEach(item => {
+                totalCalories += item.calories * item.servings;
+
+                if (item.mealType === BREAKFAST && isValidNumber(item.calories)) {
+                    totalBreakfast += item.calories * item.servings;
+                }
+                if (item.mealType === LUNCH && isValidNumber(item.calories)) {
+                    totalLunch += item.calories * item.servings;
+                }
+                if (item.mealType === DINNER && isValidNumber(item.calories)) {
+                    totalDinner += item.calories * item.servings;
+                }
+                if (item.mealType === SNACK && isValidNumber(item.calories)) {
+                    totalSnack += item.calories * item.servings;
+                }
+            });
+            setTotalCaloriesToday(totalCalories);
+            setTotalBreakfastCalories(totalBreakfast);
+            setTotalLunchCalories(totalLunch);
+            setTotalDinnerCalories(totalDinner);
+            setTotalSnackCalories(totalSnack);
+
+            /* calculate total protein */
+            let totalProtein = 0;
+            response.data.forEach(item => totalProtein += (isValidNumber(item.protein)) ? item.protein * item.servings : 0);
+            setTotalProteinToday(totalProtein);
+
+            /* calculate total carbohydrates */
+            let totalCarbs = 0;
+            response.data.forEach(item => totalCarbs += (isValidNumber(item.carbohydrates)) ? item.carbohydrates * item.servings : 0);
+            setTotalCarbsToday(totalCarbs);
+
+            /* calculate total fats */
+            let totalFat = 0;
+            response.data.forEach(item => totalFat += (isValidNumber(item.fat)) ? item.fat * item.servings : 0);
+            setTotalFatToday(totalFat);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     /**
      * Checks if a value is a number and is greater than 0

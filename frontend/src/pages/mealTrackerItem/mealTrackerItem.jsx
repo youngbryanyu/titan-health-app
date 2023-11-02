@@ -13,8 +13,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import axios from "axios";
 import Button from '@mui/material/Button';
-import ROUTES from "../../routes";
+// import ROUTES from "../../routes";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import ROUTES from "../../routes";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,15 +29,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MealTrackerItem = () => {
-    // /* force rerender on location change */
-    // const location = useLocation();
-    // useEffect(() => {
-    //     // Perform actions here on route change
-    // }, [location]);
-
     const handleMealTypeChange = (event) => {
         setMealType(event.target.value);
     }
+    const navigate = useNavigate();
 
     /* Food info corresponding to input boxes */
     const [foodName, setFoodName] = useState('');
@@ -209,6 +207,8 @@ const MealTrackerItem = () => {
                 `/users/deleteFood/${userId}/${hash}`,
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
+            
+            navigate(ROUTES.MEAL_TRACKER, { state: { refresh: true } });
         } catch (error) {
             console.error(error);
         }
@@ -394,7 +394,7 @@ const MealTrackerItem = () => {
                         <Typography fontWeight="bold" marginRight={1}>
                             {"Delete This Item: "}
                         </Typography>
-                        <Link to={ROUTES.MEAL_TRACKER} className="link" onClick={handleDeleteFood}>
+                        <Link className="link" onClick={handleDeleteFood}>
                             <Button variant="contained" color="error" size="large" className="button"> Delete </Button>
                         </Link>
                     </ListItem>
