@@ -244,13 +244,13 @@ const FoodInfo = () => {
                 console.log("successfully updated rating of menuItemId: " + menuItemID);
                 console.log(response.data.avgRating)
                 setAvg(response.data.avgRating);
-    
+
             } catch (error) {
                 console.log("failed to update avg rating: " + error);
             }
         }
         updateAvgRating();
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [score])
 
 
@@ -314,7 +314,7 @@ const FoodInfo = () => {
     function courtDataInfo(courtDataItem) {
         return (
             <ListItem key="{courtDataItem}" style={{ color: 'white' }}>
-                    &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
+                &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
             </ListItem>
         )
     }
@@ -345,7 +345,7 @@ const FoodInfo = () => {
         if (menuItemID != null) {
             updateSavedStatusInDB(); //update savedStatus of item in DB
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [savedClick]);
 
     return (
@@ -370,8 +370,8 @@ const FoodInfo = () => {
                         mx: 'auto',
                         borderRadius: 8,
                     }}>
-                        <Typography style={{ color: "#ebc034" }} fontWeight="bold">
-                             Nutrition Facts for: &nbsp; {menuItem.name}
+                        <Typography style={{ color: "white" }} fontWeight="bold">
+                            Nutrition Facts for: &nbsp; <span style={{ color: "#ebc034" }}>{menuItem.name}</span>
                         </Typography>
                     </ListItem>
                     {nutrition}
@@ -435,37 +435,53 @@ const FoodInfo = () => {
 
             <Box sx={{
                 background: '#0b0b0b',
-                width: 340,
+                width: .3,
                 height: 'auto',
                 overflow: 'hidden', //do not remove, will break the ratings appearance and idk why
                 position: 'absolute',
                 ml: 6, //left margin (percent of screen)
                 mt: 63, //top margin (percent of screen)
                 borderRadius: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0 10px' // Add some padding to ensure elements aren't touching the edges
             }}>
-                <Tooltip title={`Average Rating: ${avg}`} placement="bottom">
-                    <IconButton color="inherit">
-                        <InfoIcon />
+
+                <div style={{ display: 'flex' }}>
+                    <Tooltip title={"Click the stars to rate the menu item. Click the bookmark icon to save (favorite) the item."} placement="bottom">
+                        <IconButton color="inherit">
+                            <InfoIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <IconButton color="inherit" onClick={handleClick1}>
+                        {starClick1 ? <StarIcon /> : <StarOutlineIcon />}
                     </IconButton>
-                </Tooltip>
-                <IconButton color="inherit" onClick={handleClick1}>
-                    {starClick1 ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick2}>
-                    {starClick2 ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick3}>
-                    {starClick3 ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick4}>
-                    {starClick4 ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleClick5}>
-                    {starClick5 ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-                <IconButton color="inherit" onClick={handleSavedClick}>
-                    {savedClick ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-                </IconButton>
+                    <IconButton color="inherit" onClick={handleClick2}>
+                        {starClick2 ? <StarIcon /> : <StarOutlineIcon />}
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleClick3}>
+                        {starClick3 ? <StarIcon /> : <StarOutlineIcon />}
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleClick4}>
+                        {starClick4 ? <StarIcon /> : <StarOutlineIcon />}
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleClick5}>
+                        {starClick5 ? <StarIcon /> : <StarOutlineIcon />}
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleSavedClick}>
+                        {savedClick ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+                    </IconButton>
+                </div>
+
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                    <IconButton color="inherit" >
+                        <span style={{ fontSize: 16, marginLeft: 20 }}>
+                            {`Average Rating: ${avg}`}
+                        </span>
+                    </IconButton>
+                </div>
+                
             </Box>
             <Box sx={{ ml: 6, mt: 70, width: .9, height: 'auto', position: 'absolute' }}>
                 <Box sx={{
