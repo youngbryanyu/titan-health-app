@@ -698,7 +698,7 @@ router.get("/busy/:diningCourt", async (req, res) => {
         const court = req.params.diningCourt;
         var busytime = "not busy";
         if (court === "Wiley") {
-            console.log("wiley")
+            // console.log("wiley")
             if (d.getHours() > 20) {
                 busytime = "not too busy"
             } else if (d.getHours() > 18) {
@@ -718,7 +718,7 @@ router.get("/busy/:diningCourt", async (req, res) => {
             }
         }
         else if (court === "Windsor") {
-            console.log("windsor")
+            // console.log("windsor")
             if (d.getHours() > 20) {
                 busytime = "closed"
             } else if (d.getHours() > 18) {
@@ -738,11 +738,27 @@ router.get("/busy/:diningCourt", async (req, res) => {
             }
         }
         else if (court === "Hillenbrand") {
-            console.log("hilly")
-            busytime = "closed";
+            // console.log("hilly")
+            if (d.getHours() > 20) {
+                busytime = "closed"
+            } else if (d.getHours() > 18) {
+                busytime = "a little busy"
+            } else if (d.getHours() > 16) {
+                busytime = "a little busy"
+            } else if (d.getHours() > 14) {
+                busytime = "not too busy"
+            } else if (d.getHours() > 12) {
+                busytime = "as busy as it gets";
+            } else if (d.getHours() > 10) {
+                busytime = "closed";
+            } else if (d.getHours() > 8) {
+                busytime = "not too busy";
+            } else if (d.getHours() > 6) {
+                busytime = "not busy";
+            }
         }
         else if (court === "Ford") {
-            console.log("ford")
+            // console.log("ford")
             if (d.getHours() > 20) {
                 busytime = "closed"
             } else if (d.getHours() > 18) {
@@ -762,7 +778,7 @@ router.get("/busy/:diningCourt", async (req, res) => {
             }
         }
         else if (court === "Earhart") {
-            console.log("earhart")
+            // console.log("earhart")
             if (d.getHours() > 20) {
                 busytime = "not busy"
             } else if (d.getHours() > 18) {
@@ -781,8 +797,8 @@ router.get("/busy/:diningCourt", async (req, res) => {
                 busytime = "not busy";
             }
         }
-        console.log("Successfully retrieved " + req.params.diningCourt + "'s busy time at " + d)
-        console.log("busy time is: " + busytime);
+        // console.log("Successfully retrieved " + req.params.diningCourt + "'s busy time at " + d)
+        // console.log("busy time is: " + busytime);
         res.status(200).json(busytime);
         return;
     } catch (error) {

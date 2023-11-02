@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 const FoodInfo = () => {
     const classes = useStyles();
 
-
     const [starClick1, setStarClick1] = useState(false);
     const [starClick2, setStarClick2] = useState(false);
     const [starClick3, setStarClick3] = useState(false);
@@ -45,6 +44,7 @@ const FoodInfo = () => {
     const [avg, setAvg] = useState("N/A"); // tracks avg rating
     // const [saved, setSaved] = useState(false); // whether or not item is saved --> unused 
     const { user } = useContext(AuthContext);
+    const userId = user._id;
     let { menuItemID } = useParams(); // this will be undefined if no params
     const [menuItem, setMenuItem] = useState({
         _id: "",
@@ -111,14 +111,105 @@ const FoodInfo = () => {
         setSavedClick(!savedClick);
     }
 
-     /* fields for meal type */
-     const SELECT_MEAL = 0;
-     const BREAKFAST = 1;
-     const LUNCH = 2;
-     const DINNER = 3;
-     const SNACK = 4;
-     const [mealType, setMealType] = useState(SELECT_MEAL);
-     const mealTypes = ["", "Breakfast", "Unknown", "Lunch", "Snack", "Dinner"];
+    /* fields for meal type */
+    const SELECT_MEAL = 'Select Meal Type';
+    const BREAKFAST = 'Breakfast';
+    const LUNCH = 'Lunch';
+    const DINNER = 'Dinner';
+    const SNACK = 'Snack';
+    const [mealType, setMealType] = useState(SELECT_MEAL);
+
+    /* Servings for adding to tracker*/
+    const [servings, setServings] = useState("");
+
+    /* Handles changing the mealtype */
+    const handleMeals = (event) => {
+        //this is for handling the meal selection options
+        if (event.target.value === SELECT_MEAL) {
+            setMealType(SELECT_MEAL);
+        } else if (event.target.value === BREAKFAST) {
+            setMealType(BREAKFAST);
+        } else if (event.target.value === LUNCH) {
+            setMealType(LUNCH);
+        } else if (event.target.value === DINNER) {
+            setMealType(DINNER);
+        } else if (event.target.value === SNACK) {
+            setMealType(SNACK);
+        }
+    };
+
+    const MESSAGES = {
+        INCOMPLETE_FIELDS_ERROR: 'Please enter all necessary fields before saving',
+        SUCCESSFUL_MESSAGE: 'Successfully added item to tracker'
+    }
+
+    const [message, setMessage] = useState(MESSAGES.INCOMPLETE_FIELDS_ERROR);
+    const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
+
+    // remove's the last 'g' from a field
+    function removeUnit(str) {
+        if (str.endsWith('g')) {
+            str = str.slice(0, -1);
+        }
+        return str;
+    }
+    /* Handles adding food to tracker*/
+    const handleAddToTracker = async () => {
+        /* initialize to true to hide error message */
+        setAllFieldsComplete(true);
+
+        /* check if all fields were entered */
+        if (servings === '' || mealType === '') {
+            setAllFieldsComplete(false);
+            setMessage(MESSAGES.INCOMPLETE_FIELDS_ERROR);
+            return;
+        }
+
+        /* Get all fields of current item */
+        const foodName = menuItem.name;
+        let calories = 0;
+        let protein = 0;
+        let carbohydrates = 0;
+        let fat = 0;
+        let servingSize = 0;
+
+        menuItem.nutritionFacts.forEach((fact) => {
+            if (fact.Name === 'Serving Size') {
+                servingSize = fact.LabelValue;
+            } else if (fact.Name === 'Calories' && fact.LabelValue !== '') {
+                calories = fact.LabelValue ;
+            } else if (fact.Name === 'Protein' && fact.LabelValue !== '') {
+                protein = removeUnit(fact.LabelValue);
+            } else if (fact.Name === 'Total Carbohydrate' && fact.LabelValue !== '') {
+                carbohydrates = removeUnit(fact.LabelValue);
+            } else if (fact.Name === 'Total fat' && fact.LabelValue !== '') {
+                fat = removeUnit(fact.LabelValue);
+            }
+        });
+        // console.log(calories);
+        // console.log(protein);
+        // console.log(fat);
+        // console.log(servingSize);
+        // console.log(carbohydrates);
+        // console.log(foodName);
+            console.log(userId);
+        try {
+
+            // store item in tracker
+            await axios.put(`/users/addFood/${userId}`,
+                { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType },
+                { headers: { token: `Bearer ${user.accessToken}` } }
+            );
+
+            // Clear the editedNutritionFacts state
+            setServings('');
+            setMealType(SELECT_MEAL);
+
+            console.log(`Saved item with ${menuItem.name} to tracker!`);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     /**
     * Load initial ratings & get item & get saved item on page render
@@ -191,7 +282,7 @@ const FoodInfo = () => {
                     ingredients: item.ingredients,
                     __v: item.__v,
                 });
-                console.log(menuItem);
+                console.log("Menu item info: " + menuItem);
             } catch (error) { console.log(error) };
 
         };
@@ -230,6 +321,10 @@ const FoodInfo = () => {
         }
 
         const updateRatingInDB = async () => {
+            /* skip updating rating if nothing is selected */
+            if (!starClick1) {
+                return;
+            }
             try {
                 var rating;
                 if (starClick5) {
@@ -252,7 +347,7 @@ const FoodInfo = () => {
             } catch (error) {
                 console.log("failed to update rating: " + error);
             } finally {
-                setScore(rating)
+                setScore(rating);
             }
         }
         if (menuItemID != null) {
@@ -340,7 +435,7 @@ const FoodInfo = () => {
     )
     function courtDataInfo(courtDataItem) {
         return (
-            <ListItem key="{courtDataItem}" style={{ color: 'white' }}>
+            <ListItem key={courtDataItem} style={{ color: 'white' }}>
                 &nbsp;{courtDataItem[0] + " - " + courtDataItem[1] + " (" + courtDataItem[2] + ")"}
             </ListItem>
         )
@@ -387,7 +482,7 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 5,
+                borderRadius: 2.5,
                 overflow: 'auto',
             }}>
 
@@ -398,7 +493,7 @@ const FoodInfo = () => {
                             background: '#242424',
                             width: .98,
                             mx: 'auto',
-                            borderRadius: 5,
+                            borderRadius: 2.5,
                         }}>
                             <Typography style={{ color: "white" }} fontWeight="bold">
                                 Nutrition Facts for: &nbsp; <span style={{ color: "#ebc034" }}>{menuItem.name}</span>
@@ -422,7 +517,7 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 5,
+                borderRadius: 2.5,
                 overflow: 'auto',
             }}>
                 {/* Dietary Tags List */}
@@ -433,7 +528,7 @@ const FoodInfo = () => {
                             background: '#242424',
                             width: .98,
                             mx: 'auto',
-                            borderRadius: 5,
+                            borderRadius: 2.5,
                         }}>
                             <Typography fontWeight="bold" color={"white"}>
                                 Dietary Tags:
@@ -458,7 +553,7 @@ const FoodInfo = () => {
                 display: 'inline',
                 ml: 6,
                 top: 85,
-                borderRadius: 5,
+                borderRadius: 2.5,
                 overflow: 'auto',
             }}>
                 {/* Locations Served At Today List */}
@@ -469,7 +564,7 @@ const FoodInfo = () => {
                             background: '#242424',
                             width: .98,
                             mx: 'auto',
-                            borderRadius: 5,
+                            borderRadius: 2.5,
                         }}>
                             <Typography fontWeight="bold" color={"white"}>
                                 Locations Served At Today:
@@ -498,7 +593,7 @@ const FoodInfo = () => {
                 position: 'absolute',
                 ml: 6, //left margin (percent of screen)
                 mt: 63, //top margin (percent of screen)
-                borderRadius: 5,
+                borderRadius: 2.5,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -550,12 +645,15 @@ const FoodInfo = () => {
                 mt: 60, //top margin (percent of screen),
                 background: '#0b0b0b',
                 padding: 1,
-                borderRadius: 5
+                borderRadius: 2.5
             }}>
                 <span style={{ marginRight: 5 }}>
                     <input
                         type="number"
                         placeholder="Servings"
+                        value={servings}
+                        onChange={(e) => setServings(e.target.value)}
+                        min={0}
                         style={{
                             padding: '5px',
                             border: 'none',
@@ -567,6 +665,7 @@ const FoodInfo = () => {
                         }}
                     />
                 </span>
+                {/* <input type="cals" value={calories} onChange={(e) => setCalories(e.target.value)} /> */}
 
                 <FormControl error fullWidth sx={{ m: 1, width: 200, height: 50, marginTop: 0, marginBottom: .5 }}>
                     <InputLabel>Meal type</InputLabel>
@@ -574,26 +673,27 @@ const FoodInfo = () => {
                         id="demo-simple-select"
                         value={mealType}
                         label="Filter"
-                        // onChange={handleMeals}
+                        onChange={handleMeals}
                         classes={{ root: classes.root, select: classes.selected }}
                     >
-                        <MenuItem value={SELECT_MEAL}>{`Select meal type`}</MenuItem>
-                        <MenuItem value={BREAKFAST}>{`Breakfast`}</MenuItem>
-                        <MenuItem value={LUNCH}>{`Lunch`}</MenuItem>
-                        <MenuItem value={DINNER}>{`Dinner`}</MenuItem>
-                        <MenuItem value={SNACK}>{`Snack`}</MenuItem>
+                        <MenuItem value={SELECT_MEAL}>{SELECT_MEAL}</MenuItem>
+                        <MenuItem value={BREAKFAST}>{BREAKFAST}</MenuItem>
+                        <MenuItem value={LUNCH}>{LUNCH}</MenuItem>
+                        <MenuItem value={DINNER}>{DINNER}</MenuItem>
+                        <MenuItem value={SNACK}>{SNACK}</MenuItem>
                     </Select>
                 </FormControl>
                 <span>
                     <Button
                         variant="contained"
-                        onClick={() => {/* Your click handler function here */ }}
+                        onClick={handleAddToTracker}
                         style={{
                             backgroundColor: 'goldenrod',
                             color: 'white',
                             height: '50px',
                             paddingLeft: '10px',
                             paddingRight: '10px',
+                            zIndex: '999'
                             // marginTop: '0px'
                         }}>
                         Add to Tracker
@@ -608,13 +708,14 @@ const FoodInfo = () => {
                 justifyContent: 'center',
                 marginLeft: '10px',
                 position: "absolute",
-                ml: 140, //left margin (percent of screen)
+                ml: 125, //left margin (percent of screen)
                 mt: 48, //top margin (percent of screen),
                 // background: '#0b0b0b',
                 padding: 15,
-                borderRadius: 5
+                borderRadius: 2.5,
+                width: 200
             }}>
-                <span>ERROR </span>
+                <span>Please enter all fields first!</span>
             </Box>
 
 

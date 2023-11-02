@@ -366,7 +366,7 @@ const Menu = () => {
             setMealType(LUNCH);
         } else if (event.target.value === LATE_LUNCH) {
             setMealType(LATE_LUNCH);
-        } else if (event.target.value === 5) {
+        } else if (event.target.value === DINNER) {
             setMealType(DINNER);
         }
     };
