@@ -61,8 +61,6 @@ const MealTracker = () => {
     const [totalDinnerCalories, setTotalDinnerCalories] = useState('');
     const [totalSnackCalories, setTotalSnackCalories] = useState('');
 
-    const [totalServings, setTotalServings] = useState(0);
-
     /* Meal types */
     const EMPTY = 'Choose meal type';
     const BREAKFAST = 'Breakfast';
@@ -291,7 +289,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -309,7 +307,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -327,7 +325,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -345,7 +343,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
