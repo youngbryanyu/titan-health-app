@@ -262,11 +262,11 @@ const MealTrackerItem = () => {
                         <Typography>{foodItem.servings}</Typography>
                     </ListItem>
                     <ListItem key="servingSize" sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography fontWeight="bold">Serving size:</Typography>
+                        <Typography fontWeight="bold">Serving size</Typography>
                         <Typography>{foodItem.servingSize}</Typography>
                     </ListItem>
                     <ListItem key="mealType" sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography fontWeight="bold">Meal Type:</Typography>
+                        <Typography fontWeight="bold">Meal Type</Typography>
                         <Typography>{foodItem.mealType}</Typography>
                     </ListItem>
 

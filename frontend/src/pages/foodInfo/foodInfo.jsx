@@ -258,7 +258,7 @@ const FoodInfo = () => {
     const nutrition = menuItem.nutritionFacts.map((fact) =>
         <ListItem key={fact.Name} style={{ color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography fontWeight="bold" style={{ color: 'white' }}>
-                {fact.Name}:
+                {fact.Name}
             </Typography>
             <div>
                 {fact.LabelValue}
