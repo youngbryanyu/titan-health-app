@@ -80,11 +80,11 @@ const Navbar = () => {
                     <div className="dropdown">
                         <span>Nutrition ▾</span>
                         <div className="nutritionDropdownOptions">
-                            <Link to={ROUTES.PREFERENCES} className="link">
-                                <span>Dietary Preferences</span>
-                            </Link>
                             <Link to={ROUTES.MEAL_TRACKER} className="link">
                                 <span>Meal Tracker</span>
+                            </Link>
+                            <Link to={ROUTES.PREFERENCES} className="link">
+                                <span>Dietary Preferences</span>
                             </Link>
                         </div>
                     </div>
