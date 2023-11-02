@@ -187,6 +187,7 @@ const Preferences = () => {
         if (vegan) preferences.push(VEGAN);
 
         setPrefs(preferences); // triggers useEffect below
+    // eslint-disable-next-line
     }, [vegan, vegetarian]);
 
     /* Update the preferences in the database when prefs changes, not on first render though. Triggered by useEffect above */
@@ -236,6 +237,7 @@ const Preferences = () => {
         if (peanuts) restrictions.push(PEANUTS);
 
         setRests(restrictions); 
+    // eslint-disable-next-line
     }, [coconut, eggs, fish, gluten, sesame, shellfish, soy, treeNuts, wheat, milk, peanuts]);
 
     /* Update the restrictions in the database when restrictions changes, not on first render though. Triggered by useEffect above. */

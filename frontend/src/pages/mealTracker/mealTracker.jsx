@@ -1,5 +1,5 @@
 /* React page for the meal tracker */
-import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Typography, Divider } from "@mui/material";
+import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
 import { Link } from "react-router-dom";
@@ -259,22 +259,20 @@ const MealTracker = () => {
         return (
             <div key={id}>
                 <Link to={ROUTES.FOOD_ITEM_INFO.replace(":foodItemHash", id)} className="link">
-                    <ListItem component="div" sx={{ flexDirection: "column", alignItems: "start", paddingLeft: 1, paddingRight: 1, paddingTop: .5, paddingBottom: .5 }}>
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem component="div" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: 1, paddingRight: 1, paddingTop: .5, paddingBottom: .5 }}>
+                        <div>
                             <span>{name}</span>
-                            <span>{totalCalories}</span>
-                        </Box>
-                        <Typography variant="body2" component="span" sx={{ fontSize: '0.8em', color: 'gray' }}>
-                            {`${servings} servings (${servingSize})`}
-                        </Typography>
+                            <div className="servingLabel">
+                                {`${servings} servings (${servingSize})`}
+                            </div>
+                        </div>
+                        <span>{totalCalories}</span>
                     </ListItem>
                 </Link>
                 <Divider />
             </div>
         );
     }
-
-
 
     return (
         <div className="mealTracker">
@@ -383,25 +381,25 @@ const MealTracker = () => {
                         className="pieChart"
                         series={[
                             {
-                            data: [
-                                { id: 0, value: totalProteinToday, label: 'Total Protein' },
-                                { id: 1, value: totalFatToday, label: 'Total Fat' },
-                                { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
-                            ],
-                            innerRadius: 25,
-                            outerRadius: 90,
-                            paddingAngle: 5,
-                            cornerRadius: 5,
-                            startAngle: 0,
-                            endAngle: 360,
-                            cx: 185,
-                            // style: { fill: 'white', color: 'white' },
-                            fontSize: 20
+                                data: [
+                                    { id: 0, value: totalProteinToday, label: 'Total Protein' },
+                                    { id: 1, value: totalFatToday, label: 'Total Fat' },
+                                    { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
+                                ],
+                                innerRadius: 25,
+                                outerRadius: 90,
+                                paddingAngle: 5,
+                                cornerRadius: 5,
+                                startAngle: 0,
+                                endAngle: 360,
+                                cx: 185,
+                                // style: { fill: 'white', color: 'white' },
+                                fontSize: 20
                             },
                         ]}
                         width={450}
                         height={200}
-                        // sx={{fill: "white", color: "white"}}
+                    // sx={{fill: "white", color: "white"}}
                     />
                 </div>
             </Stack>
