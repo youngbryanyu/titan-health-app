@@ -462,7 +462,7 @@ const FoodInfo = () => {
 
             <Box sx={{
                 background: '#0b0b0b',
-                width: .3,
+                width: .35,
                 height: 'auto',
                 overflow: 'hidden', //do not remove, will break the ratings appearance and idk why
                 position: 'absolute',
@@ -475,7 +475,7 @@ const FoodInfo = () => {
                 padding: '0 10px' // Add some padding to ensure elements aren't touching the edges
             }}>
 
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', marginRight: 5 }}>
                     <Tooltip title={"Click the stars to rate the menu item. Click the bookmark icon to save (favorite) the item."} placement="bottom">
                         <IconButton color="inherit">
                             <InfoIcon />
@@ -502,11 +502,11 @@ const FoodInfo = () => {
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                    <IconButton color="inherit" >
+                    {/* <span color="inherit" > */}
                         <span style={{ fontSize: 16, marginLeft: 20 }}>
                             {`Average Rating: ${avg}`}
                         </span>
-                    </IconButton>
+                    {/* </span> */}
                 </div>
 
             </Box>
