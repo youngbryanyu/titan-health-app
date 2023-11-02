@@ -37,6 +37,7 @@ const MealTrackerItem = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
+    const [servingSize, setServingSize] = useState(''); 
 
     /* Meal types */
     const EMPTY = 'Choose meal type';
@@ -70,6 +71,7 @@ const MealTrackerItem = () => {
         protein: "",
         carbohydrates: "",
         servings: "",
+        servingSize: "",
         mealType: "",
         hash: ""
     }); //tracks food item
@@ -92,6 +94,7 @@ const MealTrackerItem = () => {
                     protein: item.protein,
                     carbohydrates: item.carbohydrates,
                     servings: item.servings,
+                    servingSize: item.servingSize,
                     mealType: item.mealType,
                     hash: item.hash
                 });
@@ -124,7 +127,7 @@ const MealTrackerItem = () => {
         setAllFieldsComplete(true);
 
         /* check if at least one */
-        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
+        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || servingSize === '' || mealType === EMPTY) {
             setAllFieldsComplete(false);
             console.log(allFieldsComplete)
             setErrorMessage(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
@@ -162,7 +165,7 @@ const MealTrackerItem = () => {
             const hash = foodItemHash;
             await axios.put(
                 `/users/editFood/${userId}`,
-                { foodName, calories, fat, protein, carbohydrates, servings, mealType, hash },
+                { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType, hash },
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
@@ -174,6 +177,7 @@ const MealTrackerItem = () => {
                 protein: protein,
                 carbohydrates: carbohydrates,
                 servings: servings,
+                servingSize: servingSize,
                 mealType: mealType,
                 hash: foodItemHash
             });
@@ -185,6 +189,7 @@ const MealTrackerItem = () => {
             setFat('');
             setCarbs('');
             setServings('');
+            setServingSize('');
             setMealType(EMPTY);
         } catch (error) {
             console.error(error);
@@ -256,11 +261,15 @@ const MealTrackerItem = () => {
                         <Typography fontWeight="bold">Servings</Typography>
                         <Typography>{foodItem.servings}</Typography>
                     </ListItem>
-
+                    <ListItem key="servingSize" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Serving size:</Typography>
+                        <Typography>{foodItem.servingSize}</Typography>
+                    </ListItem>
                     <ListItem key="mealType" sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography fontWeight="bold">Meal Type:</Typography>
                         <Typography>{foodItem.mealType}</Typography>
                     </ListItem>
+
                 </List>
 
             </Box>
@@ -318,6 +327,11 @@ const MealTrackerItem = () => {
                     <ListItem key="servings" sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography fontWeight="bold">Servings</Typography>
                         <input type="servings" value={servings} onChange={(e) => setServings(e.target.value)} />
+                    </ListItem>
+
+                    <ListItem key="servingSize" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography fontWeight="bold">Servings Size</Typography>
+                        <input type="servingSize" value={servingSize} onChange={(e) => setServingSize(e.target.value)} />
                     </ListItem>
 
                     <ListItem sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -125,7 +125,7 @@ router.put('/addFood/:userId', verify, async (req, res) => {
 router.put('/editFood/:userId', verify, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { foodName, calories, fat, protein, carbohydrates, servings, mealType, hash } = req.body;
+    const { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType, hash } = req.body;
     const editedFood = {
       foodName: foodName || "[add name]",
       calories: calories || "[add calories]",
@@ -133,6 +133,7 @@ router.put('/editFood/:userId', verify, async (req, res) => {
       protein: protein || "[add protein]",
       carbohydrates: carbohydrates || "[add carbs]",
       servings: servings || "[add servings]",
+      servingSize: servingSize || "[add serving size]",
       mealType: mealType || "[add meal type]",
       hash
     };
