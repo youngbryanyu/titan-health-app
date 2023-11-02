@@ -665,14 +665,14 @@ const Menu = () => {
                             loading.current || courtsMenu[0] === "loading" ? (
                                 <List>
                                     <ListItem component="div" disablePadding button={true}>
-                                        <span className="header">{"Loading..."}</span>
+                                        <span style={{marginLeft: 10}} className="header">{"Loading..."}</span>
                                     </ListItem>
                                 </List>
                             ) : (
                                 view === CUSTOM_PREFS && noCheckBoxesSelected() ? (
                                     <List>
                                         <ListItem component="div" disablePadding button={true}>
-                                            <span className="header">{"Select some preferences/restrictions."}</span>
+                                            <span style={{marginLeft: 10}} className="header">{"Select some preferences/restrictions."}</span>
                                         </ListItem>
                                     </List>
                                 ) : (
@@ -681,7 +681,7 @@ const Menu = () => {
                                     ) : (
                                         <List>
                                             <ListItem component="div" disablePadding button={true}>
-                                                <span className="header">{"No items served at this time."}</span>
+                                                <span style={{marginLeft: 10}} className="header">{"No items served at this time."}</span>
                                             </ListItem>
                                         </List>
                                     )
