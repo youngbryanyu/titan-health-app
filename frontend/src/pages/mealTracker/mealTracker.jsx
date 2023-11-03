@@ -34,6 +34,7 @@ const MealTracker = () => {
         if (location.state?.refresh) {
             getFoodItems();
         }
+    // eslint-disable-next-line
     }, [location]);
 
     /* scrolling list height for each meal type list */
