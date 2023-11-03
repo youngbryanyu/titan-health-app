@@ -3,13 +3,13 @@ import Navbar from "../../components/navbar/navbar";
 import "./exerciseInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-import { IconButton, Tooltip, List, ListItem, FormControl, InputLabel, Select, MenuItem, Typography, Box, Button } from '@mui/material';
+import { IconButton, Tooltip, List, ListItem, Typography, Box, Button } from '@mui/material';
 import { Info, StarOutline, Star, BookmarkBorder, Bookmark } from '@mui/icons-material';
 import { AuthContext } from "../../utils/authentication/auth-context";
 import axios from "axios";
 import { makeStyles } from '@mui/styles';
 import ROUTES from "../../routes";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ExerciseInfo = () => {
-
-    const handleMealTypeChange = (event) => {
-        //setMealType(event.target.value);
-    }
 
     /* Rating Info */
     const [starClick1, setStarClick1] = useState(false);
@@ -127,6 +123,8 @@ const ExerciseInfo = () => {
                 } else {
                     setPriorExercise("N/A");
                 }
+
+                setExerciseType(item.exerciseType);
                 
                 setExercise({
                     exerciseName: item.exerciseName,
@@ -158,8 +156,6 @@ const ExerciseInfo = () => {
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
-            console.log(res);
-
             // Refresh the food items after editing
             setExercise({
                     exerciseName: exerciseName,
@@ -187,10 +183,6 @@ const ExerciseInfo = () => {
             console.error(error);
         }
     };
-
-    const handleExerciseTypeChange = (event) => {
-        setExerciseType(event.target.value);
-    }
 
     return (
         <div className="foodInfo">
@@ -288,17 +280,6 @@ const ExerciseInfo = () => {
                             Time:
                         </Typography>
                         <input type="duration" value={time} onChange={(e) => setTime(e.target.value)}/>
-                    </ListItem>
-                    <ListItem>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl error fullWidth sx={{ m: 1, minWidth: 120 }}  >
-                                <InputLabel>Exercise Type</InputLabel>
-                                <Select id="demo-simple-select" value={exerciseType} onChange={handleExerciseTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
-                                    <MenuItem value={"Weight Lifting"}>{`Weight Lifting`}</MenuItem>
-                                    <MenuItem value={"Cardio"}>{`Cardio`}</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
                     </ListItem>
                     <ListItem>
                         <Button variant="contained" color="success" size="large" className="button" onClick={handleEditExercise}> Update Exercise </Button>

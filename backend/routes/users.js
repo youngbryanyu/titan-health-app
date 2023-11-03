@@ -224,8 +224,8 @@ router.put('/addExercise/:userId', verify, async (req, res) => {
     const hash = crypto.createHash('sha1').update(exerciseName).digest('hex');
     const newExercise = {
       exerciseName: exerciseName || "[add name]",
-      sets: sets || (exerciseType === "Cardio" ? "N/A" : "[add sets]"),
-      reps: reps || (exerciseType === "Cardio" ? "N/A" : "[add reps]"),
+      sets: sets || (exerciseType === "Cardio" || "Other" ? "N/A" : "[add sets]"),
+      reps: reps || (exerciseType === "Cardio" || "Other" ? "N/A" : "[add reps]"),
       time: time || "[add time]",
       exerciseType: exerciseType || "[add exercise type]",
       hash
@@ -238,8 +238,9 @@ router.put('/addExercise/:userId', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    exerciseType === "Weight Lifting" ? user.liftingLog.push(newExercise) : user.cardioLog.push(newExercise);
-    user.otherExerciseLog.push(newExercise);
+    if (exerciseType === "Weight Lifting") user.liftingLog.push(newExercise);
+    else if (exerciseType === "Cardio") user.cardioLog.push(newExercise);
+    else user.otherExerciseLog.push(newExercise);
     
     // Save the updated user
     await user.save();
@@ -278,9 +279,12 @@ router.put('/editExercise/:userId', verify, async (req, res) => {
     if (exerciseType === "Weight Lifting") {
       itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
       user.liftingLog[itemIndex] = editedExercise;
-    } else {
+    } else if (exerciseType === "Cardio") {
       itemIndex = user.cardioLog.findIndex((obj => obj.hash === hash));
       user.cardioLog[itemIndex] = editedExercise;
+    } else {
+      itemIndex = user.otherExerciseLog.findIndex((obj => obj.hash === hash));
+      user.otherExerciseLog[itemIndex] = editedExercise;
     }
     
     // Save the updated user
@@ -585,6 +589,26 @@ router.get('/allCardio/:userId', verify, async (req, res) => {
   }
 });
 
+/* GET - get all other exercises in tracker */
+router.get('/allOther/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get all the food items
+    return res.status(200).json(user.otherExerciseLog);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 /* GET - get an exercise from tracker */
 router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
   try {
@@ -600,8 +624,11 @@ router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
 
     const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
     const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
+    const itemIndex3 = user.otherExerciseLog.findIndex((obj => obj.hash === hash));
 
-    return itemIndex == -1 ? res.status(200).json(user.cardioLog[itemIndex2]) : res.status(200).json(user.liftingLog[itemIndex]);
+    if (itemIndex != -1) return res.status(200).json(user.liftingLog[itemIndex]);
+    else if (itemIndex2 != -1) return res.status(200).json(user.cardioLog[itemIndex2]);
+    else return res.status(200).json(user.otherExerciseLog[itemIndex3]);
 
   } catch (error) {
     console.error(error);
@@ -622,7 +649,8 @@ router.get('/priorExercise/:userId/:name', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const itemIndex = user.otherExerciseLog.findIndex((obj => obj.exerciseName === name));
+    const allExercise = user.liftingLog.concat(user.cardioLog).concat(user.otherExerciseLog);
+    const itemIndex = allExercise.findIndex((obj => obj.exerciseName === name));
 
     return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
 
