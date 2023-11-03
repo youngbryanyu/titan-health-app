@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/navbar";
 import "./exerciseInfo.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-import { IconButton, Tooltip, List, ListItem, Typography, Box, Button } from '@mui/material';
+import { IconButton, Tooltip, List, ListItem, FormControl, InputLabel, Select, MenuItem, Typography, Box, Button } from '@mui/material';
 import { Info, StarOutline, Star, BookmarkBorder, Bookmark } from '@mui/icons-material';
 import { AuthContext } from "../../utils/authentication/auth-context";
 import axios from "axios";
