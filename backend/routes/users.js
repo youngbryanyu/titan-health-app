@@ -201,21 +201,21 @@ router.put("/water/:userId", verify, async (req, res) => {
       intake: intake || "[add water intake]",
       date: date || "[add date]"
     };
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     user.waterIntakeLog.push(newEntry);
-    
+
     // Save the updated user
     await user.save();
 
     return res.status(200).json(user);
-    
-    } catch (error) {
-      console.error("Error making new water intake entry: " + error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+
+  } catch (error) {
+    console.error("Error making new water intake entry: " + error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -237,22 +237,22 @@ router.put('/addExercise/:userId', verify, async (req, res) => {
 
     // Find the user by ID
     const user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     exerciseType === "Weight Lifting" ? user.liftingLog.push(newExercise) : user.cardioLog.push(newExercise);
     user.otherExerciseLog.push(newExercise);
-    
+
     // Save the updated user
     await user.save();
 
     return res.status(200).json(user);
-    
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -268,15 +268,15 @@ router.put('/editExercise/:userId', verify, async (req, res) => {
       time: time,
       exerciseType: exerciseType,
       hash: hash
-  };
+    };
 
     // Find the user by ID
     const user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     let itemIndex;
 
     if (exerciseType === "Weight Lifting") {
@@ -286,7 +286,7 @@ router.put('/editExercise/:userId', verify, async (req, res) => {
       itemIndex = user.cardioLog.findIndex((obj => obj.hash === hash));
       user.cardioLog[itemIndex] = editedExercise;
     }
-    
+
     // Save the updated user
     await user.save();
 
@@ -310,11 +310,11 @@ router.put("/sleep/:userId", verify, async (req, res) => {
       length: length || "[add amount]",
       date: date || "[add date]"
     };
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     user.sleepLog.push(newEntry);
 
     // Save the updated user
@@ -338,7 +338,7 @@ router.put("/supplement/:userId", verify, async (req, res) => {
     const { supplement, amount, date } = req.body;
     const newEntry = {
       supplement: supplement || "[add supplement]",
-      amount: amount || "[add amount]", 
+      amount: amount || "[add amount]",
       date: date || "[add date]"
     };
 
@@ -347,7 +347,7 @@ router.put("/supplement/:userId", verify, async (req, res) => {
     }
 
     user.supplementLog.push(newEntry);
-    
+
     // Save the updated user
     await user.save();
 
@@ -422,6 +422,7 @@ router.get('/allFoods/:userId', verify, async (req, res) => {
   }
 });
 
+/* other health features */
 /* GET - get weights in log */
 router.get('/weights/:userId', verify, async (req, res) => {
   try {
@@ -653,21 +654,21 @@ router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
     user.foods.splice(itemIndex, 1);
-    
+
     // Save the updated user
     await user.save();
-    
+
     return res.status(200).json({ message: 'Food item deleted successfully' });
-    
-    } catch (error) {
+
+  } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-  
+
 /* DELETE - Delete exercise in tracker*/
 router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
   try {
@@ -681,15 +682,15 @@ router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
 
     const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
     const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
-    if(itemIndex != -1) user.liftingLog.splice(itemIndex, 1);
+    if (itemIndex != -1) user.liftingLog.splice(itemIndex, 1);
     else user.cardioLog.splice(itemIndex2, 1);
 
     // Save the updated user
     await user.save();
-    
+
     return res.status(200).json({ message: 'Exercise deleted successfully' });
-    
-    } catch (error) {
+
+  } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
