@@ -12,6 +12,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Paper from '@mui/material/Paper';
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
+import { BarChart } from "@mui/x-charts";
 //icons
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink'; // water icon
 import BedIcon from '@mui/icons-material/Bed'; // sleep icon
@@ -21,6 +22,7 @@ import MedicationIcon from '@mui/icons-material/Medication'; // supplement icon
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { axisClasses } from '@mui/x-charts';
 
 // TabPanel setup
 function TabPanel(props) {
@@ -90,6 +92,20 @@ const OtherHealthTracker = () => {
   const [suppAmt, setSuppAmt] = useState('');
   const [suppDate, setSuppDate] = useState('');
 
+  const weightdata = [];
+  const sleepdata = [];
+  const waterdata = [];
+
+  /* comparator function for date sorting */
+  function compare(a, b) {
+    if (a.date < b.date) {
+      return -1;
+    }
+    if (a.date > b.date) {
+      return 1;
+    }
+    return 0;
+  }
   /* Load entry items on page render */
   const isFirstRender = useRef(true);
   useEffect(() => {
@@ -97,10 +113,12 @@ const OtherHealthTracker = () => {
     const getAllEntries = async () => {
       try {
         // causing errors right now
+        //print bearer access token for debug
+        console.log(`jwt token: Bearer ${user.accessToken}`);
         const weightRes = await axios.get(`users/weights/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
         });
-        const waterRes= await axios.get(`users/water/${userId}`, {
+        const waterRes = await axios.get(`users/water/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
         });
         const sleepRes = await axios.get(`users/sleep/${userId}`, {
@@ -110,17 +128,17 @@ const OtherHealthTracker = () => {
           headers: { token: `Bearer ${user.accessToken}` }
         });
 
-        setWeightLog(weightRes.data);
-        setWaterLog(waterRes.data);
-        setSleepLog(sleepRes.data);
-        setSupplementLog(suppRes.data);
+        setWeightLog(weightRes.data.sort(compare));
+        setWaterLog(waterRes.data.sort(compare));
+        setSleepLog(sleepRes.data.sort(compare));
+        setSupplementLog(suppRes.data.sort(compare));
       } catch (error) {
         console.error(error);
       }
     };
     /* only run on first render */
     if (isFirstRender.current) {
-        getAllEntries();
+      getAllEntries();
     }
     isFirstRender.current = false;
     // eslint-disable-next-line
@@ -216,12 +234,13 @@ const OtherHealthTracker = () => {
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${month}\/${day}\/${year}`;
+    const formattedDate = `${month}/${day}/${year}`;
     return formattedDate;
   }
 
   // Use to provide links to edit entries later
   function listWeights(entry) { // display a menu item
+    console.log(weightLog)
     const weight = entry.weight;
     const date = formatDate(entry.date);
     // const id = item.hash;
@@ -258,7 +277,7 @@ const OtherHealthTracker = () => {
   function listSupplements(entry) { // display a menu item
     const supplement = entry.supplement;
     const amount = entry.amount;
-    const date = entry.date;
+    const date = formatDate(entry.date)
     // const id = item.hash;
 
     return (
@@ -267,6 +286,24 @@ const OtherHealthTracker = () => {
       </ListItemButton>
     );
   }
+
+  const weightFormatter = (value) => `${value} lbs`;
+  const sleepFormatter = (value) => `${value} hrs`;
+  const waterFormatter = (value) => `${value} cups`;
+  const weightSetting = {
+    yAxis: [
+      {
+        label: 'weight (lbs)',
+      },
+    ],
+    width: 500,
+    height: 300,
+    sx: {
+      [`.${axisClasses.left} .${axisClasses.label}`]: {
+        transform: 'translate(-20px, 0)',
+      },
+    },
+  };
 
   return (
     <div className="menu">
@@ -295,7 +332,7 @@ const OtherHealthTracker = () => {
         </Tabs>
         {/* weight */}
         <TabPanel value={value} index={0} >
-          <Box sx={{ display: 'flex' }}>
+          <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
             <Box sx={{ width: '40%' }}>
               <h4>{"View weights"}</h4>
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
@@ -306,6 +343,22 @@ const OtherHealthTracker = () => {
                 </Paper>
               </Box>
             </Box>
+            {/*            <Stack className="stack middle" spacing={2} alignItems={"center"} justifyContent={"center"}>
+              <div>
+                <h4 className="sectionTitle">{"Weight Log"}</h4>
+              </div>
+              <div>
+                <BarChart
+                  colors={['purple']}
+                  dataset={weightLog}
+                  xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+                  series={[{ dataKey: 'weight', label: 'Weight', weightFormatter }]}
+                  width={450}
+                  height={200}
+                />
+              </div>
+            </Stack>
+            */}
             <Box sx={{ width: '40%' }}>
               <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4>{"Add entry"}</h4>
@@ -317,10 +370,10 @@ const OtherHealthTracker = () => {
                     <input type="date" value={weightDate} onChange={(e) => setWeightDate(e.target.value)} />
                   </Box>
                 </div>
-              <Button variant="contained" color="success" size="large" className="button" onClick={handleAddWeight}> Add Entry </Button>
+                <Button variant="contained" color="success" size="large" className="button" onClick={handleAddWeight}> Add Entry </Button>
               </Stack>
             </Box>
-          </Box>
+          </Stack>
         </TabPanel>
 
         <TabPanel value={value} index={1}>
@@ -346,7 +399,7 @@ const OtherHealthTracker = () => {
                     <input type="datetime-local" value={sleepDate} onChange={(e) => setSleepDate(e.target.value)} />
                   </Box>
                 </div>
-              <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSleep}> Add Entry </Button>
+                <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSleep}> Add Entry </Button>
               </Stack>
             </Box>
           </Box>
@@ -375,12 +428,12 @@ const OtherHealthTracker = () => {
                     <input type="date" value={waterDate} onChange={(e) => setWaterDate(e.target.value)} />
                   </Box>
                 </div>
-              <Button variant="contained" color="success" size="large" className="button" onClick={handleAddWater}> Add Entry </Button>
+                <Button variant="contained" color="success" size="large" className="button" onClick={handleAddWater}> Add Entry </Button>
               </Stack>
             </Box>
           </Box>
         </TabPanel>
-        
+
         <TabPanel value={value} index={3}>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ width: '40%' }}>
@@ -406,7 +459,7 @@ const OtherHealthTracker = () => {
                     <input type="date" value={suppDate} onChange={(e) => setSuppDate(e.target.value)} />
                   </Box>
                 </div>
-              <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSupps}> Add Entry </Button>
+                <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSupps}> Add Entry </Button>
               </Stack>
             </Box>
           </Box>
