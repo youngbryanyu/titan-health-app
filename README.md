@@ -81,4 +81,9 @@ Like mentioned earlier in the section about how to run the application locally, 
 ## Bugs
 None currently :)
 
+## Screenshots
+#### Meal Tracker
+<img width="1438" alt="Food Tracker Screen" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/70f72cfb-dd64-4ae2-8777-e5c8c633db53">
+
+
 
