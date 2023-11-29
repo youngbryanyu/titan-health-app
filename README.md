@@ -82,7 +82,7 @@ Like mentioned earlier in the section about how to run the application locally, 
 None currently :)
 
 ## Screenshots
-Below are screenshots of some of the pages within our site as a preview!
+Below are screenshots of some of the pages within our site as a preview! Note that many of the pages in the site our not shown (such as the fitness and health tracker related pages), and these are just a showcase of some of the UI.
 
 #### Meal Tracker Page
 <img width="1438" alt="Food Tracker Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/70f72cfb-dd64-4ae2-8777-e5c8c633db53">
@@ -94,9 +94,10 @@ Below are screenshots of some of the pages within our site as a preview!
 <img width="1440" alt="Dining Court Menu Item Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/db37c535-321d-45ad-9184-a826891c2ad0">
 
 #### Dietary Preferences Page
-<img width="1440" alt="Dietary Preferences" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/eb6b4734-ea34-439f-a916-22af63b3c6f9">
+<img width="1440" alt="Dietary Preferences Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/eb6b4734-ea34-439f-a916-22af63b3c6f9">
 
-
+#### Home Page
+<img width="1440" alt="Home Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/aaa9c1fb-fa5d-4548-98a4-3df89bd835df">
 
 
 
