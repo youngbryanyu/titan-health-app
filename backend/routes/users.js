@@ -160,6 +160,8 @@ router.put('/editFood/:userId', verify, async (req, res) => {
   }
 });
 
+
+
 /* PUT - add to weight log */
 router.put("/weight/:userId", verify, async (req, res) => {
   try {
@@ -529,6 +531,27 @@ router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+/* DELETE - Delete all food items in tracker */
+router.delete('/deleteFood/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // delete food item
+      user.foods = [];
+      await user.save();
+  
+      return res.status(200).json({ message: 'All food items deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 /* GET - get a food item in tracker */
 router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {

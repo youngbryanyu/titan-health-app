@@ -7,12 +7,10 @@ import axios from "axios";
 //basic ui
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Paper from '@mui/material/Paper';
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
-import { BarChart } from "@mui/x-charts";
 //icons
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink'; // water icon
 import BedIcon from '@mui/icons-material/Bed'; // sleep icon
@@ -22,7 +20,7 @@ import MedicationIcon from '@mui/icons-material/Medication'; // supplement icon
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { axisClasses } from '@mui/x-charts';
+// import { axisClasses } from '@mui/x-charts';
 
 // TabPanel setup
 function TabPanel(props) {
@@ -92,9 +90,9 @@ const OtherHealthTracker = () => {
   const [suppAmt, setSuppAmt] = useState('');
   const [suppDate, setSuppDate] = useState('');
 
-  const weightdata = [];
-  const sleepdata = [];
-  const waterdata = [];
+//   const weightdata = [];
+//   const sleepdata = [];
+//   const waterdata = [];
 
   /* comparator function for date sorting */
   function compare(a, b) {
@@ -287,23 +285,23 @@ const OtherHealthTracker = () => {
     );
   }
 
-  const weightFormatter = (value) => `${value} lbs`;
-  const sleepFormatter = (value) => `${value} hrs`;
-  const waterFormatter = (value) => `${value} cups`;
-  const weightSetting = {
-    yAxis: [
-      {
-        label: 'weight (lbs)',
-      },
-    ],
-    width: 500,
-    height: 300,
-    sx: {
-      [`.${axisClasses.left} .${axisClasses.label}`]: {
-        transform: 'translate(-20px, 0)',
-      },
-    },
-  };
+//   const weightFormatter = (value) => `${value} lbs`;
+//   const sleepFormatter = (value) => `${value} hrs`;
+//   const waterFormatter = (value) => `${value} cups`;
+//   const weightSetting = {
+//     yAxis: [
+//       {
+//         label: 'weight (lbs)',
+//       },
+//     ],
+//     width: 500,
+//     height: 300,
+//     sx: {
+//       [`.${axisClasses.left} .${axisClasses.label}`]: {
+//         transform: 'translate(-20px, 0)',
+//       },
+//     },
+//   };
 
   return (
     <div className="menu">
