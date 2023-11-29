@@ -84,11 +84,19 @@ None currently :)
 ## Screenshots
 Below are screenshots of some of the pages within our site as a preview!
 
-#### Meal Tracker
-<img width="1438" alt="Food Tracker Screen" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/70f72cfb-dd64-4ae2-8777-e5c8c633db53">
+#### Meal Tracker Page
+<img width="1438" alt="Food Tracker Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/70f72cfb-dd64-4ae2-8777-e5c8c633db53">
 
 #### Dining Court Menu Page
-<img width="1437" alt="Dining Court Menu Screen" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/74240620-74b1-4fcd-adc4-c5a19600cabb">
+<img width="1437" alt="Dining Court Menu Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/74240620-74b1-4fcd-adc4-c5a19600cabb">
+
+#### Dining Court Menu Item Page
+<img width="1440" alt="Dining Court Menu Item Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/db37c535-321d-45ad-9184-a826891c2ad0">
+
+#### Dietary Preferences Page
+<img width="1440" alt="Dietary Preferences" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/eb6b4734-ea34-439f-a916-22af63b3c6f9">
+
+
 
 
 
