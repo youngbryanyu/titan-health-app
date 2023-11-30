@@ -505,6 +505,116 @@ router.get('/supplement/:userId', verify, async (req, res) => {
   }
 });
 
+/* GET - get a food item in tracker */
+router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const hash = req.params.hash;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
+  
+      // Get all the food items
+      return res.status(200).json(user.foods[itemIndex]);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  /* GET - get all weight lifting exercises in tracker */
+  router.get('/allLifting/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Get all the food items
+      return res.status(200).json(user.liftingLog);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  /* GET - get all cardio exercises in tracker */
+  router.get('/allCardio/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Get all the food items
+      return res.status(200).json(user.cardioLog);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  /* GET - get an exercise from tracker */
+  router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const hash = req.params.hash;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
+      const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
+  
+      return itemIndex == -1 ? res.status(200).json(user.cardioLog[itemIndex2]) : res.status(200).json(user.liftingLog[itemIndex]);
+  
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  /* GET - get an old exercise from tracker */
+  router.get('/priorExercise/:userId/:name', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const name = req.params.name;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const itemIndex = user.otherExerciseLog.findIndex((obj => obj.exerciseName === name));
+  
+      return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
+  
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 /* ###################### 
 ########## DELETE ##########
 ######################### */
@@ -532,175 +642,87 @@ router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
   }
 });
 
-/* DELETE - Delete all food items in tracker */
-router.delete('/deleteFood/:userId', verify, async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      const user = await User.findById(userId);
+/* DELETE - Delete all food items in a single user's tracker */
+// router.delete('/deleteFood/:userId', verify, async (req, res) => {
+//     try {
+//       const userId = req.params.userId;
+//       const user = await User.findById(userId);
   
-      if (!user) {
+//       if (!user) {
+//         return res.status(404).json({ error: 'User not found' });
+//       }
+  
+//       // delete food item
+//       user.foods = [];
+//       await user.save();
+  
+//       return res.status(200).json({ message: 'All food items deleted successfully' });
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+
+/* DELETE - Delete all food items in tracker */
+router.delete('/resetTrackers', async (req, res) => { /* skip JWT token for now so that server can call this without being a user */
+    try {
+      const users = await User.find();
+  
+      if (!users) {
         return res.status(404).json({ error: 'User not found' });
       }
-  
-      // delete food item
-      user.foods = [];
-      await user.save();
-  
+     
+      // loop through each user and clear their food tracker
+      for (let user of users) {
+        const id = user._id;
+        await User.findByIdAndUpdate(id, {
+            foods: []
+        })
+      }
+
+      // Print success message and return response to client
+      console.log("Successfully deleted all food trackers for all users.");
       return res.status(200).json({ message: 'All food items deleted successfully' });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
-
-/* GET - get a food item in tracker */
-router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const hash = req.params.hash;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
-
-    // Get all the food items
-    return res.status(200).json(user.foods[itemIndex]);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
 });
-
-/* GET - get all weight lifting exercises in tracker */
-router.get('/allLifting/:userId', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Get all the food items
-    return res.status(200).json(user.liftingLog);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-/* GET - get all cardio exercises in tracker */
-router.get('/allCardio/:userId', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Get all the food items
-    return res.status(200).json(user.cardioLog);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-/* GET - get an exercise from tracker */
-router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const hash = req.params.hash;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
-    const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
-
-    return itemIndex == -1 ? res.status(200).json(user.cardioLog[itemIndex2]) : res.status(200).json(user.liftingLog[itemIndex]);
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-/* GET - get an old exercise from tracker */
-router.get('/priorExercise/:userId/:name', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const name = req.params.name;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const itemIndex = user.otherExerciseLog.findIndex((obj => obj.exerciseName === name));
-
-    return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-/* ###################### 
-########## DELETE ##########
-######################### */
 
 /* DELETE - Delete food item in tracker*/
 router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const hash = req.params.hash;
-    const user = await User.findById(userId); // Find the user by ID
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    try {
+      const userId = req.params.userId;
+      const hash = req.params.hash;
+      const user = await User.findById(userId); // Find the user by ID
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
+      user.foods.splice(itemIndex, 1);
+  
+      // Save the updated user
+      await user.save();
+  
+      return res.status(200).json({ message: 'Food item deleted successfully' });
+  
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
-    user.foods.splice(itemIndex, 1);
-
-    // Save the updated user
-    await user.save();
-
-    return res.status(200).json({ message: 'Food item deleted successfully' });
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
+  });
+  
 /* DELETE - Delete exercise in tracker*/
 router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
-  try {
+try {
     const userId = req.params.userId;
     const hash = req.params.hash;
     const user = await User.findById(userId); // Find the user by ID
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    return res.status(404).json({ error: 'User not found' });
     }
 
     const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
@@ -713,10 +735,10 @@ router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
 
     return res.status(200).json({ message: 'Exercise deleted successfully' });
 
-  } catch (error) {
+} catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
-  }
+}
 });
 
 /* export module for external use */
