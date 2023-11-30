@@ -86,6 +86,9 @@ const Navbar = () => {
                             <Link to={ROUTES.PREFERENCES} className="link">
                                 <span>Dietary Preferences</span>
                             </Link>
+                            <Link to={ROUTES.SAVED_MENU_ITEMS} className="link">
+                                <span>Saved Menu Items</span>
+                            </Link>
                         </div>
                     </div>
                     <div className="dropdown">

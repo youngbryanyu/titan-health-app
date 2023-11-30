@@ -18,6 +18,7 @@ import OtherHealthTracker from "./pages/otherHealthTracker/otherHealthTracker";
 import FoodInfo from "./pages/foodInfo/foodInfo";
 import Menu from "./pages/menu/menu";
 import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
+import SavedMenuItems from "./pages/savedMenuItems/savedMenuItems";
 
 /**
  * Returns an instance of the frontend React application.
@@ -46,6 +47,7 @@ const App = () => {
             <Route path={ROUTES.FOOD_INFO} element={<FoodInfo />} />
             <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<FoodInfo />} />
             <Route path={ROUTES.MENU_INFO_LOCATION} element={<Menu />} />
+            <Route path={ROUTES.SAVED_MENU_ITEMS} element={<SavedMenuItems />} />
         </>
     );
 
@@ -67,6 +69,7 @@ const App = () => {
             <Route path={ROUTES.FOOD_INFO} element={<Register />} />
             <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<Register />} />
             <Route path={ROUTES.MENU_INFO_LOCATION} element={<Register />} />
+            <Route path={ROUTES.SAVED_MENU_ITEMS} element={<Register />} />
         </>
     );
 
