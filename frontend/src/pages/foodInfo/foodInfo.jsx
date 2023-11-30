@@ -239,8 +239,9 @@ const FoodInfo = () => {
         // Get initial rating then set rating of this item to that
         const setInitialRating = async () => {
             try {
-                const response = await axios.get('/ratings/' + user.username + '/' + menuItemID);
+                const response = await axios.get('/ratings/' + userId + '/' + menuItemID);
                 let rating = response.data;
+                console.log("rating is " + rating);
 
                 if (rating === "No doc found") { //means no rating for this item
                     // leave all stars blank
@@ -309,7 +310,7 @@ const FoodInfo = () => {
 
         const getSavedStatus = async () => {
             try {
-                const response = await axios.get(`/saved/${user.username}/${menuItemID}`);
+                const response = await axios.get(`/saved/${userId}/${menuItemID}`);
                 const savedStatus = response.data.saved;
                 if (savedStatus != null) {
                     // setSaved(savedStatus); // unused
@@ -359,7 +360,7 @@ const FoodInfo = () => {
                     rating = 1
                 }
                 await axios.post('/ratings', {
-                    username: user.username,
+                    userId: userId,
                     menuItemID: menuItemID,
                     rating: rating
                 });
@@ -474,7 +475,7 @@ const FoodInfo = () => {
         const updateSavedStatusInDB = async () => {
             try {
                 await axios.post('/saved', {
-                    username: user.username,
+                    userId: userId,
                     menuItemID: menuItemID,
                     saved: savedClick
                 });

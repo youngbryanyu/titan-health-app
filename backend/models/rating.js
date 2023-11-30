@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema( // create schema for ratings in DB
     {
-        username: { type: String, required: true },   
+        userId: { type: String, required: true },   
         menuItemID: { type: String, required: true },
         rating: { type: Number, required: true }
     },
