@@ -30,7 +30,7 @@ const Navbar = () => {
     const handleLogout = (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* Log user out and navigate to login */
         logout(dispatch);
         navigate(ROUTES.LOGIN);
@@ -59,8 +59,8 @@ const Navbar = () => {
                     <Link to={ROUTES.HOME} className="link">
                         <span>Home</span>
                     </Link>
-                   
-                    
+
+
                     <div className="dropdown">
                         <span>Health ▾</span>
                         <div className="healthDropdownOptions">
@@ -86,12 +86,6 @@ const Navbar = () => {
                             <Link to={ROUTES.PREFERENCES} className="link">
                                 <span>Dietary Preferences</span>
                             </Link>
-                            <Link to={ROUTES.SAVED_MENU_ITEMS} className="link">
-                                <span>Saved Menu Items</span>
-                            </Link>
-                            <Link to={ROUTES.POPULAR_MENU_ITEMS} className="link">
-                                <span>Popular Menu Items</span>
-                            </Link>
                         </div>
                     </div>
                     <div className="dropdown">
@@ -111,6 +105,17 @@ const Navbar = () => {
                             </Link>
                             <Link to={ROUTES.MENU_INFO + "/Hillenbrand"} className="link">
                                 <span className="highlight">Hillenbrand</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <span>More Dining ▾</span>
+                        <div className="moreDiningDropdownOptions">
+                            <Link to={ROUTES.SAVED_MENU_ITEMS} className="link">
+                                <span>Saved Menu Items</span>
+                            </Link>
+                            <Link to={ROUTES.POPULAR_MENU_ITEMS} className="link">
+                                <span>Popular Menu Items</span>
                             </Link>
                         </div>
                     </div>

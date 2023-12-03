@@ -109,7 +109,7 @@ const SavedMenuItems = () => {
     }, [shouldSort]);
 
     return (
-        <div className="favorites">
+        <div className="savedMenuItems">
             <Navbar />
             <div className="items">
                 <div className="sectionHeader">
@@ -120,7 +120,7 @@ const SavedMenuItems = () => {
                     </div>
                 </div>
                 {/* <h6>(click an item to see its info)</h6> */}
-                <Box sx={{ width: '100%', height: 400, width: 380, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                <Box sx={{ height: 400, width: 380, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                     <Paper style={{ height: 400, overflow: 'auto' }}>
                         {
                             loading.current ? (
@@ -147,7 +147,25 @@ const SavedMenuItems = () => {
                     </Paper>
                 </Box>
                 <FormGroup className="checkbox">
-                    <FormControlLabel control={<Checkbox size="small" color="secondary" />} label={"Sort Alphabetically"} checked={shouldSort} onChange={handleSortClick} />
+                    <FormControlLabel 
+                        control={
+                            <Checkbox
+                                size="small"
+                                color="secondary"
+                                sx={{
+                                    color: 'white', // This sets the color of the checkbox
+                                    '&.Mui-checked': {
+                                        color: 'white', // This sets the color when the checkbox is checked
+                                    },
+                                    '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                        color: 'white', // Color for the unchecked state
+                                    },
+                                }}
+                            />
+                        }
+                        label={"Sort Alphabetically"} 
+                        checked={shouldSort} 
+                        onChange={handleSortClick} />
                 </FormGroup>
             </div>
         </div>

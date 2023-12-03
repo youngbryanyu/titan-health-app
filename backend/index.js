@@ -47,11 +47,11 @@ app.listen(PORT, async () => {
     console.log("Attempting to connect to MongoDB.");
 
     /* Uncomment this to immediately parse new dining data on server startup */
-    // try {
-    //     await axios.post('http://localhost:8000/api/menuInfo/load');
-    // } catch (error) {
-    //     console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
-    // }
+    try {
+        await axios.post('http://localhost:8000/api/menuInfo/load');
+    } catch (error) {
+        console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
+    }
 
     /* Uncomment this to immediately reset all users' food trackers on server startup */
     // try {

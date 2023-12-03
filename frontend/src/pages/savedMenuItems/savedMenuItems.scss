@@ -1,5 +1,5 @@
 // Stying for page displaying a user's favorite menu items
-.favorites {
+.savedMenuItems {
     width: 100vw;
     height: 100vh;
     background: linear-gradient(
@@ -28,9 +28,7 @@
     }
     
     .filter {
-    
         margin-left: 50px;
-    
     }
     
     .filter2 {
@@ -59,7 +57,7 @@
         align-items: center; /* Ensures vertical alignment */
     }
 
-    .pageTitle {
+    .menuTitle {
         margin-left: 16px; /* Adjust as needed */
         font-size: larger; /* Makes the text a bit bigger */
         font-size: 24px;
