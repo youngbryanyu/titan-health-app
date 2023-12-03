@@ -20,7 +20,8 @@ const ROUTES = {
     MENU_INFO_LOCATION: '/menu/:location',
     EXERCISE_INFO: '/exerciseInfo/:exerciseHash',
     EXERCISE_TRACKER: '/exerciseTracker',
-    SAVED_MENU_ITEMS: '/savedMenuItems'
+    SAVED_MENU_ITEMS: '/savedMenuItems',
+    POPULAR_MENU_ITEMS: '/popularMenuItems'
 }
 
 export default ROUTES;

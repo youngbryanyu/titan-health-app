@@ -89,6 +89,9 @@ const Navbar = () => {
                             <Link to={ROUTES.SAVED_MENU_ITEMS} className="link">
                                 <span>Saved Menu Items</span>
                             </Link>
+                            <Link to={ROUTES.POPULAR_MENU_ITEMS} className="link">
+                                <span>Popular Menu Items</span>
+                            </Link>
                         </div>
                     </div>
                     <div className="dropdown">

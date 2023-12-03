@@ -19,6 +19,7 @@ import FoodInfo from "./pages/foodInfo/foodInfo";
 import Menu from "./pages/menu/menu";
 import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
 import SavedMenuItems from "./pages/savedMenuItems/savedMenuItems";
+import PopularMenuItems from "./pages/popular/popular";
 
 /**
  * Returns an instance of the frontend React application.
@@ -48,6 +49,7 @@ const App = () => {
             <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<FoodInfo />} />
             <Route path={ROUTES.MENU_INFO_LOCATION} element={<Menu />} />
             <Route path={ROUTES.SAVED_MENU_ITEMS} element={<SavedMenuItems />} />
+            <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<PopularMenuItems />} />
         </>
     );
 
@@ -70,6 +72,7 @@ const App = () => {
             <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<Register />} />
             <Route path={ROUTES.MENU_INFO_LOCATION} element={<Register />} />
             <Route path={ROUTES.SAVED_MENU_ITEMS} element={<Register />} />
+            <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<Register />} />
         </>
     );
 
