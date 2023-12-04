@@ -2,6 +2,8 @@ const router = require("express").Router();
 const Saved = require("../models/saved");
 const MenuItem = require('../models/menuItem');
 
+// TODO: add JWT token to all API calls for security
+
 //send user's saved item to DB, if it exists alr then update
 //this function requires the req body to contain {userId, menuItemID, and saved}
 router.post("/", async (req, res) => {

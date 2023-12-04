@@ -281,7 +281,6 @@ router.post("/prefsAndRests", async (req, res) => {
 router.post("/prefsAndRests/:mealType", async (req, res) => {
     var d = new Date();
     var today = new Date(d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());
-
     try {
 
         const rests = req.body.restrictions; //for example could be - "Coconut", "Peanuts"
@@ -344,6 +343,7 @@ router.post("/prefsAndRests/:mealType", async (req, res) => {
                 if (!skipPrefs) matchingItems.push(item); //this item matches both prefs & rests
             }
         });
+
         res.status(200).json(matchingItems);
     } catch (error) {
         res.status(500).json(error);

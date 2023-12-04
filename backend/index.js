@@ -11,10 +11,12 @@ const app = express();
 /* Define REST API endpoint routes */
 const authenticationRoute = require("./routes/auth");
 const menuInfoRoute = require("./routes/menuInfo");
+const recommendationsRoute = require("./routes/recommendations");
 const problemsRoute = require("./routes/problem");
 const ratingsRoute = require("./routes/ratings");
 const savedRoute = require("./routes/saved");
 const usersRoute = require("./routes/users");
+
 
 /* Configure .env (hidden env vars) */
 dotenv.config();
@@ -37,6 +39,7 @@ app.use("/api/auth", authenticationRoute);
 app.use("/api/menuInfo", menuInfoRoute);
 app.use("/api/problems", problemsRoute);
 app.use("/api/ratings", ratingsRoute); 
+app.use("/api/recommendations", recommendationsRoute); 
 app.use("/api/saved", savedRoute);
 app.use("/api/users", usersRoute);
 
@@ -47,11 +50,11 @@ app.listen(PORT, async () => {
     console.log("Attempting to connect to MongoDB.");
 
     /* Uncomment this to immediately parse new dining data on server startup */
-    try {
-        await axios.post('http://localhost:8000/api/menuInfo/load');
-    } catch (error) {
-        console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
-    }
+    // try {
+    //     await axios.post('http://localhost:8000/api/menuInfo/load');
+    // } catch (error) {
+    //     console.log("ERROR PARSING DINING DATA ON STARTUP: " + error);
+    // }
 
     /* Uncomment this to immediately reset all users' food trackers on server startup */
     // try {

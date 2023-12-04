@@ -21,7 +21,8 @@ const ROUTES = {
     EXERCISE_INFO: '/exerciseInfo/:exerciseHash',
     EXERCISE_TRACKER: '/exerciseTracker',
     SAVED_MENU_ITEMS: '/savedMenuItems',
-    POPULAR_MENU_ITEMS: '/popularMenuItems'
+    POPULAR_MENU_ITEMS: '/popularMenuItems',
+    RECOMMENDED_MENU_ITEMS: '/recommendedMenuItems'
 }
 
 export default ROUTES;
