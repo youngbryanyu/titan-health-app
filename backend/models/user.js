@@ -24,10 +24,10 @@ const schema = new mongoose.Schema(
         foods: { type: [], required: false, default: [] }, /* foods in user's meal tracker */
         lowLevelNutritionGoals: { type: Map, of: String, required: false, 
             default: {
-                calories: "2000",
-                protein: "122",
-                carbohydrates: "267",
-                fat: "57"
+                calories: "[add calories]",
+                protein: "[add protein]",
+                carbohydrates: "[add carbohydrates]",
+                fat: "[add fat]"
             },
         },
         highLevelNutritionGoals: { type: [], required: false, default: [] },
