@@ -21,7 +21,7 @@ import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
 import SavedMenuItems from "./pages/savedMenuItems/savedMenuItems";
 import PopularMenuItems from "./pages/popular/popular";
 import LowLevelNutrition from "./pages/lowLevelNutrition/lowLevelNutrition";
-
+import RecommendedMenuItems from "./pages/recommendedMenuItems/recommendedMenuItems";
 
 /**
  * Returns an instance of the frontend React application.
@@ -53,7 +53,7 @@ const App = () => {
             <Route path={ROUTES.SAVED_MENU_ITEMS} element={<SavedMenuItems />} />
             <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<PopularMenuItems />} />
             <Route path={ROUTES.LOW_LEVEL_NUTRITION} element={<LowLevelNutrition />} />
-
+            <Route path={ROUTES.RECOMMENDED_MENU_ITEMS} element={<RecommendedMenuItems />} />
         </>
     );
 
@@ -78,7 +78,7 @@ const App = () => {
             <Route path={ROUTES.SAVED_MENU_ITEMS} element={<Register />} />
             <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<Register />} />
             <Route path={ROUTES.LowLevelNutrition} element={<Register />} />
-
+            <Route path={ROUTES.RECOMMENDED_MENU_ITEMS} element={<Register />} />
         </>
     );
 

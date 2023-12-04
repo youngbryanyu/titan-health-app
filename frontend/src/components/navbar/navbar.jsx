@@ -120,6 +120,9 @@ const Navbar = () => {
                             <Link to={ROUTES.POPULAR_MENU_ITEMS} className="link">
                                 <span>Popular Menu Items</span>
                             </Link>
+                            <Link to={ROUTES.RECOMMENDED_MENU_ITEMS} className="link">
+                                <span>Recommended Menu Items</span>
+                            </Link>
                         </div>
                     </div>
                 </div>
