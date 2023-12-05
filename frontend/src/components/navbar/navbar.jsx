@@ -86,6 +86,9 @@ const Navbar = () => {
                             <Link to={ROUTES.PREFERENCES} className="link">
                                 <span>Dietary Preferences</span>
                             </Link>
+                            <Link to={ROUTES.LOW_LEVEL_NUTRITION} className="link">
+                                <span>Nutriton Goals</span>
+                            </Link>
                         </div>
                     </div>
                     <div className="dropdown">

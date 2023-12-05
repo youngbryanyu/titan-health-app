@@ -22,6 +22,7 @@ const ROUTES = {
     EXERCISE_TRACKER: '/exerciseTracker',
     SAVED_MENU_ITEMS: '/savedMenuItems',
     POPULAR_MENU_ITEMS: '/popularMenuItems',
+    LOW_LEVEL_NUTRITION: '/lowLevelNutrition'
     RECOMMENDED_MENU_ITEMS: '/recommendedMenuItems'
 }
 

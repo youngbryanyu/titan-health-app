@@ -360,7 +360,49 @@ router.put("/supplement/:userId", verify, async (req, res) => {
   }
 });
 
-
+/* PUT - add to low level nutetion */
+router.put("/nutrition/:userId", verify, async (req, res) => {
+    const userId = req.params.userId;
+    const { newEntry } = req.body;
+  
+    try {
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      // User doesn't exist case
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Extract existing lowLevelNutritionGoals from the user
+      const { lowLevelNutritionGoals } = user;
+  
+      // Create a new Map with the existing values
+      const updatedLowLevelNutritionGoals = new Map([...lowLevelNutritionGoals]);
+  
+      // Check if newEntry is present before iterating over its keys
+      if (newEntry && typeof newEntry === 'object') {
+        // Update or add values from the new entry
+        Object.keys(newEntry).forEach(key => {
+          updatedLowLevelNutritionGoals.set(key, newEntry[key]);
+        });
+      } else {
+        return res.status(400).json({ error: 'Invalid request body' });
+      }
+  
+      // Update the user's lowLevelNutritionGoals
+      user.lowLevelNutritionGoals = updatedLowLevelNutritionGoals;
+  
+      // Save the updated user
+      const updatedUser = await user.save();
+  
+      res.json(updatedUser);
+    } catch (error) {
+      console.error('Error updating nutrition goals:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
 /* ###################### 
 ########## GET ##########
 ######################### */
@@ -609,6 +651,24 @@ router.get('/aFoodItem/:userId/:hash', verify, async (req, res) => {
   
       return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
   
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  /*GET - low level nutrtion facts */
+  router.get('/nutrition/:userId', verify, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      // Find the user by ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      return res.status(200).json(user.lowLevelNutritionGoals);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Internal Server Error' });
