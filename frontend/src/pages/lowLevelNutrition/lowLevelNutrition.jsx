@@ -1,5 +1,4 @@
 import Navbar from "../../components/navbar/navbar";
-import { Link } from "react-router-dom";
 import "./lowLevelNutrition.scss";
 import axios from 'axios';
 import { AuthContext } from "../../utils/authentication/auth-context";
@@ -7,7 +6,8 @@ import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
-import RegexUtil from "../../utils/regex-util";
+
+// TODO: add input validation
 
 /**
  * Returns a react component consisting of the nutrition goal age
@@ -29,7 +29,7 @@ const NutrtionGoals = () => {
     const [newFat, setNewFat] = useState('');
     const [newProtein, setNewProtein] = useState('');
 
-    /*retrieve low level nutrition facts */
+    /* retrieve low level nutrition facts */
     const getNutritionInfo = () => {
         axios.get('users/nutrition/' + user._id, {
             headers: {

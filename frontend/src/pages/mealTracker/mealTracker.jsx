@@ -1,5 +1,8 @@
 /* React page for the meal tracker */
 import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Divider } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
 import { Link, useLocation } from "react-router-dom";
@@ -34,7 +37,7 @@ const MealTracker = () => {
         if (location.state?.refresh) {
             getFoodItems();
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [location]);
 
     /* scrolling list height for each meal type list */
@@ -92,9 +95,38 @@ const MealTracker = () => {
     const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
     const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
 
+    /* Macro low-level nutrition goals */
+    const [calorieGoal, setCalorieGoal] = useState('');
+    const [proteinGoal, setProteinGoal] = useState('');
+    const [carbohydrateGoal, setCarbohydrateGoal] = useState('');
+    const [fatGoal, setFatGoal] = useState('');
+
+    /* Get low level nutrition macro goals */
+    const getNutritionGoals = () => {
+        axios.get('users/nutrition/' + user._id, {
+            headers: {
+                token: "Bearer " + user.accessToken
+            }
+
+
+        }).then(res => {
+            setCalorieGoal(res.data.calories);
+            setCarbohydrateGoal(res.data.carbohydrates);
+            setFatGoal(res.data.fat);
+            setProteinGoal(res.data.protein);
+
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+
+
+    };
+
     /* Load food items on page render */
     useEffect(() => {
         getFoodItems(); /* note: removed only run on first render code */
+        getNutritionGoals();
         // eslint-disable-next-line
     }, []);
 
@@ -364,26 +396,55 @@ const MealTracker = () => {
 
             <Stack className="stack middle" spacing={2} alignItems={"center"} justifyContent={"center"}>
                 <div>
+                    <h4 className="sectionTitle">
+                        <span>Total Daily Macronutrients</span>
+                        <Tooltip className="toolTip" title={"Edit your daily macro goals by going to *Nutrition*, then to *Nutrition Goals* in the navigation bar at the top of the page"} placement="bottom">
+                            <IconButton color="inherit">
+                                <InfoIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <div>
+                            <span className="goalLabelTop">
+                                {"Goals"}
+                            </span>
+                            <div className="goalLabelBottom">for today</div>
 
-                    <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        </div>
+                    </h4>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Calories</span>
                         <span className="listItem">{totalCaloriesToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${calorieGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Protein</span>
                         <span className="listItem">{totalProteinToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${proteinGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Carbohydrates</span>
                         <span className="listItem">{totalCarbsToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${carbohydrateGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Fat</span>
                         <span className="listItem">{totalFatToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${fatGoal}`}</span>
+                        </span>
                     </ListItem>
-
                 </div>
+
                 <div>
                     <PieChart
                         colors={['teal', 'purple', 'orange']}
