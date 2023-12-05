@@ -81,8 +81,14 @@ Like mentioned earlier in the section about how to run the application locally, 
 ## Bugs
 None currently :)
 
+## Future Updates and Goals
+- Improve UI and visual experience for users.
+- Create more comprehensive recommendation system
+- Create more useful health and fitness features, as most features are skewed towards nutrition currently.
+- Improve robustness and user input validation of application on some pages.
+
 ## Screenshots
-Below are screenshots of some of the pages within our site as a preview! Note that many of the pages in the site our not shown (such as the fitness and health tracker related pages), and these are just a showcase of some of the UI.
+Below are screenshots of some of the pages within our site as a preview! *Note that many of the pages in the site our not shown (such as the fitness and health tracker related pages)*, and these are just a showcase of some of the UI.
 
 #### Meal Tracker Page
 <img width="1438" alt="Meal Tracker Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/36d84a49-e2f5-46e2-8335-d17a3368ae4a">
@@ -98,6 +104,10 @@ Below are screenshots of some of the pages within our site as a preview! Note th
 
 #### Home Page
 <img width="1440" alt="Home Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/aaa9c1fb-fa5d-4548-98a4-3df89bd835df">
+
+#### Recommended Menu Items Page
+<img width="1432" alt="Recommended Menu Items Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/a8a60670-9556-4f23-b542-3ed41d047baa">
+
 
 
 
