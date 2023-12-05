@@ -775,7 +775,7 @@ const Menu = () => {
                     </Paper>
                 </Box>
 
-                <h4 className="sectionTitle">{`When ${location} is open:`}</h4>
+                <h4 className="sectionTitle">{`When ${location} is open`}</h4>
                 <Box
                     sx={{
                         width: 250,
@@ -793,7 +793,7 @@ const Menu = () => {
 
             <div className="menuItems">
                 <div className="sectionHeader">
-                    <h4 className="pageTitle">{`${location}'s menu:`}</h4>
+                    <h4 className="pageTitle">{`${location}'s menu`}</h4>
                     <div className="ratingHeader">
                         <span className="ratingTitle">Rating</span>
                         <span className="ratingSubtitle">out of 5</span>

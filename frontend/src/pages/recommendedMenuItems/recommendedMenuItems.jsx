@@ -245,14 +245,30 @@ const RecommendedMenuItems = () => {
         setMenuBeforeSortPop(JSON.parse(JSON.stringify(courtsMenu)));
     }, [courtsMenu])
 
-    function listItem(item) { // display a menu item
-        const name = item.name;
-        const id = item.ID
+    function listItem(item) { //display a menu item
+        // display a menu item
+        let name = item.name;
+        if (name.length > 40) {
+            name = name.substring(0, 40) + "...";
+        }
+        const id = item.ID;
+        const rating = item.avgRating > 0 ? item.avgRating : "-";
 
         return (
             <Link to={`/foodInfo/${id}`} className="link">
-                <ListItem component="div" disablePadding button={true}>
-                    <span className="header">{`${name}`}</span>
+                <ListItem component="div" disablePadding button={true}
+                    sx={{
+                        paddingLeft: '16px', // Add left padding
+                        paddingRight: '16px', // Add right padding for symmetry
+                        borderBottom: '1px solid #e0e0e0', // Line between items
+                        marginBottom: '8px', // Spacing between items
+                        paddingBottom: '8px', // Padding at the bottom of the item
+                        display: 'flex', // Make this a flex container
+                        justifyContent: 'space-between', // Space between items
+                        alignItems: 'center', // Align items vertically in the center
+                    }}>
+                    <span className="listItem">{name}</span>
+                    <span className="listRating">{rating}</span> {/* Added marginRight */}
                 </ListItem>
             </Link>
         );
@@ -281,10 +297,16 @@ const RecommendedMenuItems = () => {
         <div className="recommendedMenuItems">
             <Navbar />
             <div>
-                <h4 className="moreSpace">{"Recommended items:"}</h4>
+                <div className="sectionHeader">
+                    <h4 className="menuTitle">{`Popular menu items today`}</h4>
+                    <div className="ratingHeader">
+                        <span className="ratingTitle">Rating</span>
+                        <span className="ratingSubtitle">out of 5</span>
+                    </div>
+                </div>
                 {/* <h6>(click to view info)</h6> */}
-                <Box sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
-                    <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
+                <Box sx={{ height: 400, width: 380, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Paper style={{ height: 400, overflow: 'auto' }}>
                         {/* {console.log(noItems.current)} */}
                         {
                             (
@@ -370,7 +392,25 @@ const RecommendedMenuItems = () => {
                             </Select>
                         </FormControl>
                         <FormGroup className="checkbox">
-                            <FormControlLabel control={<Checkbox size="small" color="secondary" />} label={"Sort by Item Popularity"} checked={shouldSortPop} onChange={handleSortClickPop} />
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
+                                label={"Sort by Item Popularity"} 
+                                checked={shouldSortPop} 
+                                onChange={handleSortClickPop} />
                         </FormGroup>
                     </Box>
                 </div>

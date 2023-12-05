@@ -77,7 +77,7 @@ const PopularMenuItems = () => {
         <div className="popular">
             <Navbar />
             <div className="items">
-            <div className="sectionHeader">
+                <div className="sectionHeader">
                     <h4 className="menuTitle">{`Popular menu items today`}</h4>
                     <div className="ratingHeader">
                         <span className="ratingTitle">Rating</span>
