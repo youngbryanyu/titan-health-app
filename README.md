@@ -85,7 +85,7 @@ None currently :)
 Below are screenshots of some of the pages within our site as a preview! Note that many of the pages in the site our not shown (such as the fitness and health tracker related pages), and these are just a showcase of some of the UI.
 
 #### Meal Tracker Page
-<img width="1438" alt="Food Tracker Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/70f72cfb-dd64-4ae2-8777-e5c8c633db53">
+<img width="1438" alt="Meal Tracker Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/36d84a49-e2f5-46e2-8335-d17a3368ae4a">
 
 #### Dining Court Menu Page
 <img width="1437" alt="Dining Court Menu Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/74240620-74b1-4fcd-adc4-c5a19600cabb">
