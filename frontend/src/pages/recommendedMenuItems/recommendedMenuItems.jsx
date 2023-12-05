@@ -298,7 +298,7 @@ const RecommendedMenuItems = () => {
             <Navbar />
             <div>
                 <div className="sectionHeader">
-                    <h4 className="menuTitle">{`Popular menu items today`}</h4>
+                    <h4 className="menuTitle">{`Recommended menu items today`}</h4>
                     <div className="ratingHeader">
                         <span className="ratingTitle">Rating</span>
                         <span className="ratingSubtitle">out of 5</span>
