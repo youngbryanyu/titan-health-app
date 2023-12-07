@@ -1,8 +1,11 @@
 /* React page for the meal tracker */
-import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Typography, Divider } from "@mui/material";
+import { Box, List, ListItem, Paper, InputLabel, MenuItem, FormControl, Select, Divider } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
 import { makeStyles } from "@mui/styles";
 import Navbar from "../../components/navbar/navbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import { useState, useEffect, useContext } from 'react';
 import "./mealTracker.scss";
@@ -28,6 +31,15 @@ const useStyles = makeStyles((theme) => ({
  * @returns a react component consisting of the meal tracker page.
  */
 const MealTracker = () => {
+    // /* force rerender on location change */
+    const location = useLocation();
+    useEffect(() => {
+        if (location.state?.refresh) {
+            getFoodItems();
+        }
+        // eslint-disable-next-line
+    }, [location]);
+
     /* scrolling list height for each meal type list */
     const MEAL_LIST_HEIGHT = 105;
 
@@ -48,6 +60,7 @@ const MealTracker = () => {
     const [fat, setFat] = useState('');
     const [carbohydrates, setCarbs] = useState('');
     const [servings, setServings] = useState('');
+    const [servingSize, setServingSize] = useState('');
 
     /* Daily totals */
     const [totalCaloriesToday, setTotalCaloriesToday] = useState('');
@@ -60,8 +73,6 @@ const MealTracker = () => {
     const [totalLunchCalories, setTotalLunchCalories] = useState('');
     const [totalDinnerCalories, setTotalDinnerCalories] = useState('');
     const [totalSnackCalories, setTotalSnackCalories] = useState('');
-
-    const [totalServings, setTotalServings] = useState(0);
 
     /* Meal types */
     const EMPTY = 'Choose meal type';
@@ -78,74 +89,101 @@ const MealTracker = () => {
         INVALID_PROTEIN_ERROR: "Protein must be a number",
         INVALID_CARBS_ERROR: "Carbohydrates must be a number",
         INVALID_FAT_ERROR: "Fat must be a number",
-        INVALID_SERVINGS_ERROR: "Servings must be a number"
+        INVALID_SERVINGS_ERROR: "Servings must be a number",
     }
 
     const [errorMessage, setErrorMessage] = useState(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
     const [allFieldsComplete, setAllFieldsComplete] = useState(true); /* initialize to true to hide error message */
 
+    /* Macro low-level nutrition goals */
+    const [calorieGoal, setCalorieGoal] = useState('');
+    const [proteinGoal, setProteinGoal] = useState('');
+    const [carbohydrateGoal, setCarbohydrateGoal] = useState('');
+    const [fatGoal, setFatGoal] = useState('');
+
+    /* Get low level nutrition macro goals */
+    const getNutritionGoals = () => {
+        axios.get('users/nutrition/' + user._id, {
+            headers: {
+                token: "Bearer " + user.accessToken
+            }
+
+
+        }).then(res => {
+            setCalorieGoal(res.data.calories);
+            setCarbohydrateGoal(res.data.carbohydrates);
+            setFatGoal(res.data.fat);
+            setProteinGoal(res.data.protein);
+
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+
+
+    };
+
     /* Load food items on page render */
     useEffect(() => {
-        // Get food items on load
-        const getFoodItems = async () => {
-            try {
-                const response = await axios.get(`users/allFoods/${userId}`, {
-                    headers: { token: `Bearer ${user.accessToken}` }
-                });
-                setFoodItems(response.data);
-
-                /* calculate total calories */
-                let totalCalories = 0;
-                let totalBreakfast = 0;
-                let totalLunch = 0;
-                let totalDinner = 0;
-                let totalSnack = 0;
-                response.data.forEach(item => {
-                    totalCalories += item.calories * item.servings;
-
-                    if (item.mealType === BREAKFAST) {
-                        totalBreakfast += item.calories * item.servings;
-                    }
-                    if (item.mealType === LUNCH) {
-                        totalLunch += item.calories * item.servings;
-                    }
-                    if (item.mealType === DINNER) {
-                        totalDinner += item.calories * item.servings;
-                    }
-                    if (item.mealType === SNACK) {
-                        totalSnack += item.calories * item.servings;
-                    }
-                });
-                setTotalCaloriesToday(totalCalories);
-                setTotalBreakfastCalories(totalBreakfast);
-                setTotalLunchCalories(totalLunch);
-                setTotalDinnerCalories(totalDinner);
-                setTotalSnackCalories(totalSnack);
-
-                /* calculate total protein */
-                let totalProtein = 0;
-                response.data.forEach(item => totalProtein += item.protein * item.servings);
-                setTotalProteinToday(totalProtein);
-
-                /* calculate total carbohydrates */
-                let totalCarbs = 0;
-                response.data.forEach(item => totalCarbs += item.carbohydrates * item.servings);
-                setTotalCarbsToday(totalCarbs);
-
-                /* calculate total fats */
-                let totalFat = 0;
-                response.data.forEach(item => totalFat += item.fat * item.servings);
-                setTotalFatToday(totalFat);
-
-
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
         getFoodItems(); /* note: removed only run on first render code */
+        getNutritionGoals();
         // eslint-disable-next-line
     }, []);
+
+    // Gets food items. should be called on page load
+    const getFoodItems = async () => {
+        try {
+            const response = await axios.get(`users/allFoods/${userId}`, {
+                headers: { token: `Bearer ${user.accessToken}` }
+            });
+            setFoodItems(response.data);
+
+            /* calculate total calories */
+            let totalCalories = 0;
+            let totalBreakfast = 0;
+            let totalLunch = 0;
+            let totalDinner = 0;
+            let totalSnack = 0;
+            response.data.forEach(item => {
+                totalCalories += item.calories * item.servings;
+
+                if (item.mealType === BREAKFAST && isValidNumber(item.calories)) {
+                    totalBreakfast += item.calories * item.servings;
+                }
+                if (item.mealType === LUNCH && isValidNumber(item.calories)) {
+                    totalLunch += item.calories * item.servings;
+                }
+                if (item.mealType === DINNER && isValidNumber(item.calories)) {
+                    totalDinner += item.calories * item.servings;
+                }
+                if (item.mealType === SNACK && isValidNumber(item.calories)) {
+                    totalSnack += item.calories * item.servings;
+                }
+            });
+            setTotalCaloriesToday(totalCalories);
+            setTotalBreakfastCalories(totalBreakfast);
+            setTotalLunchCalories(totalLunch);
+            setTotalDinnerCalories(totalDinner);
+            setTotalSnackCalories(totalSnack);
+
+            /* calculate total protein */
+            let totalProtein = 0;
+            response.data.forEach(item => totalProtein += (isValidNumber(item.protein)) ? item.protein * item.servings : 0);
+            setTotalProteinToday(totalProtein);
+
+            /* calculate total carbohydrates */
+            let totalCarbs = 0;
+            response.data.forEach(item => totalCarbs += (isValidNumber(item.carbohydrates)) ? item.carbohydrates * item.servings : 0);
+            setTotalCarbsToday(totalCarbs);
+
+            /* calculate total fats */
+            let totalFat = 0;
+            response.data.forEach(item => totalFat += (isValidNumber(item.fat)) ? item.fat * item.servings : 0);
+            setTotalFatToday(totalFat);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     /**
      * Checks if a value is a number and is greater than 0
@@ -163,7 +201,7 @@ const MealTracker = () => {
         setAllFieldsComplete(true);
 
         /* check if all fields were entered */
-        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || mealType === EMPTY) {
+        if (foodName === '' || calories === '' || protein === '' || carbohydrates === '' || servings === '' || servingSize === '' || mealType === EMPTY) {
             setAllFieldsComplete(false);
             setErrorMessage(ERROR_MESSAGES.INCOMPLETE_FIELDS_ERROR);
             return;
@@ -199,7 +237,7 @@ const MealTracker = () => {
         try {
             const res = await axios.put(
                 `users/addFood/${userId}`,
-                { foodName, calories, fat, protein, carbohydrates, servings, mealType },
+                { foodName, calories, fat, protein, carbohydrates, servings, servingSize, mealType },
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
@@ -231,6 +269,7 @@ const MealTracker = () => {
             setFat('');
             setCarbs('');
             setServings('');
+            setServingSize('');
             setMealType(EMPTY);
         } catch (error) {
             console.error(error);
@@ -243,7 +282,6 @@ const MealTracker = () => {
     }
 
     /* A list item in display */
-
     function buildListItem(item, mealType) {
         if (item.mealType !== mealType) {
             return <></>
@@ -255,20 +293,21 @@ const MealTracker = () => {
         }
         const id = item.hash;
         const servings = item.servings;
+        const servingSize = item.servingSize;
         const calories = item.calories
         const totalCalories = calories * servings;
 
         return (
             <div key={id}>
                 <Link to={ROUTES.FOOD_ITEM_INFO.replace(":foodItemHash", id)} className="link">
-                    <ListItem component="div" sx={{ flexDirection: "column", alignItems: "start", paddingLeft: 1, paddingRight: 1, paddingTop: .5, paddingBottom: .5 }}>
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem component="div" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: 1, paddingRight: 1, paddingTop: .5, paddingBottom: .5 }}>
+                        <div>
                             <span>{name}</span>
-                            <span>{totalCalories}</span>
-                        </Box>
-                        <Typography variant="body2" component="span" sx={{ fontSize: '0.8em', color: 'gray' }}>
-                            {`${servings} servings`}
-                        </Typography>
+                            <div className="servingLabel">
+                                {`${servings} servings (${servingSize})`}
+                            </div>
+                        </div>
+                        <span>{totalCalories}</span>
                     </ListItem>
                 </Link>
                 <Divider />
@@ -276,10 +315,8 @@ const MealTracker = () => {
         );
     }
 
-
-
     return (
-        <div className="menu">
+        <div className="mealTracker">
             <Navbar />
             <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
                 <div>
@@ -291,7 +328,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: 360, height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -309,7 +346,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: 360, height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -327,7 +364,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: 360, height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -345,7 +382,7 @@ const MealTracker = () => {
                             <div className="calorieLabel">calories</div>
                         </div>
                     </h4>
-                    <Box sx={{ width: '100%', height: MEAL_LIST_HEIGHT, width: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
+                    <Box sx={{ width: 360, height: MEAL_LIST_HEIGHT, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                         <Paper style={{ height: MEAL_LIST_HEIGHT, overflow: 'auto' }}>
                             <List>
                                 {
@@ -357,49 +394,82 @@ const MealTracker = () => {
                 </div>
             </Stack>
 
-            <Stack className="stack" spacing={2} ml={"50px"} alignItems={"center"} justifyContent={"center"}>
+            <Stack className="stack middle" spacing={2} alignItems={"center"} justifyContent={"center"}>
                 <div>
+                    <h4 className="sectionTitle">
+                        <span>Total Daily Macronutrients</span>
+                        <Tooltip className="toolTip" title={"Edit your daily macro goals by going to *Nutrition*, then to *Nutrition Goals* in the navigation bar at the top of the page"} placement="bottom">
+                            <IconButton color="inherit">
+                                <InfoIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <div>
+                            <span className="goalLabelTop">
+                                {"Goals"}
+                            </span>
+                            <div className="goalLabelBottom">for today</div>
 
-                    <h4 className="sectionTitle">{"Total Daily Macronutrients"}</h4>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        </div>
+                    </h4>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Calories</span>
                         <span className="listItem">{totalCaloriesToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${calorieGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Protein</span>
                         <span className="listItem">{totalProteinToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${proteinGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Carbohydrates</span>
                         <span className="listItem">{totalCarbsToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${carbohydrateGoal}`}</span>
+                        </span>
                     </ListItem>
-                    <ListItem component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <ListItem className="listContainer" component="div" disablePadding style={{ display: 'flex', justifyContent: 'space-between', width: 350 }}>
                         <span>Fat</span>
                         <span className="listItem">{totalFatToday}</span>
+                        <span className="goalItem">
+                            <span className="goalSpace">/</span>
+                            <span className="goalValue">{`${fatGoal}`}</span>
+                        </span>
                     </ListItem>
-
                 </div>
+
                 <div>
                     <PieChart
                         colors={['teal', 'purple', 'orange']}
+                        className="pieChart"
                         series={[
                             {
-                            data: [
-                                { id: 0, value: totalProteinToday, label: 'Protein' },
-                                { id: 1, value: totalFatToday, label: 'Total Fat' },
-                                { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
-                            ],
-                            innerRadius: 25,
-                            outerRadius: 90,
-                            paddingAngle: 5,
-                            cornerRadius: 5,
-                            startAngle: 0,
-                            endAngle: 360,
-                            cx: 185,
+                                data: [
+                                    { id: 0, value: totalProteinToday, label: 'Total Protein' },
+                                    { id: 1, value: totalFatToday, label: 'Total Fat' },
+                                    { id: 2, value: totalCarbsToday, label: 'Total Carbs' }
+                                ],
+                                innerRadius: 25,
+                                outerRadius: 90,
+                                paddingAngle: 5,
+                                cornerRadius: 5,
+                                startAngle: 0,
+                                endAngle: 360,
+                                cx: 185,
+                                // style: { fill: 'white', color: 'white' },
+                                fontSize: 20
                             },
                         ]}
                         width={450}
                         height={200}
+                    // sx={{fill: "white", color: "white"}}
                     />
                 </div>
             </Stack>
@@ -431,6 +501,11 @@ const MealTracker = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <label htmlFor="servings">Servings</label>
                             <input id="servings" type="text" value={servings} className="inputBox" onChange={(e) => setServings(e.target.value)} />
+                        </div>
+                        {/* TODO */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <label htmlFor="servings">Serving Size</label>
+                            <input id="servingSize" type="text" value={servingSize} className="inputBox" onChange={(e) => setServingSize(e.target.value)} />
                         </div>
                     </Box>
 

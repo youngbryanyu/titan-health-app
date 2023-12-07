@@ -30,7 +30,7 @@ const Navbar = () => {
     const handleLogout = (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* Log user out and navigate to login */
         logout(dispatch);
         navigate(ROUTES.LOGIN);
@@ -59,21 +59,72 @@ const Navbar = () => {
                     <Link to={ROUTES.HOME} className="link">
                         <span>Home</span>
                     </Link>
-                    <Link to={ROUTES.PREFERENCES} className="link">
-                        <span>Dietary Preferences</span>
-                    </Link>
-                    <Link to={ROUTES.MEAL_TRACKER} className="link">
-                        <span>Meal Tracker</span>
-                    </Link>
-                    <Link to={ROUTES.EXERCISE_TRACKER} className="link">
-                        <span>Exercise Tracker</span>
-                    </Link>
-                    <Link to={ROUTES.FOOD_ITEM} className="link">
-                        <span>Food Info</span>
-                    </Link>
-                    <Link to={ROUTES.OTHER_HEALTH_TRACKER} className="link">
-                        <span>Health Tracker</span>
-                    </Link>
+
+
+                    <div className="dropdown">
+                        <span>Health ▾</span>
+                        <div className="healthDropdownOptions">
+                            <Link to={ROUTES.OTHER_HEALTH_TRACKER} className="link">
+                                <span>Health Tracker</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <span>Fitness ▾</span>
+                        <div className="fitnessDropdownOptions">
+                            <Link to={ROUTES.EXERCISE_TRACKER} className="link">
+                                <span>Exercise Tracker</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <span>Nutrition ▾</span>
+                        <div className="nutritionDropdownOptions">
+                            <Link to={ROUTES.MEAL_TRACKER} className="link">
+                                <span>Meal Tracker</span>
+                            </Link>
+                            <Link to={ROUTES.PREFERENCES} className="link">
+                                <span>Dietary Preferences</span>
+                            </Link>
+                            <Link to={ROUTES.LOW_LEVEL_NUTRITION} className="link">
+                                <span>Nutriton Goals</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <span>Dining courts ▾</span>
+                        <div className="diningDropdownOptions">
+                            <Link to={ROUTES.MENU_INFO + "/Windsor"} className="link">
+                                <span className="highlight">Windsor</span>
+                            </Link>
+                            <Link to={ROUTES.MENU_INFO + "/Wiley"} className="link">
+                                <span className="highlight">Wiley</span>
+                            </Link>
+                            <Link to={ROUTES.MENU_INFO + "/Ford"} className="link">
+                                <span className="highlight">Ford</span>
+                            </Link>
+                            <Link to={ROUTES.MENU_INFO + "/Earhart"} className="link">
+                                <span className="highlight">Earhart</span>
+                            </Link>
+                            <Link to={ROUTES.MENU_INFO + "/Hillenbrand"} className="link">
+                                <span className="highlight">Hillenbrand</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <span>More Dining ▾</span>
+                        <div className="moreDiningDropdownOptions">
+                            <Link to={ROUTES.SAVED_MENU_ITEMS} className="link">
+                                <span>Saved Menu Items</span>
+                            </Link>
+                            <Link to={ROUTES.POPULAR_MENU_ITEMS} className="link">
+                                <span>Popular Menu Items</span>
+                            </Link>
+                            <Link to={ROUTES.RECOMMENDED_MENU_ITEMS} className="link">
+                                <span>Recommended Menu Items</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
                 <div className="right">
                     <div className="profile">

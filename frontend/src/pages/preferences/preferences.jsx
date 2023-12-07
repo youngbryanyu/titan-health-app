@@ -70,6 +70,10 @@ const Preferences = () => {
     const handleMilk = () => setMilk(!milk);
     const handlePeanuts = () => setPeanuts(!peanuts);
 
+    // whether to run an update on (for initial render case)
+    const [shouldUpdatePrefs, setShouldUpdatePrefs] = useState(false);
+    const [shouldUpdateRests, setShouldUpdateRests] = useState(false);
+
     /* Load initial preferences and restrictions on page render */
     const isFirstRender = useRef(true); 
     useEffect(() => {
@@ -93,6 +97,8 @@ const Preferences = () => {
                 }
 
                 setPrefs(preferences);
+                setShouldUpdatePrefs(true);
+                console.log("finished setting initial prefs")
             } catch (error) {
                 console.log(error);
             }
@@ -154,6 +160,8 @@ const Preferences = () => {
                 }
 
                 setRests(restrictions); 
+                setShouldUpdateRests(true);
+                console.log("finished setting initial rests")
             } catch (error) {
                 console.log(error);
             }
@@ -169,11 +177,8 @@ const Preferences = () => {
     }, []);
 
     /* Update preferences when any of the preferences changes. This will trigger the useEffect below. */
-    const isFirstRender_update = useRef(true); 
     useEffect(() => {
-        /* don't do anything on first render */
-        if (isFirstRender_update.current) {
-            isFirstRender_update.current = false;
+        if (!shouldUpdatePrefs) {
             return;
         }
 
@@ -182,14 +187,12 @@ const Preferences = () => {
         if (vegan) preferences.push(VEGAN);
 
         setPrefs(preferences); // triggers useEffect below
+    // eslint-disable-next-line
     }, [vegan, vegetarian]);
 
     /* Update the preferences in the database when prefs changes, not on first render though. Triggered by useEffect above */
-    const isFirstRender_updatePrefsDB = useRef(true);
     useEffect(() => {
-        /* don't do anything on first render */
-        if (isFirstRender_updatePrefsDB.current) {
-            isFirstRender_updatePrefsDB.current = false;
+        if (!shouldUpdatePrefs) {
             return;
         }
 
@@ -214,12 +217,9 @@ const Preferences = () => {
     }, [prefs]);
 
     /* Update restrictions when any of the restrictions changes. This will trigger the useEffect below. Triggers useEffect below. */
-    const isFirstRender_updateRestrictions = useRef(true);
     useEffect(() => {
-        /* Don't do anything on first render */
-        if (isFirstRender_updateRestrictions.current) {
-            isFirstRender_updateRestrictions.current = false;
-            return; // don't update DB on initial render
+        if (!shouldUpdateRests) {
+            return;
         }
 
         /* Set restrictions to checkboxes */
@@ -237,14 +237,12 @@ const Preferences = () => {
         if (peanuts) restrictions.push(PEANUTS);
 
         setRests(restrictions); 
+    // eslint-disable-next-line
     }, [coconut, eggs, fish, gluten, sesame, shellfish, soy, treeNuts, wheat, milk, peanuts]);
 
     /* Update the restrictions in the database when restrictions changes, not on first render though. Triggered by useEffect above. */
-    const isFirstRender_updateRestsDB = useRef(true); // don't do anything on first render
     useEffect(() => {
-        /* Don't update DB on initial render */
-        if (isFirstRender_updateRestsDB.current) {
-            isFirstRender_updateRestsDB.current = false;
+        if (!shouldUpdateRests) {
             return;
         }
 

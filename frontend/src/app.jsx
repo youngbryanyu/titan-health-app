@@ -5,7 +5,6 @@ import Login from "./pages/login/login";
 import Register from "./pages/register/register";
 import Preferences from "./pages/preferences/preferences";
 import MealTracker from "./pages/mealTracker/mealTracker";
-import FoodInfo from "./pages/foodInfo/foodInfo";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./utils/authentication/auth-context";
@@ -16,7 +15,13 @@ import PersonalInfo from "./pages/personalInfo/personalInfo";
 import ExerciseTracker from "./pages/exerciseTracker/exerciseTracker";
 import ExerciseInfo from "./pages/exerciseInfo/exerciseInfo";
 import OtherHealthTracker from "./pages/otherHealthTracker/otherHealthTracker";
-
+import FoodInfo from "./pages/foodInfo/foodInfo";
+import Menu from "./pages/menu/menu";
+import MealTrackerItem from "./pages/mealTrackerItem/mealTrackerItem";
+import SavedMenuItems from "./pages/savedMenuItems/savedMenuItems";
+import PopularMenuItems from "./pages/popular/popular";
+import LowLevelNutrition from "./pages/lowLevelNutrition/lowLevelNutrition";
+import RecommendedMenuItems from "./pages/recommendedMenuItems/recommendedMenuItems";
 
 /**
  * Returns an instance of the frontend React application.
@@ -39,9 +44,16 @@ const App = () => {
             <Route path={ROUTES.PERSONAL_INFO} element={<PersonalInfo />} />
             <Route path={ROUTES.MEAL_TRACKER} element={<MealTracker />} />
             <Route path={ROUTES.EXERCISE_TRACKER} element={<ExerciseTracker />} />
-            <Route path={ROUTES.FOOD_ITEM_INFO} element={<FoodInfo />} />
+            <Route path={ROUTES.FOOD_ITEM_INFO} element={<MealTrackerItem />} />
             <Route path={ROUTES.EXERCISE_INFO} element={<ExerciseInfo />} />
             <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
+            <Route path={ROUTES.FOOD_INFO} element={<FoodInfo />} />
+            <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<FoodInfo />} />
+            <Route path={ROUTES.MENU_INFO_LOCATION} element={<Menu />} />
+            <Route path={ROUTES.SAVED_MENU_ITEMS} element={<SavedMenuItems />} />
+            <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<PopularMenuItems />} />
+            <Route path={ROUTES.LOW_LEVEL_NUTRITION} element={<LowLevelNutrition />} />
+            <Route path={ROUTES.RECOMMENDED_MENU_ITEMS} element={<RecommendedMenuItems />} />
         </>
     );
 
@@ -60,6 +72,13 @@ const App = () => {
             <Route path={ROUTES.FOOD_ITEM_INFO} element={<Register />} />
             <Route path={ROUTES.EXERCISE_INFO} element={<Register />} />
             <Route path={ROUTES.OTHER_HEALTH_TRACKER} element={<OtherHealthTracker />} />
+            <Route path={ROUTES.FOOD_INFO} element={<Register />} />
+            <Route path={ROUTES.FOOD_INFO_MENU_ITEM_ID} element={<Register />} />
+            <Route path={ROUTES.MENU_INFO_LOCATION} element={<Register />} />
+            <Route path={ROUTES.SAVED_MENU_ITEMS} element={<Register />} />
+            <Route path={ROUTES.POPULAR_MENU_ITEMS} element={<Register />} />
+            <Route path={ROUTES.LowLevelNutrition} element={<Register />} />
+            <Route path={ROUTES.RECOMMENDED_MENU_ITEMS} element={<Register />} />
         </>
     );
 

@@ -1,0 +1,147 @@
+/* Styling for corec info block */
+.corecinfo {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0, ) 0%,
+            rgba(0, 0, 0, 1) 100%),
+            url("../../components/titan_background.jpeg");
+    background-size: cover;
+    position: relative;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .header {
+        font-weight: bold;
+    }
+    
+    .text {
+        color: white;
+    }
+    
+    .space {
+        margin-top: 5px;
+    }
+    
+    .filter {
+        margin-left: 50px;
+        margin-right: -150px;
+    }
+
+    .smallListItem {
+        font-size: 14px;
+    }
+
+    .listItem {
+        // font-size: 18px;
+        font-weight: normal;
+    }
+    
+    //for use in stack component (padding is weird)
+    .stack {
+        margin-left: 25px;
+        margin-right: 15px;
+        .stackedFilter {
+            margin-top: 0px;
+            padding-top: 10px;
+        }
+    }
+
+    .searchBar {
+        transform: translate(7.5px, 0%);
+        margin-bottom: 10px;
+        z-index: 999;
+    }
+
+    .customPrefs {
+        transform: translate(-40px, 0%);
+    }
+    
+    .menuItems {
+        margin-left: 32.5px;
+        transform: translate(10px, 0%);
+    }
+    
+    .menuTimes {
+        // margin-left: -125px;
+        transform: translate(25px, 0px);
+    }
+
+    .filters {
+        transform: translate(-5px, 0px);
+    }
+
+    /* Makes filter text white */
+    .MuiSelect-select {
+        color: white;
+    }
+    
+    .sectionTitle {
+        margin-top: 25px;
+    }
+    
+    .evenMoreSpace {
+        margin-top: 35px;
+    }
+
+    .checkboxes {
+        // align-items: center;
+        transform: translate(15px, 0);
+    }
+
+    .howBusy {
+        margin-top: -25px; /* moves left column up a bit */
+    }
+    
+    .contactInfo {
+        font-weight: bold;
+        transform: translate(0px, 340px);
+        position: absolute;
+    
+        .icon {
+            transform: translate(0px, 5px);
+        }
+    
+        .location {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .sectionHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Ensures vertical alignment */
+    }
+    
+    .menuTitle {
+        margin-left: 16px; /* Adjust as needed */
+        font-size: larger; /* Makes the text a bit bigger */
+        font-size: 24px;
+    }
+    
+    .ratingHeader {
+        text-align: right;
+        margin-right: 16px; /* Adjust as needed */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Centers the content vertically */
+        font-size: 14px;
+    }
+    
+    .ratingTitle {
+        font-weight: bold;
+        font-size: larger; /* Makes the text a bit bigger */
+    }
+    
+    .ratingSubtitle {
+        display: block; /* Makes the text appear below */
+        color: grey; /* Sets the color to grey */
+        font-size: 12px; /* Makes the text smaller */
+        margin-bottom: 2.5px;
+    }
+    
+}

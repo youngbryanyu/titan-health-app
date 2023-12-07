@@ -123,7 +123,7 @@ const ExerciseTracker = () => {
     }
 
     return (
-        <div className="menu">
+        <div className="exerciseTracker">
             <Navbar />
             <div>
                 <h4 className="moreSpace">{"View Your Exercises Today:"}</h4>

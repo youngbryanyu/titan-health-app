@@ -35,6 +35,7 @@ const PersonalInfo = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
+    const [membership, setMembership] = useState('');
 
     /* User info to be changed to (in input boxes) */
     const [newUsername, setNewUsername] = useState('');
@@ -61,13 +62,32 @@ const PersonalInfo = () => {
                 token: "Bearer " + user.accessToken
             }
         }).then(res => {
-            setPhoneNumber(res.data.phone)
-            setEmail(res.data.email)
-            setUsername(res.data.username)
+            setPhoneNumber(res.data.phone);
+            setEmail(res.data.email);
+            setUsername(res.data.username);
+            var origin = new Date(parseInt(res.data._id.toString().slice(0, 8), 16) * 1000);
+            var today = new Date();
+            var diffms = Math.abs(today - origin);
+            var membertime = diff(diffms);
+            setMembership(membertime);
         }).catch(err => {
             console.log(err)
         })
     };
+    /* util function for converting ms to dd:hh:mm*/
+    function diff(t) {
+        var day = 1000 * 60 * 60 * 24;
+
+        var days = Math.floor(t / day);
+        var months = Math.floor(days / 31);
+        var years = Math.floor(months / 12);
+
+        var message = days + " days ";
+        message += months + " months ";
+        message += years + " years ago";
+
+        return message
+    }
 
     /* get user info on first render */
     const isFirstRender = useRef(true);
@@ -91,7 +111,7 @@ const PersonalInfo = () => {
     const handleUpdateUsername = async (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* reset all error messages at start of event */
         setError(false);
 
@@ -110,7 +130,7 @@ const PersonalInfo = () => {
                 username: newUsername,
             }, {
                 headers: {
-                    token: "Bearer " + user.accessToken 
+                    token: "Bearer " + user.accessToken
                 }
             });
 
@@ -130,11 +150,11 @@ const PersonalInfo = () => {
         getUserInfo();
     };
 
-     /* Updates email when user initiates through the UI */
+    /* Updates email when user initiates through the UI */
     const updateEmail = async (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* reset all error messages at start of event */
         setError(false);
 
@@ -177,7 +197,7 @@ const PersonalInfo = () => {
     const updatePhone = async (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* reset all error messages at start of event */
         setError(false);
 
@@ -216,11 +236,11 @@ const PersonalInfo = () => {
         getUserInfo();
     };
 
-     /* Updates password when user initiates through the UI */ 
+    /* Updates password when user initiates through the UI */
     const updatePassword = async (e) => {
         /* Prevent default event behavior */
         e.preventDefault();
-        
+
         /* reset all error messages at start of event */
         setError(false);
 
@@ -267,8 +287,9 @@ const PersonalInfo = () => {
                         <button type='button' className="infoButton">Username: <span>{username}</span> </button>
                         <button type='button' className="infoButton">Email: <span>{email}</span></button>
                         <button type='button' className="infoButton">Phone number: <span>{phoneNumber}</span></button>
-                       
-                       <label>
+                        <button type='button' className="infoButton">Member since: <span>{membership}</span></button>
+
+                        <label>
                             <div className="infoType"> {"Change username: "}</div>
                             <input
                                 type="username"

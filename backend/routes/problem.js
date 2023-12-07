@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Problem = require("../models/Problem");
+const Problem = require("../models/problem");
 const verify = require("../util/auth/verifyJWTToken");
 
 
