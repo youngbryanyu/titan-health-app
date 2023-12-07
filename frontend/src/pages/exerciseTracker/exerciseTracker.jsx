@@ -35,6 +35,7 @@ const ExerciseTracker = () => {
     
     const [weightLiftingExercises, setLiftingExercises] = useState([]);
     const [cardioExercises, setCardioExercises] = useState([]);
+    const [otherExercises, setOtherExercises] = useState([]);
     const [allExercises, setAllExercises] = useState([]);
     const [sortType, setSortType] = useState('all');
     
@@ -52,11 +53,14 @@ const ExerciseTracker = () => {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
 
-                
+                const resOther = await axios.get(`/users/allOther/${userId}`, {
+                    headers: { token: `Bearer ${user.accessToken}` }
+                });
 
                 setLiftingExercises(resLifting.data);
                 setCardioExercises(resCardio.data);
-                setAllExercises(resLifting.data.concat(resCardio.data));
+                setOtherExercises(resOther.data);
+                setAllExercises(resLifting.data.concat(resCardio.data).concat(resOther.data));
 
             } catch (error) {
                 console.log(error);
@@ -80,10 +84,11 @@ const ExerciseTracker = () => {
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
 
-            // Refresh the food items after editing
-            setAllExercises(res.data.liftingLog.concat(res.data.cardioLog));
+            // Refresh the exercise items after editing
+            setAllExercises(res.data.liftingLog.concat(res.data.cardioLog).concat(res.data.otherExerciseLog));
             setLiftingExercises(res.data.liftingLog);
             setCardioExercises(res.data.cardioLog);
+            setOtherExercises(res.data.cardioLog);
 
             // Clear the editedNutritionFacts state
             setExerciseName('');
@@ -128,7 +133,8 @@ const ExerciseTracker = () => {
                             {
                                 sortType === "all" ? allExercises.map((item) => listItem(item)) : 
                                 (sortType === "cardio" ? cardioExercises.map((item) => listItem(item)) : 
-                                weightLiftingExercises.map((item) => listItem(item)))
+                                (sortType === "other" ? otherExercises.map((item) => listItem(item)) : 
+                                weightLiftingExercises.map((item) => listItem(item))))
                             }
                         </List>
                     </Paper>
@@ -139,6 +145,7 @@ const ExerciseTracker = () => {
                         <Select id="demo-simple-select" value={sortType} label="Filter" onChange={handleSortChange} classes={{ root: classes.root, select: classes.selected }} >
                             <MenuItem value={"weightLifting"}>{`Weight Lifting`}</MenuItem>
                             <MenuItem value={"cardio"}>{`Cardio`}</MenuItem>
+                            <MenuItem value={"other"}>{`Other`}</MenuItem>
                             <MenuItem value={"all"}>{`All`}</MenuItem>
                         </Select>
                     </FormControl>
@@ -165,6 +172,7 @@ const ExerciseTracker = () => {
                             <Select id="demo-simple-select" value={exerciseType} onChange={handleExerciseTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
                                 <MenuItem value={"Weight Lifting"}>{`Weight Lifting`}</MenuItem>
                                 <MenuItem value={"Cardio"}>{`Cardio`}</MenuItem>
+                                <MenuItem value={"Other"}>{`Other`}</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
