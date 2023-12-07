@@ -117,6 +117,7 @@ const ExerciseInfo = () => {
             try {
                 const response = await axios.get(`/users/anExercise/${userId}/${exerciseHash}`,
                 { headers: { token: `Bearer ${user.accessToken}` } });
+                console.log(`Bearer ${user.accessToken}`);
                 const item = response.data;
 
                 const priorCheck = await axios.get(`/users/priorExercise/${userId}/${item.exerciseName}`,
@@ -296,6 +297,7 @@ const ExerciseInfo = () => {
                                 <Select id="demo-simple-select" value={exerciseType} onChange={handleExerciseTypeChange} label="Filter" classes={{ root: classes.root, select: classes.selected }} >
                                     <MenuItem value={"Weight Lifting"}>{`Weight Lifting`}</MenuItem>
                                     <MenuItem value={"Cardio"}>{`Cardio`}</MenuItem>
+                                    <MenuItem value={"Other"}>{`Other`}</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -403,7 +405,5 @@ const ExerciseInfo = () => {
         </div>
     );
 };
-
-
 
 export default ExerciseInfo;

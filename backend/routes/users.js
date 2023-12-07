@@ -160,6 +160,8 @@ router.put('/editFood/:userId', verify, async (req, res) => {
   }
 });
 
+
+
 /* PUT - add to weight log */
 router.put("/weight/:userId", verify, async (req, res) => {
   try {
@@ -225,11 +227,14 @@ router.put('/addExercise/:userId', verify, async (req, res) => {
     //TODO: add logic to reject duplicate exercises
     const userId = req.params.userId;
     const { exerciseName, sets, reps, time, exerciseType } = req.body;
-    const hash = crypto.createHash('sha1').update(exerciseName).digest('hex');
+    let hash = crypto.createHash('sha1').update(exerciseName).digest('hex');
+    const d = new Date();
+    //hash += "*" + "2023-10-24";  //only used to add exercises to a specific month
+    hash += "*" + d.toISOString().split('T')[0]; //add data in yyyy-mm-dd format
     const newExercise = {
       exerciseName: exerciseName || "[add name]",
-      sets: sets || (exerciseType === "Cardio" ? "N/A" : "[add sets]"),
-      reps: reps || (exerciseType === "Cardio" ? "N/A" : "[add reps]"),
+      sets: sets || (exerciseType === "Cardio" || "Other" ? "N/A" : "[add sets]"),
+      reps: reps || (exerciseType === "Cardio" || "Other" ? "N/A" : "[add reps]"),
       time: time || "[add time]",
       exerciseType: exerciseType || "[add exercise type]",
       hash
@@ -242,8 +247,9 @@ router.put('/addExercise/:userId', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    exerciseType === "Weight Lifting" ? user.liftingLog.push(newExercise) : user.cardioLog.push(newExercise);
-    user.otherExerciseLog.push(newExercise);
+    if (exerciseType === "Weight Lifting") user.liftingLog.push(newExercise);
+    else if (exerciseType === "Cardio") user.cardioLog.push(newExercise);
+    else user.otherExerciseLog.push(newExercise);
     
     // Save the updated user
     await user.save();
@@ -282,9 +288,12 @@ router.put('/editExercise/:userId', verify, async (req, res) => {
     if (exerciseType === "Weight Lifting") {
       itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
       user.liftingLog[itemIndex] = editedExercise;
-    } else {
+    } else if (exerciseType === "Cardio") {
       itemIndex = user.cardioLog.findIndex((obj => obj.hash === hash));
       user.cardioLog[itemIndex] = editedExercise;
+    } else {
+      itemIndex = user.otherExerciseLog.findIndex((obj => obj.hash === hash));
+      user.otherExerciseLog[itemIndex] = editedExercise;
     }
     
     // Save the updated user
@@ -355,6 +364,40 @@ router.put("/supplement/:userId", verify, async (req, res) => {
   } catch (error) {
     console.error("Error making new supplement entry: " + error);
     return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* PUT - save activity info */
+router.put('/saveActivityInfo/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { activityLevel, lifestyle } = req.body;
+    const newActivityInfo = {
+      activityLevel: activityLevel || "[add activityLevel]",
+      lifestyle: lifestyle || "[add lifestyle]"
+    };
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    if (user.physicalActivityRestrictions.length == 0) {
+      user.physicalActivityRestrictions.push(newActivityInfo);
+    } else {
+      user.physicalActivityRestrictions[0] = newActivityInfo;
+    }
+    
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json(user.physicalActivityRestrictions);
+    
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -502,27 +545,23 @@ router.get('/supplement/:userId', verify, async (req, res) => {
   }
 });
 
-/* ###################### 
-########## DELETE ##########
-######################### */
-
-/* DELETE - Delete food item in tracker*/
-router.delete('/deleteFood/:userId/:hash', verify, async (req, res) => {
+/* GET - get all other exercises in tracker */
+router.get('/allOther/:userId', verify, async (req, res) => {
   try {
     const userId = req.params.userId;
+
+    // Find the user by ID
     const user = await User.findById(userId);
-    const hash = req.params.hash;
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // delete food item
-    const itemIndex = user.foods.findIndex((obj => obj.hash === hash));
-    user.foods.splice(itemIndex, 1);
-    await user.save();
-
-    return res.status(200).json({ message: 'Food item deleted successfully' });
+    let d = new Date();
+    let date = d.toISOString().split('T')[0];
+ 
+    // Get all other exercises from today
+    return res.status(200).json(user.otherExerciseLog.filter((exercise) => exercise.hash.split('*')[1] === date));
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -564,8 +603,11 @@ router.get('/allLifting/:userId', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Get all the food items
-    return res.status(200).json(user.liftingLog);
+    let d = new Date();
+    let date = d.toISOString().split('T')[0];
+
+    // Get all lifting exercises from today
+    return res.status(200).json(user.liftingLog.filter((exercise) => exercise.hash.split('*')[1] === date));
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -584,8 +626,31 @@ router.get('/allCardio/:userId', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Get all the food items
-    return res.status(200).json(user.cardioLog);
+    let d = new Date();
+    let date = d.toISOString().split('T')[0];
+
+    // Get all cardio exercises from today
+    return res.status(200).json(user.cardioLog.filter((exercise) => exercise.hash.split('*')[1] === date));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* GET - get activity info */
+router.get('/activityInfo/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get users activity info
+    return res.status(200).json(user.physicalActivityRestrictions);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -607,8 +672,11 @@ router.get('/anExercise/:userId/:hash', verify, async (req, res) => {
 
     const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
     const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
+    const itemIndex3 = user.otherExerciseLog.findIndex((obj => obj.hash === hash));
 
-    return itemIndex == -1 ? res.status(200).json(user.cardioLog[itemIndex2]) : res.status(200).json(user.liftingLog[itemIndex]);
+    if (itemIndex != -1) return res.status(200).json(user.liftingLog[itemIndex]);
+    else if (itemIndex2 != -1) return res.status(200).json(user.cardioLog[itemIndex2]);
+    else return res.status(200).json(user.otherExerciseLog[itemIndex3]);
 
   } catch (error) {
     console.error(error);
@@ -629,10 +697,43 @@ router.get('/priorExercise/:userId/:name', verify, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const itemIndex = user.otherExerciseLog.findIndex((obj => obj.exerciseName === name));
+    const allExercise = user.liftingLog.concat(user.cardioLog).concat(user.otherExerciseLog);
+    const itemIndex = allExercise.findIndex((obj => obj.exerciseName === name)); 
 
-    return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(user.otherExerciseLog[itemIndex]);
+    return itemIndex == -1 ? res.status(200).json("No Prior History") : res.status(200).json(allExercise[itemIndex]);
 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+/* GET - get counts of exercises per month */
+router.get('/exercisesPerMonth/:userId', verify, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    let counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let allExercises = user.cardioLog.concat(user.liftingLog).concat(user.otherExerciseLog);
+
+    for (let i = 0; i < allExercises.length; i++) {
+
+      if (allExercises[i].hash != null && allExercises[i].hash.split('*').length == 2) {
+        let month = allExercises[i].hash.split('*')[1].split("-")[1];
+        counts[parseInt(month) - 1]++;
+      } 
+
+    }
+
+    // Get counts of exercises
+    return res.status(200).json(counts);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -681,8 +782,11 @@ router.delete('/deleteExercise/:userId/:hash', verify, async (req, res) => {
 
     const itemIndex = user.liftingLog.findIndex((obj => obj.hash === hash));
     const itemIndex2 = user.cardioLog.findIndex((obj => obj.hash === hash));
-    if(itemIndex != -1) user.liftingLog.splice(itemIndex, 1);
-    else user.cardioLog.splice(itemIndex2, 1);
+    const itemIndex3 = user.otherExerciseLog.findIndex((obj => obj.hash === hash));
+
+    if (itemIndex != -1) user.liftingLog.splice(itemIndex, 1);
+    else if (itemIndex2 != -1) user.cardioLog.splice(itemIndex2, 1);
+    else user.otherExerciseLog.splice(itemIndex3, 1);
 
     // Save the updated user
     await user.save();
