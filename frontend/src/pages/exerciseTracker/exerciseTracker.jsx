@@ -35,16 +35,16 @@ const ExerciseTracker = () => {
     const [exerciseType, setExerciseType] = useState('');
     const [lifestyle, setLifestyle] = useState('');
     const [activityLevel, setActivityLevel] = useState('');
-    
+
     const [weightLiftingExercises, setLiftingExercises] = useState([]);
     const [cardioExercises, setCardioExercises] = useState([]);
     const [otherExercises, setOtherExercises] = useState([]);
     const [allExercises, setAllExercises] = useState([]);
     const [sortType, setSortType] = useState('all');
     const [exerciseCounts, setExerciseCounts] = useState([]);
-    
+
     /* Load exercises on page render */
-    const isFirstRender = useRef(true); 
+    const isFirstRender = useRef(true);
     useEffect(() => {
         // Get all exercises on load
         const getExercises = async () => {
@@ -62,13 +62,12 @@ const ExerciseTracker = () => {
                 });
 
                 const resActivity = await axios.get(`/users/activityInfo/${userId}`, {
-                  headers: { token: `Bearer ${user.accessToken}` }
-                });
-              
-                const resOther = await axios.get(`/users/allOther/${userId}`, {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
 
+                const resOther = await axios.get(`/users/allOther/${userId}`, {
+                    headers: { token: `Bearer ${user.accessToken}` }
+                });
                 const resActivityLevel = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].activityLevel;
                 const resLifestyle = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].lifestyle;
 
@@ -118,7 +117,7 @@ const ExerciseTracker = () => {
             const counts = await axios.get(`/users/exercisesPerMonth/${userId}`, {
                 headers: { token: `Bearer ${user.accessToken}` }
             });
-            
+
             setExerciseCounts(counts.data);
             // Refresh the exercise items after editing
             setLiftingExercises(resLifting.data);
@@ -176,10 +175,10 @@ const ExerciseTracker = () => {
             <Link to={`/exerciseInfo/${id}`} className="link">
                 <ListItem component="div" disablePadding button={true}>
                     {
-                        item.exerciseType === "Weight Lifting" ? <span className="header">{`${name} (${item.sets} sets, ${item.reps} reps)`}</span> : 
-                        ( <span className="header">{`${name} (${item.time} mins)`}</span> )
+                        item.exerciseType === "Weight Lifting" ? <span className="header">{`${name} (${item.sets} sets, ${item.reps} reps)`}</span> :
+                            (<span className="header">{`${name} (${item.time} mins)`}</span>)
                     }
-                    
+
                 </ListItem>
             </Link>
         );
@@ -194,10 +193,10 @@ const ExerciseTracker = () => {
                     <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
                         <List>
                             {
-                                sortType === "all" ? allExercises.map((item) => listItem(item)) : 
-                                (sortType === "cardio" ? cardioExercises.map((item) => listItem(item)) : 
-                                (sortType === "other" ? otherExercises.map((item) => listItem(item)) : 
-                                weightLiftingExercises.map((item) => listItem(item))))
+                                sortType === "all" ? allExercises.map((item) => listItem(item)) :
+                                    (sortType === "cardio" ? cardioExercises.map((item) => listItem(item)) :
+                                        (sortType === "other" ? otherExercises.map((item) => listItem(item)) :
+                                            weightLiftingExercises.map((item) => listItem(item))))
                             }
                         </List>
                     </Paper>
@@ -219,13 +218,13 @@ const ExerciseTracker = () => {
                 <div className="filter">
                     <Box sx={{ minWidth: 120 }}>
                         <div> {"Exercise Name: "}</div>
-                        <input type="name" value={exerciseName} onChange={(e) => setExerciseName(e.target.value)}/>
+                        <input type="name" value={exerciseName} onChange={(e) => setExerciseName(e.target.value)} />
                         <div> {"Sets: "}</div>
-                        <input type="sets" value={sets} onChange={(e) => setSets(e.target.value)}/>
+                        <input type="sets" value={sets} onChange={(e) => setSets(e.target.value)} />
                         <div> {"Reps: "}</div>
-                        <input type="reps" value={reps} onChange={(e) => setReps(e.target.value)}/>
+                        <input type="reps" value={reps} onChange={(e) => setReps(e.target.value)} />
                         <div> {"Time (mins): "}</div>
-                        <input type="secs" value={time} onChange={(e) => setTime(e.target.value)}/>
+                        <input type="secs" value={time} onChange={(e) => setTime(e.target.value)} />
                     </Box>
                 </div>
                 <div className="filter2">
@@ -244,7 +243,7 @@ const ExerciseTracker = () => {
             </Stack>
             <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4 className="moreSpace">{"View Exercise Counts:"}</h4>
-                <div>   
+                <div>
                     <BarChart
                         xAxis={[{ scaleType: 'band', data: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }]}
                         series={[{ data: [exerciseCounts[0], exerciseCounts[1], exerciseCounts[2], exerciseCounts[3], exerciseCounts[4], exerciseCounts[5], exerciseCounts[6], exerciseCounts[7], exerciseCounts[8], exerciseCounts[9], exerciseCounts[10], exerciseCounts[11]] }]}
@@ -252,7 +251,7 @@ const ExerciseTracker = () => {
                         height={300}
                     />
                 </div>
-                
+
             </Stack>
             <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4 className="moreSpace">{`Activity: ${activityLevel}`}</h4>
