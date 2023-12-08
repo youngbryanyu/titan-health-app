@@ -17,6 +17,15 @@
     .header {
         font-weight: normal;
     }
+
+    // set text color of legend to white
+    .MuiChartsAxis-tickLabel tspan {
+        fill: white;
+    }
+
+    .MuiOutlinedInput-input {
+        fill: white;
+    }
     
     .text {
         color: white;
