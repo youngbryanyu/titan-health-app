@@ -18,7 +18,7 @@ const schema = new mongoose.Schema(
         /* Dining court */
         preferences: { type: [], required: false, default: [] },
         restrictions: { type: [], required: false, default: [] },
-        favoriteMenuItems: { type: [], required: false, default: [] },
+        favoriteMenuItems: { type: [], required: false, default: [] }, /* saved/favorite menu items are currently stored in their own collection */
         
         /* Food tracking and nutrition */
         foods: { type: [], required: false, default: [] }, /* foods in user's meal tracker */

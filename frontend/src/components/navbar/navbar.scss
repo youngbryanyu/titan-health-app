@@ -35,28 +35,35 @@
             
             .dropdown {
                 .diningDropdownOptions {
-                    transform: translate(12.5%, 5%); // translate X and Y to fix centering of dropdown
+                    transform: translate(12.5%, 2.5%); // translate X and Y to fix centering of dropdown
+                    display: none;
+                    background-color: var(--main-color);
+                    border-radius: 5px;
+                }
+
+                .moreDiningDropdownOptions {
+                    transform: translate(7.5%, 5%); // translate X and Y to fix centering of dropdown
                     display: none;
                     background-color: var(--main-color);
                     border-radius: 5px;
                 }
 
                 .nutritionDropdownOptions {
-                    transform: translate(7.5%, 12.5%); // translate X and Y to fix centering of dropdown
+                    transform: translate(7.5%, 5%); // translate X and Y to fix centering of dropdown
                     display: none;
                     background-color: var(--main-color);
                     border-radius: 5px;
                 }
 
                 .fitnessDropdownOptions {
-                    transform: translate(7.5%, 20%); // translate X and Y to fix centering of dropdown
+                    transform: translate(7.5%, 12.5%); // translate X and Y to fix centering of dropdown
                     display: none;
                     background-color: var(--main-color);
                     border-radius: 5px;
                 }
 
                 .healthDropdownOptions {
-                    transform: translate(7.5%, 20%); // translate X and Y to fix centering of dropdown
+                    transform: translate(7.5%, 12.5%); // translate X and Y to fix centering of dropdown
                     display: none;
                     background-color: var(--main-color);
                     border-radius: 5px;
@@ -84,6 +91,13 @@
 
                 &:hover {
                     .diningDropdownOptions {
+                        display: flex;
+                        flex-direction: column;
+                        position: absolute;
+                        // top: 50px; // moves dropdown a bit further down
+                    }
+
+                    .moreDiningDropdownOptions {
                         display: flex;
                         flex-direction: column;
                         position: absolute;

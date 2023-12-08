@@ -2,12 +2,14 @@ const router = require("express").Router();
 const Rating = require("../models/rating");
 const MenuItem = require("../models/menuItem");
 
+// TODO: add JWT token to all API calls for security
+
 //send user's rating to DB, if it exists alr then update
-//this function requires the req body to contain {username, menuItemID, and rating}
+//this function requires the req body to contain {userId, menuItemID, and rating}
 router.post("/", async (req, res) => {
     try {
         const findRating = await Rating.findOne({ //findOne returns null if no matching doc found
-            username: req.body.username,
+            userId: req.body.userId,
             menuItemID: req.body.menuItemID
         });
 
@@ -42,7 +44,7 @@ router.post("/", async (req, res) => {
             }
         } else { // if not then make a new document in the DB
             const newRating = await new Rating({
-                username: req.body.username,
+                userId: req.body.userId,
                 menuItemID: req.body.menuItemID,
                 rating: req.body.rating
             }).save();
@@ -82,13 +84,13 @@ router.post("/", async (req, res) => {
 // this endpoint returns all menuItems rated by a specific user above 4+ stars
 //first get ALL items where user = specificUser AND rating >= 4 (using rating collection)
 //then go thru each item and see if served today (using menuItems collection) 
-router.get("/highlyRatedItems/:username", async (req, res) => {
+router.get("/highlyRatedItems/:userId", async (req, res) => {
     
     var d = new Date();
     var today = new Date(d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate());
     try {
         const highlyRatedItems = await (Rating.find({
-            username: req.params.username, 
+            userId: req.params.userId, 
             rating: { $gte: 4 }
         }));
 
@@ -119,17 +121,17 @@ router.get("/highlyRatedItems/:username", async (req, res) => {
 });
 
 //get a user's rating of a specific menu item
-router.get("/:username/:menuItemId", async (req, res) => {
+router.get("/:userId/:menuItemId", async (req, res) => {
     try {
-        //find the doc with the matching username and menuItemId
+        //find the doc with the matching userId and menuItemId
         const findRating = await Rating.findOne({
-            username: req.params.username,
+            userId: req.params.userId,
             menuItemID: req.params.menuItemId
         });
 
         if (!findRating) { // this means a rating doc was not found so create one with rating 0
             const newRating = await new Rating({
-                username: req.params.username,
+                userId: req.params.userId,
                 menuItemID: req.params.menuItemId,
                 rating: 0
             }).save();

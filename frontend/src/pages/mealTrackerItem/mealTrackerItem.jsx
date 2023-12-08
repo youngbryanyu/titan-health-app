@@ -3,7 +3,7 @@
 import Navbar from "../../components/navbar/navbar";
 import "./mealTrackerItem.scss";
 import { useContext, useState, useEffect, useRef } from 'react';
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';

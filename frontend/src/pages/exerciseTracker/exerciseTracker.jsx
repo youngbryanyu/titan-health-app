@@ -62,6 +62,10 @@ const ExerciseTracker = () => {
                 });
 
                 const resActivity = await axios.get(`/users/activityInfo/${userId}`, {
+                  headers: { token: `Bearer ${user.accessToken}` }
+                });
+              
+                const resOther = await axios.get(`/users/allOther/${userId}`, {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
 
@@ -101,6 +105,7 @@ const ExerciseTracker = () => {
                 { exerciseName, sets, time, reps, exerciseType },
                 { headers: { token: `Bearer ${user.accessToken}` } }
             );
+
 
             const resLifting = await axios.get(`/users/allLifting/${userId}`, {
                 headers: { token: `Bearer ${user.accessToken}` }

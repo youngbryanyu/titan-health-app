@@ -82,6 +82,35 @@ const Menu = () => {
     //disabling the button when the other one is in use
     const [disableSortPop, setDisableSortPop] = useState(false);
 
+    //should sort based on protein
+    const [shouldSortProtein, setShouldSortProtein] = useState(false);
+
+    // sort the menu items based on the protein
+    const [menuBeforeSortProtein, setMenuBeforeSortProtein] = useState([]);
+
+    //disabling the button when the other one is in use
+    const [disableSortProtein, setDisableSortProtein] = useState(false);
+
+
+    //should sort based on fat
+    const [shouldSortFat, setShouldSortFat] = useState(false);
+
+    // sort the menu items based on the fat
+    const [menuBeforeSortFat, setMenuBeforeSortFat] = useState([]);
+
+    //disabling the button when the other one is in use
+    const [disableSortFat, setDisableSortFat] = useState(false);
+
+    //should sort based on calories
+    const [shouldSortCalories, setShouldSortCalories] = useState(false);
+
+    // sort the menu items based on the calories
+    const [menuBeforeSortCalories, setMenuBeforeSortCalories] = useState([]);
+
+    //disabling the button when the other one is in use
+    const [disableSortCalories, setDisableSortCalories] = useState(false);
+
+
     let username = user.username;
 
     const loading = useRef(true); /* whether page is loading */
@@ -217,6 +246,19 @@ const Menu = () => {
         setShouldSortPop(!shouldSortPop);
     };
 
+    const handleSortClickProtein = () => {
+        setShouldSortProtein(!shouldSortProtein);
+    };
+
+    const handleSortClickFat = () => {
+        setShouldSortFat(!shouldSortFat);
+    };
+
+    const handleSortClickCalories = () => {
+        setShouldSortCalories(!shouldSortCalories);
+    };
+
+
     /*disable the sorting button*/
     // const handleSortDisable = () => {
     //     setDisableSort(!disableSort);
@@ -231,6 +273,9 @@ const Menu = () => {
         // sort courts menu then set it to the sorted
         if (shouldSort) {
             setDisableSortPop(true);
+            setDisableSortProtein(true);
+            setDisableSortFat(true);
+            setDisableSortCalories(true);
             //this does a copy of the prior menu
             setMenuBeforeSort(JSON.parse(JSON.stringify(courtsMenu))); //unsorted items now stored in menuBeforeSort
             //now we sort the item (this is an inline function that compares two objects names)
@@ -242,6 +287,9 @@ const Menu = () => {
             );
         } else if (!shouldSort) {
             setDisableSortPop(false);
+            setDisableSortProtein(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
             //set courtsMenu back to the way it was originally
             setCourtsMenu(menuBeforeSort);
         }
@@ -253,16 +301,84 @@ const Menu = () => {
         // sort courts menu then set it to the sorted
         if (shouldSortPop) {
             setDisableSort(true);
+            setDisableSortProtein(true);
+            setDisableSortFat(true);
+            setDisableSortCalories(true);
             setMenuBeforeSortPop(JSON.parse(JSON.stringify(courtsMenu)));
             courtsMenu.sort((a, b) =>
                 a.avgRating < b.avgRating ? 1 : b.avgRating < a.avgRating ? -1 : 0
             ); //make the most highly rated items appear at the top of the list
         } else if (!shouldSortPop) {
             setDisableSort(false);
+            setDisableSortProtein(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
             setCourtsMenu(menuBeforeSortPop);
         }
         // eslint-disable-next-line
     }, [shouldSortPop]);
+
+    /*Sort by highest protein count */
+    useEffect(() => {
+        if (shouldSortProtein) {
+            setDisableSort(true);
+            setDisableSortPop(true);
+            setDisableSortFat(true);
+            setDisableSortCalories(true);
+            setMenuBeforeSortProtein([...courtsMenu]);
+            courtsMenu.sort((a, b) => (b?.nutritionFacts?.[11]?.Value || 0) - (a?.nutritionFacts?.[11]?.Value || 0));
+            setCourtsMenu(courtsMenu);
+        } else if (!shouldSortProtein) {
+            setDisableSort(false);
+            setDisableSortPop(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
+            setCourtsMenu([...menuBeforeSortProtein]);
+        }
+        // eslint-disable-next-line
+    }, [shouldSortProtein]);
+
+
+    /*Sort by lowest fat count */
+    useEffect(() => {
+        if (shouldSortFat) {
+            setDisableSort(true);
+            setDisableSortPop(true);
+            setDisableSortProtein(true);
+            setDisableSortCalories(true);
+            setMenuBeforeSortFat([...courtsMenu]);
+            courtsMenu.sort((a, b) => (a?.nutritionFacts?.[3]?.Value || 0) - (b?.nutritionFacts?.[3]?.Value || 0));
+            setCourtsMenu(courtsMenu);
+        } else if (!shouldSortFat) {
+            setDisableSort(false);
+            setDisableSortPop(false);
+            setDisableSortProtein(false);
+            setDisableSortCalories(false);
+            setCourtsMenu([...menuBeforeSortFat]);
+        }
+        // eslint-disable-next-line
+    }, [shouldSortFat]);
+
+
+      /*Sort by lowest calorie count */
+      useEffect(() => {
+        if (shouldSortCalories) {
+            setDisableSort(true);
+            setDisableSortPop(true);
+            setDisableSortProtein(true);
+            setDisableSortFat(true);
+            setMenuBeforeSortCalories([...courtsMenu]);
+            courtsMenu.sort((a, b) => (a?.nutritionFacts?.[1]?.Value || 0) - (b?.nutritionFacts?.[1]?.Value || 0));
+            setCourtsMenu(courtsMenu);
+        } else if (!shouldSortCalories) {
+            setDisableSort(false);
+            setDisableSortPop(false);
+            setDisableSortProtein(false);
+            setDisableSortFat(false);
+            setCourtsMenu([...menuBeforeSortCalories]);
+        }
+        // eslint-disable-next-line
+    }, [shouldSortCalories]);
 
     /* selecting preferences and restrictions from checkbox */
     const handleSelectPrefsClick = async () => {
@@ -332,6 +448,9 @@ const Menu = () => {
         loading.current = true; /* need to load */
         setShouldSort(false); /* reset sorting when user changes filter */
         setShouldSortPop(false);
+        setShouldSortProtein(false);
+        setDisableSortFat(false);
+        setDisableSortCalories(false);
 
         //this is for handling the filters options
         if (event.target.value === FULL_MENU) {
@@ -354,6 +473,9 @@ const Menu = () => {
         loading.current = true; /* need to load */
         setShouldSort(false); /* reset sorting when user changes filter */
         setShouldSortPop(false);
+        setShouldSortProtein(false);
+        setDisableSortFat(false);
+        setDisableSortCalories(false);
 
         //this is for handling the meal selection options
         if (event.target.value === ALL_MEALS) {
@@ -366,7 +488,7 @@ const Menu = () => {
             setMealType(LUNCH);
         } else if (event.target.value === LATE_LUNCH) {
             setMealType(LATE_LUNCH);
-        } else if (event.target.value === DINNER) {
+        } else if (event.target.value === 5) {
             setMealType(DINNER);
         }
     };
@@ -379,6 +501,9 @@ const Menu = () => {
             // setCourtsMenu(["loading"]);
             setShouldSort(false); /* reset sorting */
             setShouldSortPop(false);
+            setShouldSortProtein(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
             handleSelectPrefsClick();
         } else if (view === FULL_MENU) {
             getCourtsItems();
@@ -392,6 +517,9 @@ const Menu = () => {
             // setCourtsMenu(["loading"]);
             setShouldSort(false); /* reset sorting */
             setShouldSortPop(false);
+            setShouldSortProtein(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
             handleSelectPrefsClick();
         }
     },
@@ -474,6 +602,9 @@ const Menu = () => {
             setView(FULL_MENU);
             setShouldSort(false); /* reset sorting */
             setShouldSortPop(false);
+            setShouldSortProtein(false);
+            setDisableSortFat(false);
+            setDisableSortCalories(false);
 
             loading.current = true; /* loading new page */
             setCourtsMenu(["loading"]); // this is to set the menu to blank (to clear the prior stuff while loading) -> causes slight visual glitch
@@ -637,14 +768,14 @@ const Menu = () => {
                                     paddingBottom: '8px', // Padding at the bottom of the item
                                 }}>
                                 <span className="smallListItem">
-                                    {`${location} is currently ${busyLevel} at ${busytime}`}
+                                    {`${location}`} is currently {`${busyLevel}`} at {`${busytime}`}
                                 </span>
                             </ListItem>
                         </List>
                     </Paper>
                 </Box>
 
-                <h4 className="sectionTitle">{`When ${location} is open:`}</h4>
+                <h4 className="sectionTitle">{`When ${location} is open`}</h4>
                 <Box
                     sx={{
                         width: 250,
@@ -662,7 +793,7 @@ const Menu = () => {
 
             <div className="menuItems">
                 <div className="sectionHeader">
-                    <h4 className="menuTitle">{`${location}'s menu:`}</h4>
+                    <h4 className="pageTitle">{`${location}'s menu`}</h4>
                     <div className="ratingHeader">
                         <span className="ratingTitle">Rating</span>
                         <span className="ratingSubtitle">out of 5</span>
@@ -805,6 +936,69 @@ const Menu = () => {
                                 checked={shouldSortPop}
                                 onChange={handleSortClickPop}
                                 disabled={disableSortPop}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
+                                label={"Sort Item By High-Protein Content"}
+                                checked={shouldSortProtein}
+                                onChange={handleSortClickProtein}
+                                disabled={disableSortProtein}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
+                                label={"Sort Item By Low-Fat Content"}
+                                checked={shouldSortFat}
+                                onChange={handleSortClickFat}
+                                disabled={disableSortFat}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        size="small"
+                                        color="secondary"
+                                        sx={{
+                                            color: 'white', // This sets the color of the checkbox
+                                            '&.Mui-checked': {
+                                                color: 'white', // This sets the color when the checkbox is checked
+                                            },
+                                            '& .MuiSvgIcon-root': { // This targets the SVG icon (the box itself)
+                                                color: 'white', // Color for the unchecked state
+                                            },
+                                        }}
+                                    />
+                                }
+                                label={"Sort Item By Low-Calorie Content"}
+                                checked={shouldSortCalories}
+                                onChange={handleSortClickCalories}
+                                disabled={disableSortCalories}
                             />
                         </FormGroup>
                     </Box>

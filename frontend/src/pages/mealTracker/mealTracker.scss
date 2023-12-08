@@ -1,11 +1,9 @@
 .mealTracker {
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0,) 0%, 
-        rgba(0, 0, 0, 1) 100%
-        ), 
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0, ) 0%,
+            rgba(0, 0, 0, 1) 100%),
         url("../../components/titan_background.jpeg");
     background-size: cover;
     position: relative;
@@ -27,7 +25,6 @@
         margin-top: 20px;
         // padding: 15px;
         margin-left: 20px;
-        
     }
 
 
@@ -35,19 +32,43 @@
         font-weight: normal;
         white-space: pre; // enable whitespace for span text
         margin-top: 2.5px;
+
+        flex-grow: 1; /* Allows the item to grow to fill available space */
+        text-align: right; /* Aligns the text to the right */
+        margin-right: 0px; /* Adds some space before the goal value */
+    }
+
+    /* Style for the goals column */
+    .goalItem {
+        width: 80px; /* Fixed width for the goals column */
+        text-align: left; /* Aligns the goal values to the left */
+        // background-color: aqua;
+        transform: translate(20%, 0%);
+    }
+
+    .goalSpace {
+        margin-right: 15px;
+    }
+
+    .goalValue {
+        font-weight: bold;
+    }
+
+    .toolTip {
+        transform: translate(60%, 0%);
     }
 
     .text {
         color: white;
     }
-    
+
     .inputContainer {
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 5px;
 
     }
-    
+
     .mealTypeContainer {
         margin-top: 10px;
         margin-left: 10%;
@@ -56,7 +77,7 @@
     .button {
         margin-top: 20px;
     }
-    
+
     .sectionTitle {
         margin-top: 5px;
         display: flex;
@@ -67,17 +88,27 @@
     .calorieLabel {
         color: gray;
         font-size: 0.8rem;
-        font-weight: normal;  // Set the font weight to normal
+        font-weight: normal; // Set the font weight to normal
     }
 
     .servingLabel {
         color: gray;
         font-size: 0.8rem;
-        font-weight: normal;  // Set the font weight to normal
+        font-weight: normal; // Set the font weight to normal
     }
 
     .calorieLabelValue {
-        font-weight: normal;  // Set the font weight to normal
+        font-weight: normal; // Set the font weight to normal
+        // font-size: 1rem;
+    }
+
+    .goalLabelBottom {
+        color: gray;
+        font-size: 0.8rem;
+        font-weight: normal; // Set the font weight to normal
+    }
+    .goalLabelTop {
+        font-weight: normal; // Set the font weight to normal
         // font-size: 1rem;
     }
 
