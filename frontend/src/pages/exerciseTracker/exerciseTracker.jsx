@@ -69,7 +69,7 @@ const ExerciseTracker = () => {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
                 const resActivityLevel = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].activityLevel;
-                const resLifestyle = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].lifestyle;
+                const resLifestyle = resActivity.data.length === 0 ? "[none]" : resActivity.data[0].lifestyle;
 
                 setActivityLevel(resActivityLevel);
                 setLifestyle(resLifestyle);
