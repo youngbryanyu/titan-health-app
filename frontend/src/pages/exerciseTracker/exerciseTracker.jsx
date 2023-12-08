@@ -68,7 +68,7 @@ const ExerciseTracker = () => {
                 const resOther = await axios.get(`/users/allOther/${userId}`, {
                     headers: { token: `Bearer ${user.accessToken}` }
                 });
-                
+
                 const resActivityLevel = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].activityLevel;
                 const resLifestyle = resActivity.data.length == 0 ? "[none]" : resActivity.data[0].lifestyle;
 
