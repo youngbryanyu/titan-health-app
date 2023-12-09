@@ -108,6 +108,8 @@ Below are screenshots of some of the pages within our site as a preview! **Note 
 #### Recommended Menu Items Page
 <img width="1432" alt="Recommended Menu Items Page" src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/a8a60670-9556-4f23-b542-3ed41d047baa">
 
+#### Other Health Tracker Page - Weight 
+<img width="1437" alt="Other Health Tracker Page - Weight " src="https://github.com/yyu2002/Titan_Health_App/assets/32204448/c4bd551b-801e-42b8-b57b-4ef44df178a6">
 
 
 
