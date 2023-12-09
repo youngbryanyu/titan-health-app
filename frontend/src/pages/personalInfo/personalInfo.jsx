@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import RegexUtil from "../../utils/regex-util";
+import { Replay30 } from "@mui/icons-material";
 
 /**
  * Returns a react component consisting of the Personal Info page. 
@@ -81,6 +82,13 @@ const PersonalInfo = () => {
         var days = Math.floor(t / day);
         var months = Math.floor(days / 31);
         var years = Math.floor(months / 12);
+
+        if (days > 30) {
+            days %= 30;
+        }
+        if (months > 12) {
+            months %= 12;
+        }
 
         var message = days + " days ";
         message += months + " months ";

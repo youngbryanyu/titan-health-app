@@ -5,12 +5,15 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../utils/authentication/auth-context";
 import axios from "axios";
 //basic ui
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import Paper from '@mui/material/Paper';
-import Stack from "@mui/material/Stack";
-import Button from '@mui/material/Button';
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+  Stack,
+  Button
+} from "@mui/material";
 //icons
 import LocalDrinkIcon from '@mui/icons-material/LocalDrink'; // water icon
 import BedIcon from '@mui/icons-material/Bed'; // sleep icon
@@ -20,7 +23,7 @@ import MedicationIcon from '@mui/icons-material/Medication'; // supplement icon
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-// import { axisClasses } from '@mui/x-charts';
+import { LineChart, BarChart, axisClasses } from '@mui/x-charts';
 
 // TabPanel setup
 function TabPanel(props) {
@@ -58,6 +61,13 @@ function a11yProps(index) {
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
+const activityMap = new Map();
+activityMap.set("Sedentary", 0);
+activityMap.set("[none]", 0);
+activityMap.set("Lightly Active", 1);
+activityMap.set("Moderately Active", 2);
+activityMap.set("Very Active", 3);
+activityMap.set("Extremely Active", 4);
 
 const OtherHealthTracker = () => {
   const { user } = useContext(AuthContext);
@@ -74,6 +84,8 @@ const OtherHealthTracker = () => {
   const [sleepLog, setSleepLog] = useState([]); // the sleep log displayed
   const [waterLog, setWaterLog] = useState([]); // the water log displayed
   const [supplementLog, setSupplementLog] = useState([]); // the supplement log displayed
+  const [recommendedWater, setRecommendedWater] = useState(0) // water recommendation based on formula
+  const [activity, setActivity] = useState('')
 
   /* Input states corresponding to each input box */
   // weight tracking:
@@ -89,10 +101,6 @@ const OtherHealthTracker = () => {
   const [suppName, setSupplement] = useState('');
   const [suppAmt, setSuppAmt] = useState('');
   const [suppDate, setSuppDate] = useState('');
-
-//   const weightdata = [];
-//   const sleepdata = [];
-//   const waterdata = [];
 
   /* comparator function for date sorting */
   function compare(a, b) {
@@ -111,8 +119,6 @@ const OtherHealthTracker = () => {
     const getAllEntries = async () => {
       try {
         // causing errors right now
-        //print bearer access token for debug
-        console.log(`jwt token: Bearer ${user.accessToken}`);
         const weightRes = await axios.get(`users/weights/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
         });
@@ -125,11 +131,18 @@ const OtherHealthTracker = () => {
         const suppRes = await axios.get(`users/supplement/${userId}`, {
           headers: { token: `Bearer ${user.accessToken}` }
         });
+        const activityRes = await axios.get(`/users/activityInfo/${userId}`, {
+          headers: { token: `Bearer ${user.accessToken}` }
+        });
+
+        console.log(`Bearer ${user.accessToken}`);
+        const resActivityLevel = activityRes.data.length === 0 ? "[none]" : activityRes.data[0].activityLevel;
 
         setWeightLog(weightRes.data.sort(compare));
         setWaterLog(waterRes.data.sort(compare));
         setSleepLog(sleepRes.data.sort(compare));
         setSupplementLog(suppRes.data.sort(compare));
+        setActivity(resActivityLevel);
       } catch (error) {
         console.error(error);
       }
@@ -141,6 +154,19 @@ const OtherHealthTracker = () => {
     isFirstRender.current = false;
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    // calculate value
+    const updateWaterRec = async () => {
+      let latestWeight = parseInt(weightLog.at(-1).weight);
+      let activityMapping = activityMap.get(activity);
+      setRecommendedWater(Math.round(((latestWeight * 0.5 + 12 * activityMapping * 0.25) / 8) / .5) * .5);
+    };
+    if (waterLog.length > 0) {
+      updateWaterRec();
+    }
+    // eslint-disable-next-line
+  }, [weightLog, activity]);
 
   const handleAddWeight = async () => {
     try {
@@ -160,6 +186,26 @@ const OtherHealthTracker = () => {
       console.error(error);
     }
   };
+
+  const handleAddSleep = async () => {
+    try {
+      const res = await axios.put(
+        `users/sleep/${userId}`,
+        { "length": sleepLength, "date": sleepDate },
+        { headers: { token: `Bearer ${user.accessToken}` } }
+      );
+
+      // Reflect new sleep log changes
+      setSleepLog(res.data.sleepLog);
+
+      // Clear all sleep fields
+      setSleepLength('');
+      setSleepDate('');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleAddWater = async () => {
     try {
       const res = await axios.put(
@@ -178,25 +224,7 @@ const OtherHealthTracker = () => {
       console.error(error);
     }
   };
-  const handleAddSleep = async () => {
-    try {
-      ///////keep this
-      const res = await axios.put(
-        `users/sleep/${userId}`,
-        { "length": sleepLength, "date": sleepDate },
-        { headers: { token: `Bearer ${user.accessToken}` } }
-      );
 
-      // Reflect new sleep log changes
-      setSleepLog(res.data.sleepLog);
-
-      // Clear all sleep fields
-      setSleepLength('');
-      setSleepDate('');
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const handleAddSupps = async () => {
     try {
       const res = await axios.put(
@@ -238,7 +266,6 @@ const OtherHealthTracker = () => {
 
   // Use to provide links to edit entries later
   function listWeights(entry) { // display a menu item
-    console.log(weightLog)
     const weight = entry.weight;
     const date = formatDate(entry.date);
     // const id = item.hash;
@@ -285,31 +312,68 @@ const OtherHealthTracker = () => {
     );
   }
 
-//   const weightFormatter = (value) => `${value} lbs`;
-//   const sleepFormatter = (value) => `${value} hrs`;
-//   const waterFormatter = (value) => `${value} cups`;
-//   const weightSetting = {
-//     yAxis: [
-//       {
-//         label: 'weight (lbs)',
-//       },
-//     ],
-//     width: 500,
-//     height: 300,
-//     sx: {
-//       [`.${axisClasses.left} .${axisClasses.label}`]: {
-//         transform: 'translate(-20px, 0)',
-//       },
-//     },
-//   };
+  let weightchart;
+  if (weightLog.length > 0) {
+    weightchart =
+      <LineChart
+        xAxis={[{ scaleType: 'utc', data: weightLog.map(item => { return (new Date(item.date)) }) }]}
+        series={[
+          {
+            data: weightLog.map(item => { return (parseInt(item.weight)) }),
+            showMark: ({ index }) => index,
+          },
+        ]}
+        width={500}
+        height={300}
+      />;
+  } else {
+    weightchart =
+      <h4>chart not populated yet...</h4>
+  }
+  let sleepchart;
+  if (sleepLog.length > 0) {
+    sleepchart =
+      <LineChart
+        xAxis={[{ scaleType: 'utc', data: sleepLog.map(item => { return (new Date(item.date)) }) }]}
+        series={[
+          {
+            data: sleepLog.map(item => { return (parseInt(item.length)) }),
+            showMark: ({ index }) => index,
+          },
+        ]}
+        width={500}
+        height={300}
+      />;
+  } else {
+    sleepchart =
+      <h4>chart not populated yet...</h4>
+  }
+  let waterchart;
+  if (waterLog.length > 0) {
+    waterchart =
+      <LineChart
+        xAxis={[{ scaleType: 'utc', data: waterLog.map(item => { return (new Date(item.date)) }) }]}
+        series={[
+          {
+            data: waterLog.map(item => { return (parseInt(item.intake)) }),
+            showMark: ({ index }) => index,
+          },
+        ]}
+        width={500}
+        height={300}
+      />;
+  } else {
+    waterchart =
+      <h4>chart not populated yet...</h4>
+  }
 
   return (
     <div className="menu">
       <Navbar />
       <Box
         sx={{
-          height: 500,
-          width: 900,
+          height: 600,
+          width: 1200,
           borderRadius: 2,
           border: 1,
           borderColor: 'white'
@@ -328,10 +392,10 @@ const OtherHealthTracker = () => {
           <Tab icon={<LocalDrinkIcon />} iconPosition="start" aria-label="water" label="Water" {...a11yProps(2)} />
           <Tab icon={<MedicationIcon />} iconPosition="start" aria-label="supps" label="Supplements" {...a11yProps(3)} />
         </Tabs>
-        {/* weight */}
-        <TabPanel value={value} index={0} >
-          <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-            <Box sx={{ width: '40%' }}>
+        {/* Weight content tab */}
+        <TabPanel className="contents tab" value={value} index={0} >
+          <Stack className="tab container" spacing={0} direction="row">
+            <Stack className="contents stack" width={"40%"} spacing={0} alignItems={"center"} justifyContent={"center"}>
               <h4>{"View weights"}</h4>
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
@@ -340,24 +404,17 @@ const OtherHealthTracker = () => {
                   </List>
                 </Paper>
               </Box>
-            </Box>
-            {/*            <Stack className="stack middle" spacing={2} alignItems={"center"} justifyContent={"center"}>
-              <div>
-                <h4 className="sectionTitle">{"Weight Log"}</h4>
-              </div>
-              <div>
-                <BarChart
-                  colors={['purple']}
-                  dataset={weightLog}
-                  xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-                  series={[{ dataKey: 'weight', label: 'Weight', weightFormatter }]}
-                  width={450}
-                  height={200}
-                />
-              </div>
             </Stack>
-            */}
-            <Box sx={{ width: '40%' }}>
+            {/* weight bar chart */}
+            <Stack className="contents stack" spacing={0} alignItems={"center"} justifyContent={"center"}>
+              <Box>
+                <h4 className="sectionTitle">{"Weight Progression"}</h4>
+              </Box>
+              <Box>
+                {weightchart}
+              </Box>
+            </Stack>
+            <Box className="entry" sx={{ width: '40%' }}>
               <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4>{"Add entry"}</h4>
                 <div className="filter">
@@ -374,9 +431,10 @@ const OtherHealthTracker = () => {
           </Stack>
         </TabPanel>
 
-        <TabPanel value={value} index={1}>
-          <Box sx={{ display: 'flex' }}>
-            <Box sx={{ width: '40%' }}>
+        {/* Sleep content tab */}
+        <TabPanel className="contents tab" value={value} index={1} >
+          <Stack className="tab container" spacing={0} direction="row">
+            <Stack className="contents stack" width={"40%"} spacing={0} alignItems={"center"} justifyContent={"center"}>
               <h4>{"View sleep"}</h4>
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
@@ -385,8 +443,17 @@ const OtherHealthTracker = () => {
                   </List>
                 </Paper>
               </Box>
-            </Box>
-            <Box sx={{ width: '40%' }}>
+            </Stack>
+            {/* sleep bar chart */}
+            <Stack className="contents stack" spacing={0} alignItems={"center"} justifyContent={"center"}>
+              <Box>
+                <h4 className="sectionTitle">{"Sleep record"}</h4>
+              </Box>
+              <Box>
+                {sleepchart}
+              </Box>
+            </Stack>
+            <Box className="entry" sx={{ width: '40%' }}>
               <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4>{"Add entry"}</h4>
                 <div className="filter">
@@ -400,12 +467,13 @@ const OtherHealthTracker = () => {
                 <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSleep}> Add Entry </Button>
               </Stack>
             </Box>
-          </Box>
+          </Stack>
         </TabPanel>
 
-        <TabPanel value={value} index={2}>
-          <Box sx={{ display: 'flex' }}>
-            <Box sx={{ width: '40%' }}>
+        {/* Water content tab */}
+        <TabPanel className="contents tab" value={value} index={2} >
+          <Stack className="tab container" spacing={0} direction="row">
+            <Stack className="contents stack" width={"40%"} spacing={0} alignItems={"center"} justifyContent={"center"}>
               <h4>{"View water intake"}</h4>
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
@@ -414,9 +482,18 @@ const OtherHealthTracker = () => {
                   </List>
                 </Paper>
               </Box>
-            </Box>
-            <Box sx={{ width: '40%' }}>
-              <Stack className="stack" spacing={2} ml={"50px"}>
+            </Stack>
+            {/* water bar chart */}
+            <Stack className="contents stack" spacing={0} alignItems={"center"} justifyContent={"center"}>
+              <Box>
+                <h4 className="sectionTitle">{"Water record"}</h4>
+              </Box>
+              <Box>
+                {waterchart}
+              </Box>
+            </Stack>
+            <Box className="entry" sx={{ width: '40%' }}>
+              <Stack className="stack" justifyItems={"center"} justifyContent={"center"} spacing={2} ml={"50px"}>
                 <h4>{"Add entry"}</h4>
                 <div className="filter">
                   <Box sx={{ minWidth: 120 }}>
@@ -427,14 +504,40 @@ const OtherHealthTracker = () => {
                   </Box>
                 </div>
                 <Button variant="contained" color="success" size="large" className="button" onClick={handleAddWater}> Add Entry </Button>
+                <Paper style={{
+                  maxWidth: 250,
+                  maxHeight: 355,
+                }}
+                  elevation={3}>
+                  <List>
+                    <ListItem
+                      component="div"
+                      disablePadding
+                      sx={{
+                        paddingLeft: '16px', // Add left padding
+                        paddingRight: '4px', // Add left padding
+                        borderBottom: '1px solid #e0e0e0', // Line between items
+                        marginBottom: '8px', // Spacing between items
+                        paddingBottom: '8px', // Padding at the bottom of the item
+                        paddingTop: '4px', // Add left padding
+                      }}
+                    >
+                      <b>Recommended Water Intake:</b>
+                    </ListItem>
+                    <ListItem>
+                      {recommendedWater + " cups"}
+                    </ListItem>
+                  </List>
+                </Paper>
               </Stack>
             </Box>
-          </Box>
+          </Stack>
         </TabPanel>
 
-        <TabPanel value={value} index={3}>
-          <Box sx={{ display: 'flex' }}>
-            <Box sx={{ width: '40%' }}>
+        {/* Supplement content tab */}
+        <TabPanel className="contents tab" value={value} index={3} >
+          <Stack className="tab container" spacing={0} direction="row">
+            <Stack className="contents stack" width={"40%"} spacing={0} alignItems={"center"} justifyContent={"center"}>
               <h4>{"View supplement intake"}</h4>
               <Box sx={{ width: '100%', height: 370, maxWidth: 360, bgcolor: 'background.paper', borderRadius: 5 }} className="list">
                 <Paper style={{ maxHeight: 400, overflow: 'auto' }}>
@@ -443,8 +546,8 @@ const OtherHealthTracker = () => {
                   </List>
                 </Paper>
               </Box>
-            </Box>
-            <Box sx={{ width: '40%' }}>
+            </Stack>
+            <Box className="entry" sx={{ width: '40%' }}>
               <Stack className="stack" spacing={2} ml={"50px"}>
                 <h4>{"Add entry"}</h4>
                 <div className="filter">
@@ -460,7 +563,7 @@ const OtherHealthTracker = () => {
                 <Button variant="contained" color="success" size="large" className="button" onClick={handleAddSupps}> Add Entry </Button>
               </Stack>
             </Box>
-          </Box>
+          </Stack>
         </TabPanel>
       </Box>
     </div>
