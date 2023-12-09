@@ -158,7 +158,10 @@ const OtherHealthTracker = () => {
   useEffect(() => {
     // calculate value
     const updateWaterRec = async () => {
-      let latestWeight = parseInt(weightLog.at(-1).weight);
+        let latestWeight;
+        if (weightLog.at(-1)) {
+            latestWeight = parseInt(weightLog.at(-1).weight);
+        }
       let activityMapping = activityMap.get(activity);
       setRecommendedWater(Math.round(((latestWeight * 0.5 + 12 * activityMapping * 0.25) / 8) / .5) * .5);
     };
@@ -349,7 +352,7 @@ const OtherHealthTracker = () => {
       <h4>chart not populated yet...</h4>
   }
   let waterchart;
-  if (waterLog.length > 0) {
+  if (waterLog && waterLog.length > 0) {
     waterchart =
       <LineChart
         xAxis={[{ scaleType: 'utc', data: waterLog.map(item => { return (new Date(item.date)) }) }]}
