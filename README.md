@@ -4,7 +4,7 @@ A web application for Purdue Students that seamlessly combines exercise and nutr
 Specialized dining court integration features are included for students @ Purdue.
 
 ## Workspace Setup
-To clone the repository onto your local machine, run `git clone https://github.com/yyu2002/Titan_Health_App.git` in the directory you want the repository to be cloned into.
+To clone the repository onto your local machine, run `git clone https://github.com/yyu2002/titan-health-app.git` in the directory you want the repository to be cloned into.
 
 We used [yarn](https://yarnpkg.com/) as the package manager for our application. Install yarn by running `npm install yarn`. We will be managing the versions of node modules separately for front and backend. Next, navigate to both the `/backend` and `/frontend` directories run `yarn` in both to install all the necessary node module dependencies. <ins>If you accidentally ran `yarn` in the root directory instead of in the `/backend` and `/frontend` directories, delete the `/node_modules` directory and `yarn.lock` files and make sure to run `yarn` in the proper directories.<ins>
 
