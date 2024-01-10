@@ -4,14 +4,14 @@ A web application for Purdue Students that seamlessly combines exercise and nutr
 Specialized dining court integration features are included for students @ Purdue.
 
 ## Workspace Setup
-To clone the repository onto your local machine, run `git clone https://github.com/yyu2002/titan-health-app.git` in the directory you want the repository to be cloned into.
+To clone the repository onto your local machine, run `git clone https://github.com/youngbryanyu/titan-health-app.git` in the directory you want the repository to be cloned into.
 
 We used [yarn](https://yarnpkg.com/) as the package manager for our application. Install yarn by running `npm install yarn`. We will be managing the versions of node modules separately for front and backend. Next, navigate to both the `/backend` and `/frontend` directories run `yarn` in both to install all the necessary node module dependencies. <ins>If you accidentally ran `yarn` in the root directory instead of in the `/backend` and `/frontend` directories, delete the `/node_modules` directory and `yarn.lock` files and make sure to run `yarn` in the proper directories.<ins>
 
 ## Running the Application
 
 ### Set up the environment Variables
-The environment variables for the backend server will need to be configured before running the application. See the [Environment Variables for the Backend Server](https://github.com/yyu2002/titan-health-app/blob/main/README.md#environment-variables-for-the-backend-server) section for steps on setting up the `.env` file for environment variables.
+The environment variables for the backend server will need to be configured before running the application. See the [Environment Variables for the Backend Server](https://github.com/youngbryanyu/titan-health-app/blob/main/README.md#environment-variables-for-the-backend-server) section for steps on setting up the `.env` file for environment variables.
 
 ### Running the Backend (Server)
 Navigate to the `/backend` directory. Before starting the server, run `yarn` to update existing node modules or install any missing node module dependencies. Then run `yarn start` to start the backend server. 
@@ -35,7 +35,7 @@ Next, just run the following:
 1. `git pull` to pull in any changes before committing. If the pull pull and rebase fails due to conflicting local changes run `git stash`, then `git pull`, then `git stash pop`. Fix any conflicts and commit when finished.
 2. `git commit -m <message>` to commit your changes.
 3. `git push` to push the changes to the remote branch that will be created by default based on the config set above.
-4. Navigate to [Pull requests](https://github.com/yyu2002/titan-health-app/pulls) to create the pull request onto the `main` branch. Get the necessary approvals then merge and delete the branch.
+4. Navigate to [Pull requests](https://github.com/youngbryanyu/titan-health-app/pulls) to create the pull request onto the `main` branch. Get the necessary approvals then merge and delete the branch.
 
 <ins> Make sure not to push anything from `node_modules` when committing and pushing changes. We don't want tons of dependencies stored in our repository.<ins>
 
@@ -43,7 +43,7 @@ Next, just run the following:
 The follow requirements must be met before pushing changes onto the `main` branch:
 - Must be an invited contributor to the repository
 - Must have 1 approval from another contributor
-- Must have 1 approval from the repository owner (yyu2002)
+- Must have 1 approval from the repository owner (youngbryanyu)
 
 ### Personal Access Tokens
 You may need to set up a personal access token for authentication due to GitHub's newer security guidelines. See [this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic) documentation for how to do so (create a classic token), or follow the steps below:
@@ -91,25 +91,25 @@ Like mentioned earlier in the section about how to run the application locally, 
 Below are screenshots of some of the pages within our site as a preview! **Note that many of the pages in the site our not shown (such as the fitness and health tracker related pages)**, and these are just a showcase of some of the UI.
 
 #### Meal Tracker Page
-<img width="1438" alt="Meal Tracker Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/36d84a49-e2f5-46e2-8335-d17a3368ae4a">
+<img width="1438" alt="Meal Tracker Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/36d84a49-e2f5-46e2-8335-d17a3368ae4a">
 
 #### Dining Court Menu Page
-<img width="1437" alt="Dining Court Menu Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/74240620-74b1-4fcd-adc4-c5a19600cabb">
+<img width="1437" alt="Dining Court Menu Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/74240620-74b1-4fcd-adc4-c5a19600cabb">
 
 #### Dining Court Menu Item Page
-<img width="1440" alt="Dining Court Menu Item Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/db37c535-321d-45ad-9184-a826891c2ad0">
+<img width="1440" alt="Dining Court Menu Item Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/db37c535-321d-45ad-9184-a826891c2ad0">
 
 #### Dietary Preferences Page
-<img width="1440" alt="Dietary Preferences Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/eb6b4734-ea34-439f-a916-22af63b3c6f9">
+<img width="1440" alt="Dietary Preferences Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/eb6b4734-ea34-439f-a916-22af63b3c6f9">
 
 #### Home Page
-<img width="1440" alt="Home Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/aaa9c1fb-fa5d-4548-98a4-3df89bd835df">
+<img width="1440" alt="Home Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/aaa9c1fb-fa5d-4548-98a4-3df89bd835df">
 
 #### Recommended Menu Items Page
-<img width="1432" alt="Recommended Menu Items Page" src="https://github.com/yyu2002/titan-health-app/assets/32204448/a8a60670-9556-4f23-b542-3ed41d047baa">
+<img width="1432" alt="Recommended Menu Items Page" src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/a8a60670-9556-4f23-b542-3ed41d047baa">
 
 #### Other Health Tracker Page - Weight 
-<img width="1437" alt="Other Health Tracker Page - Weight " src="https://github.com/yyu2002/titan-health-app/assets/32204448/c4bd551b-801e-42b8-b57b-4ef44df178a6">
+<img width="1437" alt="Other Health Tracker Page - Weight " src="https://github.com/youngbryanyu/titan-health-app/assets/32204448/c4bd551b-801e-42b8-b57b-4ef44df178a6">
 
 
 
