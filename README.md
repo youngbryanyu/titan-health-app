@@ -3,6 +3,12 @@ A web application for Purdue Students that seamlessly combines exercise and nutr
 
 Specialized dining court integration features are included for students @ Purdue.
 
+## Contributing
+~~If you are interested in contributing, reach out to `youngyu2002@gmail.com`.~~ This project has currently been paused. If you are interested in running it or extending it, you will need to:
+1. Clone the repo (or fork it)
+2. Set up your own MongoDB Atlas database instance
+3. Fill in the required fields in the `./backend/.env` file (see [./backend/.env.example](./backend/.env.example) for the required fields).
+
 ## Workspace Setup
 To clone the repository onto your local machine, run `git clone https://github.com/youngbryanyu/titan-health-app.git` in the directory you want the repository to be cloned into.
 
@@ -55,7 +61,9 @@ You may need to set up a personal access token for authentication due to GitHub'
 Next time if you are prompted for your username and password when pushing, use your access token as the password. If you don't want to retype your credentials every time, run `git config credential.helper store` before you run `git push`, and once you enter your credentials, they will be stored locally (unencrypted) so you don't have to re-enter them repeatedly.
 
 ### MongoDB Setup (For Database Access)
-We have set up a MongoDB cluster though MongoDB Atlas, hosted on AWS. Follow the below steps to make sure you are setup for development. The necessary credentials are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit) which is private (must request access).
+We have set up a MongoDB cluster though MongoDB Atlas, hosted on AWS. Follow the below steps to make sure you are setup for development. ~~The necessary credentials are contained in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit) which is private (must request access)~~. 
+
+> :warning: See [/backend/.env.example](./backend/.env.example) for the required environment variables that you will need to setup to run your own instance of the backend. You will need to create your own MongoDB instance and make up your own encryption key. You will need to set up your own MongoDB atlas instance and configure the steps below.
 
 #### Setting Up Network Access for your IP Address
 1. Navigate to [cloud.mongodb.com](https://cloud.mongodb.com/) and log into the Titan Health App account using the credentials in the [credentials document](https://docs.google.com/document/d/1XyIoMjj3yVY9TDJR9R39AVFLrzpDo_KEBhMqWR9ADTs/edit). Select the Titan Health App organization and project.
