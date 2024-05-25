@@ -5,7 +5,7 @@ Specialized dining court integration features are included for students @ Purdue
 
 ## Contributing
 ~~If you are interested in contributing, reach out to `youngyu2002@gmail.com`.~~ This project has currently been paused. If you are interested in running it or extending it, you will need to:
-1. Clone the repo (or fork it)
+1. Fork the repo (or clone it)
 2. Set up your own MongoDB Atlas database instance
 3. Fill in the required fields in the `./backend/.env` file (see [./backend/.env.example](./backend/.env.example) for the required fields).
 
