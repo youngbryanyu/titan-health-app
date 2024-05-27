@@ -11,7 +11,7 @@
     "@fontsource/public-sans": "^5.0.8",
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.15",
-    "@mui/styles": "^5.14.12",
+    "@mui/styles": "^5.15.2",
     "@mui/x-charts": "^6.0.0-alpha.17",
     "axios": "^1.5.0",
     "http": "^0.0.1-security",
